@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // DB
+    implementation 'com.mysql:mysql-connector-j:8.0.33'
+    // Mybatis
+    implementation 'org.mybatis:mybatis:3.5.6'
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    //assertj-core
+    testImplementation("org.assertj:assertj-core:3.24.2")
+}
+
+test {
+    useJUnitPlatform()
+}
