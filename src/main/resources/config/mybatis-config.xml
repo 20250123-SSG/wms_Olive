@@ -6,6 +6,12 @@
 
     <properties resource="config/connection-config.properties"/>
 
+    <typeAliases>
+        <!-- Login -->
+        <typeAlias alias="Login" type="com.minisec.common.login.Login"/>
+
+    </typeAliases>
+
     <environments default="dev">
         <environment id="dev">
             <transactionManager type="JDBC"/>
@@ -18,6 +24,10 @@
         </environment>
     </environments>
     <mappers>
+        <!-- DB Connect Check -->
         <mapper resource="mapper/healthcheck-mapper.xml"/>
+        <!-- Login -->
+        <mapper resource="mapper/login-mapper.xml"/>
+
     </mappers>
 </configuration>
