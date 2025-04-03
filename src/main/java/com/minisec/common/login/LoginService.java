@@ -8,6 +8,8 @@ import java.util.Map;
 import static com.minisec.common.Template.getSqlSession;
 
 public class LoginService {
+    
+    // 로그인
     public Login login(String userId, String userPwd) {
         SqlSession sqlSession = getSqlSession();
         LoginMapper mapper = sqlSession.getMapper(LoginMapper.class);
@@ -28,5 +30,23 @@ public class LoginService {
             e.printStackTrace();
             return null;
         }
+    }
+    
+    // 관리 창고 조회
+    public int getWareHouseManageId(int userId) {
+        SqlSession sqlSession = getSqlSession();
+        LoginMapper mapper = sqlSession.getMapper(LoginMapper.class);
+
+        int manageId = mapper.getWareHouseManageId(userId);
+        return manageId;
+    }
+    
+    // 관리 가맹점 조회
+    public int getStoreManageId(int userId) {
+        SqlSession sqlSession = getSqlSession();
+        LoginMapper mapper = sqlSession.getMapper(LoginMapper.class);
+
+        int manageId = mapper.getStoreManageId(userId);
+        return manageId;
     }
 }
