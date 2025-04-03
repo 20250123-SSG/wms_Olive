@@ -3,10 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.minisec.warehouse.mapper.WareHouseMapper">
+<mapper namespace="com.minisec.warehouse.model.dao.WareHouseMapper">
 
     <!-- 전체 상품 목록 조회 -->
-    <select id="getProductList" resultType="com.minisec.warehouse.model.WareHouseDto">
+    <select id="getProductList" resultType="com.minisec.warehouse.model.dto.WareHouseDto">
         SELECT
             product_id,
             category_id,
@@ -15,18 +15,20 @@
             product_price,
             product_description
         FROM
-            products;
+            product;
     </select>
 
     <!-- 입고 내역 조회 -->
-    <select id="getIncomingList" resultType="com.minisec.warehouse.model.IncomingDto">
+    <select id="selectAllStorage" resultType="com.minisec.warehouse.model.dto.StorageDto">
         SELECT
-            incoming_id,
+            storage_id,
+            warehouse_id,
             product_id,
-            incoming_quantity,
-            incoming_date
+            supplier_name,
+            storage_quantity,
+            created_at
         FROM
-            incoming
+            storage
     </select>
 
 </mapper>
