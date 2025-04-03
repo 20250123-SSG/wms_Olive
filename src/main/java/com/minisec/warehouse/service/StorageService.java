@@ -10,7 +10,8 @@ import static com.minisec.common.Template.getSqlSession;
 
 public class StorageService {
 
-    public List<StorageDto> selectAllStorage() {
+    // 입고된 모든 상품
+    public List<StorageDto> selectAllStorage(){
         SqlSession sqlSession = getSqlSession();
         StorageMapper storageMapper = sqlSession.getMapper(StorageMapper.class);
         List<StorageDto> list = storageMapper.selectAllStorage();
@@ -19,7 +20,7 @@ public class StorageService {
     }
 
     // 불량품 제외 계산
-    public int calculateFinalStorageQuantity(StorageDto storage) {
+    public int calculateFinalStorageQuantity(StorageDto storage){
         Random rand = new Random();
         int min = (int) (storage.getStorageQuantity() * 0.75); // 최소 75% 입고
         int max = storage.getStorageQuantity(); // 최대 100% 입고

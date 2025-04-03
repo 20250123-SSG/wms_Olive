@@ -9,13 +9,24 @@ public class StorageController {
 
     private StorageService storageService = new StorageService();
 
+    // 입고 내역 조회
     public void selectFilteredStorageList() {
         List<StorageDto> list = storageService.selectAllStorage();
-        System.out.println("\n📦 입고 내역 조회 📦");
+        System.out.println("\n🎁 입고 내역 조회 🎁\n");
         for (StorageDto storage : list) {
+
+            // 0%~100% 검사 진행
+            for (int i = 0; i <= 100; i += 10) {
+                System.out.print("\r🔍 불량품 검사중: " + i + "%");
+                try {
+                    Thread.sleep(200); // 0.2초 대기
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
+
             int finalQuantity = storageService.calculateFinalStorageQuantity(storage);
-            System.out.println("\n🔍 불량품 검사중...");
-            System.out.println(finalQuantity);
+            System.out.println("\n📦 최종 입고 수량: " + finalQuantity + "개 📦\n");
         }
     }
 }
