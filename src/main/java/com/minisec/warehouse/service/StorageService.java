@@ -1,0 +1,28 @@
+package com.minisec.warehouse.service;
+import com.minisec.warehouse.model.dao.StorageMapper;
+import com.minisec.warehouse.model.dto.StorageDto;
+import org.apache.ibatis.session.SqlSession;
+import java.util.List;
+import java.util.Random;
+
+import static com.minisec.common.Template.getSqlSession;
+
+
+public class StorageService {
+
+    public List<StorageDto> selectAllStorage() {
+        SqlSession sqlSession = getSqlSession();
+        StorageMapper storageMapper = sqlSession.getMapper(StorageMapper.class);
+        List<StorageDto> list = storageMapper.selectAllStorage();
+        sqlSession.close();
+        return list;
+    }
+
+    // 불량품 제외 계산
+    public int calculateFinalStorageQuantity(StorageDto storage) {
+        Random rand = new Random();
+        int min = (int) (storage.getStorageQuantity() * 0.75); // 최소 75% 입고
+        int max = storage.getStorageQuantity(); // 최대 100% 입고
+        return rand.nextInt((max - min) + 1) + min;
+    }
+}
