@@ -8,6 +8,7 @@ import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.model.helper.OrderWrapper;
 import com.minisec.user.view.details.InputOrderMemoView;
+import com.minisec.user.view.printer.OrderDetailsPrinter;
 import com.minisec.user.view.printer.ShopProductPrinter;
 import com.minisec.user.view.printer.StoreListPrinter;
 
@@ -70,6 +71,9 @@ public class OrderView {
     private void purchase(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
          List<OrderDto> orderList = new InputOrderMemoView().run(user, orderListByStore);
          orderController.insertOrder(orderList);
+
+
+         /// 주문 출력 -> 문제 : 시간이 등록이 안되어있음
     }
 
     private void addToCart(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {

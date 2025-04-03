@@ -9,10 +9,15 @@
         <id column="user_id" property="userId"/>
         <result column="user_order_status" property="orderStatus"/>
         <result column="user_order_memo" property="orderMemo"/>
+        <result column="created_at" property="orderDate"/>
 
         <association property="store" javaType="StoreDto">
             <id column="store_id" property="storeId"/>
         </association>
+    </resultMap>
+
+    <resultMap id="orderIdResultMap" type="OrderDto">
+        <id column="user_order_id" property="orderId"/>
     </resultMap>
 
     <insert id="insertOrder" parameterType="OrderDto"
@@ -37,4 +42,16 @@
             , NOW()
             )
     </insert>
+
+
+    <select id="selectOrderListByUserId" parameterType="_int" resultMap="orderIdResultMap">
+        SELECT
+        user_order_id
+        FROM
+            user_order
+        WHERE
+        user_id = #{user_id}
+    </select>
+
+
 </mapper>

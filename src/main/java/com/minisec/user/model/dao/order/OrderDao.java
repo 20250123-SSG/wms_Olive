@@ -7,4 +7,6 @@ import java.util.List;
 public interface OrderDao {
 
     int insertOrder(OrderDto order);
+
+    List<OrderDto> selectOrderListByUserId(int userId);
 }

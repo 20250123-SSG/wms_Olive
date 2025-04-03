@@ -111,12 +111,26 @@ public class OrderService {
 
     }
 
-    public void initDaos(SqlSession sqlSession){
+    private void initDaos(SqlSession sqlSession){
         storeProductDao = sqlSession.getMapper(StoreProductDao.class);
         userDao = sqlSession.getMapper(UserDao.class);
         orderDao = sqlSession.getMapper(OrderDao.class);
         orderDetailDao = sqlSession.getMapper(OrderDetailDao.class);
         cartDao = sqlSession.getMapper(CartDao.class);
+    }
+
+    public void selectOrderListByUserId(int userId){
+       try(SqlSession sqlSession = getSqlSession()){
+           orderDao = sqlSession.getMapper(OrderDao.class);
+           /**
+            * 사용자 주문 아이디들 가져오기
+            * 조인해서 List<OrderDto>로 받아오기
+            *
+            */
+
+           List<OrderDto> userOrderIdList = orderDao.selectOrderListByUserId(userId);
+
+       }
     }
 
 

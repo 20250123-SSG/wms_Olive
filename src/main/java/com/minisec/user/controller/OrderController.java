@@ -70,6 +70,7 @@ public class OrderController {
             InsertStatusPrinter.printInsertOrderList(false);
             return;
         }
+        InsertStatusPrinter.printInsertOrderList(true);
         OrderDetailsPrinter.printList(orderDtoList);
     }
 
@@ -91,6 +92,10 @@ public class OrderController {
 
         int insertResult = cartService.insertCartList(cartList);
         InsertStatusPrinter.printInsertCartList(insertResult == cartList.size());
+    }
+
+    public void selectOrderDetailListByUser(){
+
     }
 
 }
