@@ -7,7 +7,7 @@ import com.minisec.common.login.Login;
 import com.minisec.common.login.LoginService;
 import com.minisec.store.view.StoreView;
 import com.minisec.user.view.UserMainView;
-import com.minisec.warehouse.view.WareHouseView;
+import com.minisec.warehouse.view.WarehouseView;
 
 
 public class Main {
@@ -56,8 +56,8 @@ public class Main {
         } else {
             if (userType == 'W') {
                 int manageId = loginService.getWareHouseManageId(userId);
-                WareHouseView wareHouseView = new WareHouseView();
-                wareHouseView.mainWareHouseView(loginInfo, manageId);
+                WarehouseView warehouseView = new WarehouseView();
+                warehouseView.mainWarehouseView(loginInfo, manageId);
             }
             if (userType == 'S') {
                 int manageId = loginService.getStoreManageId(userId);
