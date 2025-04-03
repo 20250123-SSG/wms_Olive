@@ -7,7 +7,7 @@ import com.minisec.common.login.Login;
 import com.minisec.common.login.LoginService;
 import com.minisec.store.view.StoreView;
 import com.minisec.user.view.UserMainView;
-import com.minisec.warehouse.view.WareHouseView;
+import com.minisec.warehouse.view.WarehouseView;
 
 
 public class Main {
@@ -47,8 +47,8 @@ public class Main {
         char userType = loginInfo.getUserType();
         if (userType == 'W') {
             System.out.println("창고관리자");
-            WareHouseView wareHouseView = new WareHouseView();
-            wareHouseView.mainWareHouseView(loginInfo);
+            WarehouseView wareHouseView = new WarehouseView();
+            wareHouseView.mainWarehouseView(loginInfo);
         } else if (userType == 'S') {
             System.out.println("매장관리자");
             StoreView storeView = new StoreView();
