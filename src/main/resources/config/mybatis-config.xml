@@ -16,10 +16,10 @@
         <environment id="dev">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="${driver}"/>
-                <property name="url" value="${url}"/>
-                <property name="username" value="${username}"/>
-                <property name="password" value="${password}"/>
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/menudb"/>
+                <property name="username" value="podoseee"/>
+                <property name="password" value="podoseee"/>
             </dataSource>
         </environment>
     </environments>
@@ -28,6 +28,8 @@
         <mapper resource="mapper/healthcheck-mapper.xml"/>
         <!-- Login -->
         <mapper resource="mapper/login-mapper.xml"/>
+        <!-- WareHouse -->
+        <mapper resource="mapper/warehouse-mapper.xml"/>
 
     </mappers>
 </configuration>
