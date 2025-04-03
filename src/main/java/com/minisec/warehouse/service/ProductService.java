@@ -11,11 +11,13 @@ public class ProductService {
 
     private ProductMapper productMapper;
 
-    // 전체 상품 조회
+    // 창고 전체 상품 조회
     public List<ProductDto> selectAllProducts() {
         SqlSession sqlSession = getSqlSession();
         productMapper = sqlSession.getMapper(ProductMapper.class);
+
         List<ProductDto> list = productMapper.getProductList();
+
         sqlSession.close();
         return list;
     }

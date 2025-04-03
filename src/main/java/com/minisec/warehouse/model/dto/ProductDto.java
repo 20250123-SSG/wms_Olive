@@ -9,10 +9,10 @@ import lombok.*;
 @ToString
 @Builder
 public class ProductDto {
+    private int warehouseDetailId;
+    private int warehouseId;
     private int productId;
-    private int categoryId;
-    private String productName;
-    private String productBrandName;
-    private int productPrice;
-    private String productDescription;
+    private int warehouseDetailQuantity;
+    private String createdAt;
+    private String modifiedAt;
 }
