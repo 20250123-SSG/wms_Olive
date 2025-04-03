@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.user.model.dao.order.StoreProductDao">
+
+    <resultMap id="productResultMap" type="StoreProductDto">
+        <id column="store_detail_id" property="storeProductId"/>
+        <result column="product_id" property="productId"/>
+        <result column="product_name" property="productName"/>
+        <result column="store_detail_price" property="storeProductPrice"/>
+        <result column="store_detail_quantity" property="storeProductQuantity"/>
+        <result column="category_name" property="category"/>
+        <result column="product_brand_name" property="brandName"/>
+        <result column="store_detail_discount" property="discount"/>
+        <result column="product_description" property="productDescription"/>
+    </resultMap>
+
+    <select id="selectStoreAllProductByStoreId" parameterType="_int" resultMap="productResultMap">
+        SELECT
+            sd.store_detail_id
+          , p.product_id
+          , p.product_name
+          , sd.store_detail_price
+          , sd.store_detail_quantity
+          , c.category_name
+          , p.product_brand_name
+          , sd.store_detail_discount
+          , p.product_description
+        FROM
+            store_detail sd
+                JOIN product p ON p.product_id = sd.product_id
+                LEFT JOIN category c ON c.category_id = p.category_id
+        WHERE
+            store_id = #{storeId}
+        AND store_detail_status = 1
+    </select>
+
+
+    <update id="decreaseStoreProductQuantity" parameterType="StoreInventoryDeductionDto">
+        UPDATE
+            store_detail
+        SET
+            store_detail_quantity = store_detail_quantity - #{userOrderQuantity}
+        WHERE
+            store_detail_id = #{storeDetailId}
+        AND store_detail_quantity > 0
+    </update>
+
+
+</mapper>

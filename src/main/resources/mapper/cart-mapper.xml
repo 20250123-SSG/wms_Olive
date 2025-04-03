@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.user.model.dao.cart.CartDao">
+
+    <resultMap id="cartResultMap" type="CartDto">
+        <id column="store_id" property="storeId"/>
+        <result column="user_id" property="userId"/>
+
+        <association property="orderProduct" javaType="OrderProductDto">
+            <result column="cart_quantity" property="quantity"/>
+
+            <association property="product" javaType="StoreProductDto">
+                <id     column="product_id"     property="productId"/>
+            </association>
+        </association>
+    </resultMap>
+    
+    <insert id="insertCartList">
+        INSERT INTO
+            cart
+            (
+              store_id
+            , user_id
+            , product_id
+            , cart_quantity
+            , created_at
+            , modified_at
+            )
+        VALUES
+        <foreach collection="list" item="cart" separator=",">
+            (
+              #{cart.storeId}
+            , #{cart.userId}
+            , #{cart.orderProduct.product.productId}
+            , #{cart.orderProduct.quantity}
+            , NOW()
+            , NOW()
+            )
+        </foreach>
+    </insert>
+
+
+
+</mapper>
