@@ -9,17 +9,20 @@
     <typeAliases>
         <!-- Login -->
         <typeAlias alias="Login" type="com.minisec.common.login.Login"/>
-
+        <!-- Warehouse Product -->
+        <typeAlias alias="ProductDto" type="com.minisec.warehouse.model.dto.ProductDto"/>
+        <!-- Storage Input -->
+        <typeAlias alias="StorageDto" type="com.minisec.warehouse.model.dto.StorageDto"/>
     </typeAliases>
 
     <environments default="dev">
         <environment id="dev">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/menudb"/>
-                <property name="username" value="podoseee"/>
-                <property name="password" value="podoseee"/>
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
             </dataSource>
         </environment>
     </environments>
@@ -30,6 +33,8 @@
         <mapper resource="mapper/login-mapper.xml"/>
         <!-- WareHouse -->
         <mapper resource="mapper/warehouse-mapper.xml"/>
+        <!-- Storage -->
+        <mapper resource="mapper/storage-mapper.xml"/>
 
     </mappers>
 </configuration>
