@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.user.model.dao.UserDao">
+
+    <update id="updateUserBalance" parameterType="UserBalanceUpdateDto">
+        UPDATE
+            user
+        SET
+            user_balance = user_balance + #{userOrderAmountForDeducted}
+        WHERE
+            user_id = #{userId}
+        AND user_balance > 0
+    </update>
+
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.user.model.dao.order.OrderDetailDao">
+
+    <resultMap id="orderDetailResultMap" type="OrderDto">
+        <id column="user_order_id" property="orderId"/>
+
+        <collection property="orderProducts" javaType="list" ofType="OrderProductDto">
+            <result column="user_order_detail_quantity" property="quantity"/>
+            <result column="user_order_detail_price" property="totalPrice"/>
+
+            <association property="product" javaType="StoreProductDto">
+                <id column="product_id" property="productId"/>
+            </association>
+        </collection>
+    </resultMap>
+
+
+    <resultMap id="orderResultMap" type="OrderDto">
+        <id column="user_order_id" property="orderId"/>
+        <result column="user_id" property="userId"/>
+        <result column="user_order_status" property="orderStatus"/>
+        <result column="created_at" property="orderDate"/>
+        <result column="user_order_memo" property="orderMemo"/>
+
+        <association property="store" javaType="StoreDto">
+            <id column="store_id" property="storeId"/>
+            <result column="store_name" property="storeName"/>
+            <result column="store_phone" property="phone"/>
+            <result column="store_address" property="address"/>
+        </association>
+
+        <collection property="orderProducts" javaType="list" ofType="OrderProductDto">
+            <result column="user_order_detail_quantity" property="quantity"/>
+            <result column="user_order_detail_price" property="totalPrice"/>
+
+            <association property="product" javaType="StoreProductDto">
+                <id column="product_id" property="productId"/>
+                <result column="product_name" property="productName"/>
+                <result column="store_detail_price" property="storeProductPrice"/>
+                <result column="store_detail_quantity" property="storeProductQuantity"/>
+                <result column="category_name" property="category"/>
+                <result column="product_brand_name" property="brandName"/>
+                <result column="store_detail_discount" property="discount"/>
+            </association>
+        </collection>
+    </resultMap>
+
+
+
+
+
+    <insert id="insertOrderDetailList" parameterType="list">
+        INSERT INTO user_order_detail (
+        user_order_id,
+        product_id,
+        user_order_detail_quantity,
+        user_order_detail_price,
+        created_at,
+        modified_at
+        )
+        VALUES
+        <foreach collection="list" item="order" separator=",">
+            <foreach collection="order.orderProducts" item="item" separator=",">
+                (
+                #{order.orderId},
+                #{item.product.productId},
+                #{item.quantity},
+                #{item.totalPrice},
+                NOW(),
+                NOW()
+                )
+            </foreach>
+        </foreach>
+    </insert>
+
+
+</mapper>
