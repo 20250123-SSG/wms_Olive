@@ -10,7 +10,7 @@ public class WarehouseController {
 
     // 창고 내 전체 상품 조회
     public void selectAllProducts() {
-        System.out.println("\n창고 내 전체 상품 조회");
+        System.out.println("\n📦 창고 내 전체 상품 조회 📦");
         List<WarehouseDto> list = warehouseService.selectAllProducts();
 
         System.out.println("────────────────────────────────────────────────────────────────────────────────");
