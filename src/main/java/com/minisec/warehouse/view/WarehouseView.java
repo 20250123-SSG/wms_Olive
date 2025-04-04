@@ -6,14 +6,9 @@ import com.minisec.warehouse.controller.StorageController;
 import java.util.Scanner;
 
 public class WarehouseView {
-    private ProductController productController;
-    private StorageController storageController;
+    private ProductController productController = new ProductController();
+    private StorageController storageController = new StorageController();
     private Scanner sc = new Scanner(System.in);
-
-    public WarehouseView() {
-        productController = new ProductController();
-        storageController = new StorageController();
-    }
 
     public void mainWarehouseView(Login loginInfo, int manageId) {
         while (true) {
