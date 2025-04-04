@@ -26,4 +26,15 @@
             warehouse_detail
     </select>
 
+    // 창고 내 상품 조회 업데이트
+    <update id="updateProductQuantity">
+        UPDATE
+            warehouse_detail
+        SET
+            warehouse_detail_quantity = #{newQuantity}, modified_at = NOW()
+        WHERE
+            warehouse_id = #{warehouseId}
+          AND product_id = #{productId}
+    </update>
+
 </mapper>

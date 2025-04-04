@@ -21,4 +21,15 @@ public class ProductService {
         sqlSession.close();
         return list;
     }
+
+    // 입출고 업데이트된 상품 조회
+    public void updateProductQuantity(int productId, int warehouseId, int newQuantity) {
+        SqlSession sqlSession = getSqlSession();
+        productMapper = sqlSession.getMapper(ProductMapper.class);
+
+        productMapper.updateProductQuantity(productId, warehouseId, newQuantity);
+
+        sqlSession.commit();
+        sqlSession.close();
+    }
 }

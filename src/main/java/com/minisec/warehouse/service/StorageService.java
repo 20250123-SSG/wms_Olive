@@ -10,6 +10,8 @@ import static com.minisec.common.Template.getSqlSession;
 
 public class StorageService {
 
+    private ProductService productService = new ProductService();
+
     // 입고된 모든 상품
     public List<StorageDto> selectAllStorage(){
         SqlSession sqlSession = getSqlSession();
@@ -41,5 +43,11 @@ public class StorageService {
         } finally {
             sqlSession.close();
         }
+    }
+
+    // 입고 후 창고 업데이트
+    public void processStorageUpdate(StorageDto storage) {
+        int finalQuantity = calculateFinalStorageQuantity(storage);
+        productService.updateProductQuantity(storage.getProductId(), storage.getWarehouseId(), finalQuantity);
     }
 }
