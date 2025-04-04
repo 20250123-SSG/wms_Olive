@@ -14,11 +14,8 @@ import java.util.Scanner;
 public class InputOrderMemoView {
     private final Scanner sc = new Scanner(System.in);
 
-
     public List<OrderDto> run(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
-        OrderAssembler orderAssembler = new OrderAssembler();
-
-        List<OrderDto> orderList = orderAssembler.getOrderList(user, orderListByStore);
+        List<OrderDto> orderList = new OrderAssembler().getOrderList(user, orderListByStore);
 
         for (OrderDto order : orderList) {
             OrderDetailsPrinter.printOne(order);

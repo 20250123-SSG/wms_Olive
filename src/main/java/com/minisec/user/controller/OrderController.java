@@ -50,10 +50,9 @@ public class OrderController {
     }
 
 
-    /// 이 DTO 생성 로직을 따로 뺴고 좋을거같은데 어차피 CartController에서 사용해야됨
     public void insertOrder(List<OrderDto> orderList) {
-        List<StoreInventoryDeductionDto> storeInventoryDeductionList = new ArrayList<>(); ///1
-        List<UserBalanceUpdateDto> userAmountDeductionList = new ArrayList<>(); ///2
+        List<StoreInventoryDeductionDto> storeInventoryDeductionList = new ArrayList<>();
+        List<UserBalanceUpdateDto> userAmountDeductionList = new ArrayList<>();
 
         for (OrderDto orderDto : orderList) {
             for (OrderProductDto orderProduct : orderDto.getOrderProducts()) {
@@ -73,7 +72,7 @@ public class OrderController {
                     Math.negateExact(totalPrice)
             ));
         }
-        int insertResult = orderService.insertOrderList(new InsertOrderDto(
+        int insertResult = orderService.order(new OrderProcessDto(
                 storeInventoryDeductionList,
                 userAmountDeductionList,
                 orderList

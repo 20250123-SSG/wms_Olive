@@ -14,7 +14,7 @@ import java.util.Objects;
 @ToString
 public class OrderProductDto {
 
-    private int orderId;
+    private int orderId; //티데일아이디여야하는데
     private StoreProductDto product;
     private int quantity;
     private int totalPrice;
@@ -22,7 +22,7 @@ public class OrderProductDto {
     public OrderProductDto(StoreProductDto product, int quantity) {
         this.product = product;
         this.quantity = quantity;
-        this.totalPrice = product.getProductPriceAfterDiscount() * quantity;
+        calculateTotalPrice();
     }
 
     public void updateQuantity(int quantity) {
@@ -32,6 +32,9 @@ public class OrderProductDto {
         this.quantity += quantity;
     }
 
+    public void calculateTotalPrice() {
+        this.totalPrice = product.getProductPriceAfterDiscount() * quantity;
+    }
 
     @Override
     public boolean equals(Object o) {

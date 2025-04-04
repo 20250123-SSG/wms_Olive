@@ -5,6 +5,63 @@
 
 <mapper namespace="com.minisec.user.model.dao.cart.CartDao">
 
+    <resultMap id="cartDetailsResultMap" type="CartDetailByStoreDto">
+        <id column="user_id" property="userId"/>
+        <id column="store_id" property="store.storeId"/>
+
+        <association property="store" javaType="StoreDto">
+            <id column="store_id" property="storeId"/>
+            <result column="store_name"  property="storeName"/>
+
+        </association>
+        <collection property="orderProductList" javaType="list" ofType="OrderProductDto">
+            <result column="cart_quantity" property="quantity"/>
+            <result column="cart_id"   property="orderId"/>
+
+            <association property="product" javaType="StoreProductDto">
+                <id      column="store_detail_id"        property="storeProductId"/>
+                <result  column="product_id"             property="productId"/>
+                <result  column="product_name"           property="productName"/>
+                <result  column="store_detail_price"     property="storeProductPrice"/>
+                <result  column="store_detail_quantity"  property="storeProductQuantity"/>
+                <result  column="category_name"          property="category"/>
+                <result  column="product_brand_name"     property="brandName"/>
+                <result  column="product_description"    property="productDescription"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <!-- 가격 할인 계산해서 넣기-->
+    <select id="selectAllCartDetailListByUserId" parameterType="_int" resultMap="cartDetailsResultMap">
+        SELECT
+            c.cart_id
+          , c.user_id
+          , c.store_id
+          , c.cart_quantity
+          , c.product_id
+
+          , p.product_name
+          , p.product_brand_name
+          , p.product_description
+
+          , sd.store_detail_id
+          , sd.store_detail_price
+          , sd.store_detail_quantity
+
+          , s.store_name
+          , ct.category_name
+        FROM
+            cart c
+                JOIN product p ON p.product_id = c.product_id
+                JOIN store_detail sd ON sd.product_id = c.product_id
+                    AND sd.store_id = c.store_id
+                JOIN store s ON s.store_id = c.store_id
+                LEFT JOIN category ct ON ct.category_id = p.category_id
+        WHERE
+            c.user_id = #{userId}
+    </select>
+
+
     <insert id="insertCartList">
         INSERT INTO
             cart
@@ -28,5 +85,16 @@
             )
         </foreach>
     </insert>
+
+    <delete id="deleteCartListByCartId" parameterType="list">
+        DELETE
+        FROM
+            cart
+        WHERE
+            cart_id IN
+        <foreach collection="list" item="cartId" open="(" separator="," close=")">
+            #{cartId}
+        </foreach>
+    </delete>
 
 </mapper>

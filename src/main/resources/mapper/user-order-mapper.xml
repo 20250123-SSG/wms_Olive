@@ -63,9 +63,9 @@
             user_order o
                 JOIN user_order_detail od ON od.user_order_id = o.user_order_id
                 JOIN product p ON p.product_id = od.product_id
-                JOIN store s ON s.store_id = o.store_id
                 JOIN store_detail sd ON sd.store_id = o.store_id
                     AND sd.product_id = p.product_id
+                JOIN store s ON s.store_id = o.store_id
                 LEFT JOIN category c ON c.category_id = p.category_id
         <where>
             <if test="orderId != null">

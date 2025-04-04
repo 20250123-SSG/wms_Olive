@@ -3,6 +3,7 @@ package com.minisec.user.service;
 import com.minisec.common.Template;
 import com.minisec.user.model.dao.cart.CartDao;
 import com.minisec.user.model.dao.order.OrderDao;
+import com.minisec.user.model.dto.cart.CartDetailByStoreDto;
 import com.minisec.user.model.dto.cart.CartDto;
 import org.apache.ibatis.session.SqlSession;
 
@@ -13,6 +14,13 @@ import static com.minisec.common.Template.getSqlSession;
 public class CartService {
     private CartDao cartDao;
 
+    public List<CartDetailByStoreDto> selectAllCartDetailListByUserId(int userId) {
+        try(SqlSession sqlSession = getSqlSession()) {
+            cartDao = sqlSession.getMapper(CartDao.class);
+
+            return cartDao.selectAllCartDetailListByUserId(userId);
+        }
+    }
 
     public int insertCartList(List<CartDto> cartList){
         try(SqlSession sqlSession = getSqlSession()){

@@ -6,6 +6,7 @@ import com.minisec.user.model.dao.cart.CartDao;
 import com.minisec.user.model.dao.order.OrderDao;
 import com.minisec.user.model.dao.order.OrderDetailDao;
 import com.minisec.user.model.dao.order.StoreProductDao;
+import com.minisec.user.model.dto.cart.CartOrderProcessDto;
 import com.minisec.user.model.dto.order.*;
 import org.apache.ibatis.session.SqlSession;
 
@@ -20,15 +21,7 @@ public class OrderService {
     private OrderDao orderDao;
     private OrderDetailDao orderDetailDao;
     private CartDao cartDao;
-    // private UserDao userDao
 
-    ///바로 구매
-    /**
-     * 1. StoreDao(재고차감)
-     * 2. UserDao(금액차감)
-     * 3. OrderDao(주문추가)
-     * 4. OrderDao(주문상품추가)
-     */
 
     public List<OrderDto> selectAllOrderDetailListByOrderId(OrderDetailFilterDto orderDetailFilter) {
         try (SqlSession sqlSession = getSqlSession()) {
@@ -39,25 +32,12 @@ public class OrderService {
         }
     }
 
-    public int insertOrderList(InsertOrderDto request) {
+    public int order(OrderProcessDto request){
         try (SqlSession sqlSession = getSqlSession()) {
-            initDaos(sqlSession);
+            orderDao = sqlSession.getMapper(OrderDao.class);
 
-            if (!decreaseStoreProductsQuantity(request.storeInventoryDeductionList())) {
-                sqlSession.rollback();
-                return 0;
-            }
-            if (!decreaseUserBalance(request.userBalanceUpdateList())) {
-                sqlSession.rollback();
-                return 0;
-            }
-
-            List<OrderDto> orderList = request.orderDtoList();
-            if (!insertOrderListAndGetOrderId(orderList)) {
-                sqlSession.rollback();
-                return 0;
-            }
-            if (!insertOrderDetailList(orderList)) {
+            int insertOrderListResult = insertOrderList(request,sqlSession);
+            if(insertOrderListResult == 0){
                 sqlSession.rollback();
                 return 0;
             }
@@ -67,10 +47,49 @@ public class OrderService {
         }
     }
 
-    /// 장바구니 구매
-    public void insertOrderFromCart() {
-        // insertOrder();
 
+    public int orderFromCart(CartOrderProcessDto request) {
+        try (SqlSession sqlSession = getSqlSession()) {
+            orderDao = sqlSession.getMapper(OrderDao.class);
+            cartDao = sqlSession.getMapper(CartDao.class);
+
+            int insertOrderListResult = insertOrderList(request.orderProcessDto(),sqlSession);
+            if(insertOrderListResult == 0){
+                sqlSession.rollback();
+                return 0;
+            }
+
+            List<Integer> deleteCartIdList = request.cartIdList();
+            int deleteFromCart = cartDao.deleteCartListByCartId(deleteCartIdList);
+            if(deleteFromCart != deleteCartIdList.size()){
+                sqlSession.rollback();
+                return 0;
+            }
+
+            sqlSession.commit();
+            return 1;
+        }
+    }
+
+    private int insertOrderList(OrderProcessDto request, SqlSession sqlSession) {
+        initDaos(sqlSession);
+
+        if (!decreaseStoreProductsQuantity(request.storeInventoryDeductionList())) {
+            return 0;
+        }
+        if (!decreaseUserBalance(request.userBalanceUpdateList())) {
+            return 0;
+        }
+
+        List<OrderDto> orderList = request.orderDtoList();
+        if (!insertOrderListAndGetOrderId(orderList)) {
+            return 0;
+        }
+        if (!insertOrderDetailList(orderList)) {
+            return 0;
+        }
+
+        return 1;
     }
 
 

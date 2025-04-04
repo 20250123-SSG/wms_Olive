@@ -32,7 +32,6 @@ public class OrderAssembler {
                     OrderStatus.ORDERABLE.getValue(),
                     orderProductList
             );
-//            order.calculateTotalPriceAndQuantity();
             result.add(order);
         }
         return result;

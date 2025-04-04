@@ -26,7 +26,14 @@ public class OrderWrapper {
         return checkExistProduct(quantity, orderProductList, orderProduct);
     }
 
-    private static OrderProductDto checkExistProduct(int quantity, List<OrderProductDto> orderProductList, OrderProductDto orderProduct) {
+    public void addOrderFromCart(StoreDto store, OrderProductDto product, int quantity){
+        List<OrderProductDto> orderProductList = checkExistStore(store);
+        checkExistProduct(quantity, orderProductList, product);
+    }
+
+
+
+    private OrderProductDto checkExistProduct(int quantity, List<OrderProductDto> orderProductList, OrderProductDto orderProduct) {
         if (orderProductList.contains(orderProduct)) {
             orderProduct = orderProductList.get(orderProductList.indexOf(orderProduct));
             orderProduct.updateQuantity(quantity);

@@ -36,6 +36,6 @@ public class ShopProductPrinter {
         System.out.printf("상품 설명 : %s\n", product.getProductDescription());
         System.out.printf("할인여부 : %s\n",  product.getDiscount() > 0 ? "O" : "X");
         System.out.println("==========");
-
     }
+
 }

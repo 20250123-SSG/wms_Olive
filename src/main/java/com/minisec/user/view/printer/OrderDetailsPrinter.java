@@ -27,12 +27,9 @@ public class OrderDetailsPrinter {
     }
 
     public static void printList(List<OrderDto> orders) {
-        System.out.println("\n\n\n============= 구매 내역 =============\n");
-
         for (OrderDto order : orders) {
             printOne(order);
         }
-        System.out.println("==================================\n\n\n");
     }
 
     private static String getOrderProductDetails(List<OrderProductDto> orderProducts) {
@@ -52,4 +49,5 @@ public class OrderDetailsPrinter {
         result.append("\n");
         return result.toString();
     }
+
 }
