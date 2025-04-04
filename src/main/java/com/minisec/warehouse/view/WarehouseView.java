@@ -4,6 +4,7 @@ import com.minisec.common.login.Login;
 import com.minisec.warehouse.controller.WarehouseController;
 import com.minisec.warehouse.controller.ShipmentController;
 import com.minisec.warehouse.controller.StorageController;
+import com.minisec.warehouse.model.dto.ShipmentDetailDto;
 import com.minisec.warehouse.model.dto.ShipmentDto;
 
 import java.util.*;
@@ -45,32 +46,35 @@ public class WarehouseView {
     }
 
     public void selectOrderList(int manageId) {
-        System.out.println("1. 현재 대기중인 발주 목록 확인");
+        System.out.println("\n1. 현재 대기중인 발주 목록 확인");
         System.out.println("2. 완료한 발주 목록 확인");
         System.out.println("0. 돌아가기");
-        System.out.print("확인하고 싶은 내역을 선택하세요: ");
+        System.out.print("\n확인하고 싶은 내역을 선택하세요: ");
         int choice = this.sc.nextInt();
         this.sc.nextLine();
-        List<ShipmentDto> orders = this.wareHouseController.selectOrderList(manageId, choice);
-        Map<Integer, Integer> map = new HashMap<>();
-        System.out.println("주문번호\t 주문명\t 주문메모\t 주문상태\t 주문발생일");
 
         if (choice == 0) {
             System.out.println("상위 메뉴로 돌아갑니다.");
             return;
         }
 
+        List<ShipmentDto> orders = this.wareHouseController.selectOrderList(manageId, choice);
+        Map<Integer, Integer> map = new HashMap<>();
+        System.out.println("\n────────────────────────────────────────────────────────────────────────────────");
+        System.out.println("주문번호\t 주문명\t\t\t 주문메모\t 주문상태\t 주문발생일");
+
         for(int i = 0; i < orders.size(); ++i) {
-            ShipmentDto order = (ShipmentDto)orders.get(i);
-            System.out.printf("%d\t %s\t %s\t %s\t %s \n", i + 1, order.getStoreOrderSubject(), order.getStoreOrderMemo(), this.getOrderStatus(order.getStoreOrderStatus()), order.getCreatedAt());
+            ShipmentDto order = orders.get(i);
+            System.out.printf("%d\t\t\t %s\t %s\t\t %s\t\t %s \n", i + 1, order.getStoreOrderSubject(), order.getStoreOrderMemo(), this.getOrderStatus(order.getStoreOrderStatus()), order.getCreatedAt());
             map.put(i, order.getStoreOrderId());
         }
+        System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
 
         System.out.print("주문의 상세조회를 원하신다면 번호를, 상위메뉴로 돌아갈 경우 0번을 입력하세요: ");
         int orderDetail = this.sc.nextInt();
-        this.sc.nextLine(); // 개행 문자 처리
+        this.sc.nextLine();
 
-        if (orderDetail == 0) {
+        if (orderDetail == 0 || !map.containsKey(orderDetail - 1)) {
             System.out.println("상위 메뉴로 돌아갑니다.");
             return;
         }
@@ -81,22 +85,30 @@ public class WarehouseView {
         }
 
         ShipmentDto order = orders.get(orderDetail - 1);
-        System.out.println("\n주문 상세 정보");
+        System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
+        System.out.println("[주문 상세 정보]");
         System.out.println("주문명: " + order.getStoreOrderSubject());
         System.out.println("주문메모: " + order.getStoreOrderMemo());
         System.out.println("주문상태: " + this.getOrderStatus(order.getStoreOrderStatus()));
         System.out.println("주문발생일: " + order.getCreatedAt());
 
+        System.out.println("\n[주문 상세 항목]");
+        for (ShipmentDetailDto detail : order.getOrderDetails()) {
+            System.out.printf("상품명: %s, 수량: %d, 생성일: %s\n", detail.getProductName(), detail.getStoreOrderDetailQuantity(), detail.getCreatedAt());
+        }
+        System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
+
         if (choice == 1) { // 현재 대기중인 주문이라면
             System.out.print("수주하시겠습니까? (Y/N): ");
             String answer = this.sc.nextLine().trim().toUpperCase();
 
+            boolean success = false;
             if (answer.equals("Y")) {
-                System.out.println("수주가 완료되었습니다.");
-                // 여기에 수주 처리 로직 추가 가능
-            } else {
-                System.out.println("돌아갑니다.");
+                success = this.wareHouseController.acceptOrder(order.getStoreOrderId());
+            } else if (answer.equals("N")) {
+                success = this.wareHouseController.rejectOrder(order.getStoreOrderId());
             }
+            System.out.println(success ? "거절" : "거절실패");
         }
 
     }
