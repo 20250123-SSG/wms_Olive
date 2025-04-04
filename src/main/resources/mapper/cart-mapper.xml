@@ -5,19 +5,6 @@
 
 <mapper namespace="com.minisec.user.model.dao.cart.CartDao">
 
-    <resultMap id="cartResultMap" type="CartDto">
-        <id column="store_id" property="storeId"/>
-        <result column="user_id" property="userId"/>
-
-        <association property="orderProduct" javaType="OrderProductDto">
-            <result column="cart_quantity" property="quantity"/>
-
-            <association property="product" javaType="StoreProductDto">
-                <id     column="product_id"     property="productId"/>
-            </association>
-        </association>
-    </resultMap>
-    
     <insert id="insertCartList">
         INSERT INTO
             cart
@@ -41,7 +28,5 @@
             )
         </foreach>
     </insert>
-
-
 
 </mapper>

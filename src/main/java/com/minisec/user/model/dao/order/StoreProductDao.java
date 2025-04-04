@@ -10,4 +10,5 @@ public interface StoreProductDao {
     List<StoreProductDto> selectStoreAllProductByStoreId(int storeId);
 
     int decreaseStoreProductQuantity(StoreInventoryDeductionDto storeInventoryUpdateDetail);
+
 }

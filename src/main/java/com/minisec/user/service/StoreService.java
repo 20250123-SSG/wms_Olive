@@ -14,16 +14,16 @@ public class StoreService {
     private StoreDao storeDao;
     private StoreProductDao storeProductDao;
 
-    public List<StoreDto> selectStoreList(){
-        try(SqlSession sqlSession = getSqlSession()){
+    public List<StoreDto> selectStoreList() {
+        try (SqlSession sqlSession = getSqlSession()) {
             storeDao = sqlSession.getMapper(StoreDao.class);
 
-            return  storeDao.selectStoreList();
+            return storeDao.selectStoreList();
         }
     }
 
-    public List<StoreProductDto> selectStoreAllProductByStoreId(int storeId){
-        try(SqlSession sqlSession = getSqlSession()){
+    public List<StoreProductDto> selectStoreAllProductByStoreId(int storeId) {
+        try (SqlSession sqlSession = getSqlSession()) {
             storeProductDao = sqlSession.getMapper(StoreProductDao.class);
 
             return storeProductDao.selectStoreAllProductByStoreId(storeId);

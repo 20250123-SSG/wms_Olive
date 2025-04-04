@@ -9,10 +9,11 @@
         UPDATE
             user
         SET
-            user_balance = user_balance + #{userOrderAmountForDeducted}
+            user_balance = (user_balance + #{userOrderAmountForDeducted})
         WHERE
             user_id = #{userId}
         AND user_balance > 0
+        AND (user_balance + #{userOrderAmountForDeducted}) >= 0
     </update>
 
 </mapper>

@@ -22,7 +22,6 @@ public class UserMainView {
                 >> 입력 :""");
             int functionNum = Integer.parseInt(sc.nextLine());
 
-
             if(functionNum == 0){
                 System.out.println("프로그램을 종료합니다.");
                 return;

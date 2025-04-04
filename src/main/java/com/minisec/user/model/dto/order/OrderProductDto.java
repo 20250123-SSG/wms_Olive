@@ -26,7 +26,7 @@ public class OrderProductDto {
     }
 
     public void updateQuantity(int quantity) {
-        if((this.quantity + quantity) > product.getStoreProductQuantity()){ //todo 예외
+        if ((this.quantity + quantity) > product.getStoreProductQuantity()) { //todo 예외
 
         }
         this.quantity += quantity;

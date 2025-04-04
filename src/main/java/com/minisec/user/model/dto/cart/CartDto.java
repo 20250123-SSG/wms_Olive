@@ -15,14 +15,12 @@ public class CartDto {
     private int cartId;
     private int storeId;
     private int userId;
-    private OrderProductDto orderProduct; /// 수량 가격
+    private OrderProductDto orderProduct;
 
     public CartDto(int storeId, int userId, OrderProductDto orderProduct) {
         this.storeId = storeId;
         this.userId = userId;
         this.orderProduct = orderProduct;
     }
-
-
 
 }

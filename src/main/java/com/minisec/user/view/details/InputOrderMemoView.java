@@ -14,6 +14,7 @@ import java.util.Scanner;
 public class InputOrderMemoView {
     private final Scanner sc = new Scanner(System.in);
 
+
     public List<OrderDto> run(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
         OrderAssembler orderAssembler = new OrderAssembler();
 
@@ -21,12 +22,11 @@ public class InputOrderMemoView {
 
         for (OrderDto order : orderList) {
             OrderDetailsPrinter.printOne(order);
-
             System.out.println("[ 주문 메모를 입력해주세요. (추가를 원하지 않으시면 공백을 입력하세요.) ]");
             System.out.println(">> 입력:");
             String inputOrderMemo = sc.nextLine().trim();
 
-            if(inputOrderMemo.isEmpty()) {
+            if (inputOrderMemo.isEmpty()) {
                 continue;
             }
             order.setOrderMemo(inputOrderMemo);

@@ -9,5 +9,4 @@ public interface CartDao {
 
     int insertCartList(List<CartDto> cartList);
 
-
 }

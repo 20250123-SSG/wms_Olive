@@ -6,15 +6,15 @@
 <mapper namespace="com.minisec.user.model.dao.order.StoreProductDao">
 
     <resultMap id="productResultMap" type="StoreProductDto">
-        <id column="store_detail_id" property="storeProductId"/>
-        <result column="product_id" property="productId"/>
-        <result column="product_name" property="productName"/>
-        <result column="store_detail_price" property="storeProductPrice"/>
-        <result column="store_detail_quantity" property="storeProductQuantity"/>
-        <result column="category_name" property="category"/>
-        <result column="product_brand_name" property="brandName"/>
-        <result column="store_detail_discount" property="discount"/>
-        <result column="product_description" property="productDescription"/>
+        <id      column="store_detail_id"        property="storeProductId"/>
+        <result  column="product_id"             property="productId"/>
+        <result  column="product_name"           property="productName"/>
+        <result  column="store_detail_price"     property="storeProductPrice"/>
+        <result  column="store_detail_quantity"  property="storeProductQuantity"/>
+        <result  column="category_name"          property="category"/>
+        <result  column="product_brand_name"     property="brandName"/>
+        <result  column="store_detail_discount"  property="discount"/>
+        <result  column="product_description"    property="productDescription"/>
     </resultMap>
 
     <select id="selectStoreAllProductByStoreId" parameterType="_int" resultMap="productResultMap">
@@ -37,16 +37,14 @@
         AND store_detail_status = 1
     </select>
 
-
     <update id="decreaseStoreProductQuantity" parameterType="StoreInventoryDeductionDto">
         UPDATE
             store_detail
         SET
-            store_detail_quantity = store_detail_quantity - #{userOrderQuantity}
+            store_detail_quantity = ( store_detail_quantity - #{userOrderQuantity} )
         WHERE
             store_detail_id = #{storeDetailId}
-        AND store_detail_quantity > 0
+            AND store_detail_quantity > 0
     </update>
-
 
 </mapper>
