@@ -26,7 +26,7 @@
             storage
     </select>
 
-    // db 업데이트
+    <!--// db 업데이트
     <update id="updateStorageQuantity">
         UPDATE
             storage
@@ -35,6 +35,6 @@
         WHERE
             storage_id = #{storageId}
           AND warehouse_id = #{warehouseId}
-    </update>
+    </update>-->
 
 </mapper>

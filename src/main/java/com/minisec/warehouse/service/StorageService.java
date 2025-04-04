@@ -29,7 +29,7 @@ public class StorageService {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    // 최종 입고 수량 db 업데이트
+    /*// 최종 입고 수량 db 업데이트
     public void updateStorageQuantity(int storageId, int newQuantity) {
         SqlSession sqlSession = getSqlSession();
         StorageMapper storageMapper = sqlSession.getMapper(StorageMapper.class);
@@ -44,10 +44,5 @@ public class StorageService {
             sqlSession.close();
         }
     }
-
-    // 입고 후 창고 업데이트
-    public void processStorageUpdate(StorageDto storage) {
-        int finalQuantity = calculateFinalStorageQuantity(storage);
-        productService.updateProductQuantity(storage.getProductId(), storage.getWarehouseId(), finalQuantity);
-    }
+*/
 }

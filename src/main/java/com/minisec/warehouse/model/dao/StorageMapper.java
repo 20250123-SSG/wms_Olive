@@ -9,6 +9,6 @@ public interface StorageMapper {
     // 전체 입고 내역 조회
     List<StorageDto> selectAllStorage();
 
-    // 입고 수량 db 업데이트
-    void updateStorageQuantity(@Param("storageId") int storageId, @Param("newQuantity") int newQuantity);
+   /* // 입고 수량 db 업데이트
+    void updateStorageQuantity(@Param("storageId") int storageId, @Param("newQuantity") int newQuantity);*/
 }
