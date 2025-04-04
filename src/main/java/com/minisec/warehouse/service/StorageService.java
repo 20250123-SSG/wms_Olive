@@ -10,7 +10,7 @@ import static com.minisec.common.Template.getSqlSession;
 
 public class StorageService {
 
-    private ProductService productService = new ProductService();
+    private WarehouseService warehouseService = new WarehouseService();
 
     // 입고된 모든 상품
     public List<StorageDto> selectAllStorage(){
@@ -29,7 +29,7 @@ public class StorageService {
         return rand.nextInt((max - min) + 1) + min;
     }
 
-    /*// 최종 입고 수량 db 업데이트
+    // 최종 입고 수량 db 업데이트
     public void updateStorageQuantity(int storageId, int newQuantity) {
         SqlSession sqlSession = getSqlSession();
         StorageMapper storageMapper = sqlSession.getMapper(StorageMapper.class);
@@ -44,5 +44,4 @@ public class StorageService {
             sqlSession.close();
         }
     }
-*/
 }

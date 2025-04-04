@@ -14,6 +14,18 @@
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
+
+    <!--db 업데이트 -->
+    <update id="updateStorageQuantity">
+        UPDATE
+            storage
+        SET
+            storage_quantity = #{newQuantity}
+        WHERE
+            storage_id = #{storageId}
+    </update>
+
+
     <select id="selectAllStorage" resultMap="StorageResultMap">
         SELECT
             storage_id,
@@ -25,16 +37,5 @@
         FROM
             storage
     </select>
-
-    <!--// db 업데이트
-    <update id="updateStorageQuantity">
-        UPDATE
-            storage
-        SET
-            storage_quantity = #{newQuantity}
-        WHERE
-            storage_id = #{storageId}
-          AND warehouse_id = #{warehouseId}
-    </update>-->
 
 </mapper>
