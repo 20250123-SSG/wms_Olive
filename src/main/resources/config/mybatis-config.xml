@@ -15,6 +15,7 @@
         <typeAlias type="com.minisec.user.model.dto.order.OrderDto" alias="OrderDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.StoreInventoryDeductionDto" alias="StoreInventoryDeductionDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.UserBalanceUpdateDto" alias="UserBalanceUpdateDto"/>
+        <typeAlias type="com.minisec.user.model.dto.order.OrderDetailFilterDto" alias="OrderDetailFilterDto"/>
         <typeAlias type="com.minisec.user.model.dto.StoreProductDto" alias="StoreProductDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartDto" alias="CartDto"/>
 

@@ -20,7 +20,7 @@ public class OrderService {
     private OrderDao orderDao;
     private OrderDetailDao orderDetailDao;
     private CartDao cartDao;
-   // private UserDao userDao
+    // private UserDao userDao
 
     ///바로 구매
     /**
@@ -29,25 +29,35 @@ public class OrderService {
      * 3. OrderDao(주문추가)
      * 4. OrderDao(주문상품추가)
      */
+
+    public List<OrderDto> selectAllOrderDetailListByOrderId(OrderDetailFilterDto orderDetailFilter) {
+        try (SqlSession sqlSession = getSqlSession()) {
+            orderDao = sqlSession.getMapper(OrderDao.class);
+
+            List<OrderDto> orderList = orderDao.selectAllOrderDetailListByFilter(orderDetailFilter);
+            return orderList;
+        }
+    }
+
     public int insertOrderList(InsertOrderDto request) {
-        try(SqlSession sqlSession = getSqlSession()){
+        try (SqlSession sqlSession = getSqlSession()) {
             initDaos(sqlSession);
 
-            if(!decreaseStoreProductsQuantity(request.storeInventoryDeductionList())){
+            if (!decreaseStoreProductsQuantity(request.storeInventoryDeductionList())) {
                 sqlSession.rollback();
                 return 0;
             }
-            if(!decreaseUserBalance(request.userBalanceUpdateList())){
+            if (!decreaseUserBalance(request.userBalanceUpdateList())) {
                 sqlSession.rollback();
                 return 0;
             }
 
             List<OrderDto> orderList = request.orderDtoList();
-            if(!insertOrderListAndGetOrderId(orderList)){
+            if (!insertOrderListAndGetOrderId(orderList)) {
                 sqlSession.rollback();
                 return 0;
             }
-            if(!insertOrderDetailList(orderList)){
+            if (!insertOrderDetailList(orderList)) {
                 sqlSession.rollback();
                 return 0;
             }
@@ -57,82 +67,53 @@ public class OrderService {
         }
     }
 
-    public boolean insertOrderDetailList(List<OrderDto> orderList){
+    /// 장바구니 구매
+    public void insertOrderFromCart() {
+        // insertOrder();
+
+    }
+
+
+    private boolean insertOrderDetailList(List<OrderDto> orderList) {
         int insertCheckCount = 0;
-        for(OrderDto orderDto : orderList){
+        for (OrderDto orderDto : orderList) {
             List<OrderProductDto> orderProductList = orderDto.getOrderProducts();
             insertCheckCount += orderProductList.size();
         }
         int insertOrderDetailResult = orderDetailDao.insertOrderDetailList(orderList);
-        if(insertCheckCount == insertOrderDetailResult){
-            return true;
-        }
-        return false;
-
+        return insertCheckCount == insertOrderDetailResult;
     }
 
-    public boolean insertOrderListAndGetOrderId(List<OrderDto> orderList){
+    private boolean insertOrderListAndGetOrderId(List<OrderDto> orderList) {
         int insertOrderResult = 0;
-        for(OrderDto orderDto : orderList){
+        for (OrderDto orderDto : orderList) {
             insertOrderResult += orderDao.insertOrder(orderDto);
         }
-        if(insertOrderResult == orderList.size()){
-            return true;
-        }
-        return false;
+        return insertOrderResult == orderList.size();
     }
 
-    public boolean decreaseUserBalance(List<UserBalanceUpdateDto> updateUserBalanceList){
+    private boolean decreaseUserBalance(List<UserBalanceUpdateDto> updateUserBalanceList) {
         int updateUserBalanceDeductionResult = 0;
-        for(UserBalanceUpdateDto userBalanceUpdateDto : updateUserBalanceList){
+        for (UserBalanceUpdateDto userBalanceUpdateDto : updateUserBalanceList) {
             updateUserBalanceDeductionResult += userDao.updateUserBalance(userBalanceUpdateDto);
         }
-        if(updateUserBalanceDeductionResult == updateUserBalanceList.size() ){
-            return true;
-        }
-        return false;
+        return updateUserBalanceDeductionResult == updateUserBalanceList.size();
     }
 
-    public boolean decreaseStoreProductsQuantity(List<StoreInventoryDeductionDto> updateStoreProductQuantityList){
+    private boolean decreaseStoreProductsQuantity(List<StoreInventoryDeductionDto> updateStoreProductQuantityList) {
         int updateStoreProductQuantityResult = 0;
-        for(StoreInventoryDeductionDto storeProductDto : updateStoreProductQuantityList){
+        for (StoreInventoryDeductionDto storeProductDto : updateStoreProductQuantityList) {
             updateStoreProductQuantityResult += storeProductDao.decreaseStoreProductQuantity(storeProductDto);
         }
-        if(updateStoreProductQuantityResult == updateStoreProductQuantityList.size()){
-            return true;
-        }
-        return false;
+        return updateStoreProductQuantityResult == updateStoreProductQuantityList.size();
     }
 
-
-    /// 장바구니 구매
-    public void insertOrderFromCart(){
-       // insertOrder();
-
-    }
-
-    private void initDaos(SqlSession sqlSession){
+    private void initDaos(SqlSession sqlSession) {
         storeProductDao = sqlSession.getMapper(StoreProductDao.class);
         userDao = sqlSession.getMapper(UserDao.class);
         orderDao = sqlSession.getMapper(OrderDao.class);
         orderDetailDao = sqlSession.getMapper(OrderDetailDao.class);
         cartDao = sqlSession.getMapper(CartDao.class);
     }
-
-    public void selectOrderListByUserId(int userId){
-       try(SqlSession sqlSession = getSqlSession()){
-           orderDao = sqlSession.getMapper(OrderDao.class);
-           /**
-            * 사용자 주문 아이디들 가져오기
-            * 조인해서 List<OrderDto>로 받아오기
-            *
-            */
-
-           List<OrderDto> userOrderIdList = orderDao.selectOrderListByUserId(userId);
-
-       }
-    }
-
-
 
 }

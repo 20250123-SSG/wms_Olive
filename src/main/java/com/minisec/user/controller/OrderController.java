@@ -20,6 +20,10 @@ public class OrderController {
     private final OrderService orderService = new OrderService();
     private final CartService cartService = new CartService();
 
+    public OrderController() {
+    }
+
+
     public List<StoreDto> selectStoreList() {
         return storeService.selectStoreList();
     }
@@ -28,24 +32,33 @@ public class OrderController {
         return storeService.selectStoreAllProductByStoreId(storeDto.getStoreId());
     }
 
-    /**
-     * 1. store_detail UPDATE - 재고차감
-     * 2. user - 금액차감
-     * 3. user_order - 주문 추가
-     * 4. user_order_detail - 주문 상세 추가
-     * @param orderDtoList
-     */
+    public void selectAllOrderDetailListByUserId() {
+
+    }
+
+    private void selectAllOrderDetailListByOrderId(List<OrderDto> orderList) {
+        List<OrderDetailFilterDto> orderDetailFilterList = new ArrayList<>();
+        for (OrderDto orderDto : orderList) {
+            orderDetailFilterList.add(OrderDetailFilterDto.builder()
+                    .orderId(orderDto.getOrderId())
+                    .build());
+        }
+        for (OrderDetailFilterDto orderDetailFilterDto : orderDetailFilterList) {
+            orderList = orderService.selectAllOrderDetailListByOrderId(orderDetailFilterDto);
+            OrderDetailsPrinter.printList(orderList);
+        }
+    }
 
 
     /// 이 DTO 생성 로직을 따로 뺴고 좋을거같은데 어차피 CartController에서 사용해야됨
-    public void insertOrder(List<OrderDto> orderDtoList) {
+    public void insertOrder(List<OrderDto> orderList) {
         List<StoreInventoryDeductionDto> storeInventoryDeductionList = new ArrayList<>(); ///1
         List<UserBalanceUpdateDto> userAmountDeductionList = new ArrayList<>(); ///2
 
-        for (OrderDto orderDto : orderDtoList) {
-            for(OrderProductDto orderProduct : orderDto.getOrderProducts()){
+        for (OrderDto orderDto : orderList) {
+            for (OrderProductDto orderProduct : orderDto.getOrderProducts()) {
                 /// 1. store_detail UPDATE - 재고차감
-                int storeDetailId = orderProduct.getProduct().getStoreProductId(); //고유pk라 스토어아이디는 별도로 필요 없을듯
+                int storeDetailId = orderProduct.getProduct().getStoreProductId();
                 int userOrderQuantity = orderProduct.getQuantity();
                 storeInventoryDeductionList.add(new StoreInventoryDeductionDto(
                         storeDetailId,
@@ -63,16 +76,17 @@ public class OrderController {
         int insertResult = orderService.insertOrderList(new InsertOrderDto(
                 storeInventoryDeductionList,
                 userAmountDeductionList,
-                orderDtoList
+                orderList
         ));
-
-        if( insertResult == 0){
+        if (insertResult == 0) {
             InsertStatusPrinter.printInsertOrderList(false);
             return;
         }
+
         InsertStatusPrinter.printInsertOrderList(true);
-        OrderDetailsPrinter.printList(orderDtoList);
+        selectAllOrderDetailListByOrderId(orderList);
     }
+
 
     public void insertCartList(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
         List<CartDto> cartList = new ArrayList<>();
@@ -89,13 +103,8 @@ public class OrderController {
                 ));
             }
         }
-
         int insertResult = cartService.insertCartList(cartList);
         InsertStatusPrinter.printInsertCartList(insertResult == cartList.size());
-    }
-
-    public void selectOrderDetailListByUser(){
-
     }
 
 }

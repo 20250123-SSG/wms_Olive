@@ -22,24 +22,18 @@ public class OrderAssembler {
         List<OrderDto> result = new ArrayList<>();
 
         for(Map.Entry<StoreDto, List<OrderProductDto>> entry : orderListByStore.entrySet()) {
-            int totalQuantity = 0;
-            int totalPrice = 0;
             StoreDto store = entry.getKey();
             List<OrderProductDto> orderProductList = entry.getValue();
 
-            for(OrderProductDto product : orderProductList) {
-                totalQuantity += product.getQuantity();
-                totalPrice += product.getTotalPrice();
-            }
-
             validateUserAmount();
-            result.add(new OrderDto(
+            OrderDto order = new OrderDto(
                     store,
                     user.getUserId(),
                     OrderStatus.ORDERABLE.getValue(),
-                    totalQuantity,
-                    totalPrice,orderProductList
-            ));
+                    orderProductList
+            );
+//            order.calculateTotalPriceAndQuantity();
+            result.add(order);
         }
         return result;
     }

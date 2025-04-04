@@ -5,20 +5,81 @@
 
 <mapper namespace="com.minisec.user.model.dao.order.OrderDao">
 
-    <resultMap id="orderResultMap" type="OrderDto">
-        <id column="user_id" property="userId"/>
-        <result column="user_order_status" property="orderStatus"/>
-        <result column="user_order_memo" property="orderMemo"/>
-        <result column="created_at" property="orderDate"/>
+
+    <resultMap id="orderDetailsResultMap" type="OrderDto">
+        <id      column="user_order_id"      property="orderId"/>
+        <result  column="user_id"            property="userId"/>
+        <result  column="user_order_status"  property="orderStatus"/>
+        <result  column="created_at"         property="orderDate"/>
+        <result  column="user_order_memo"    property="orderMemo"/>
 
         <association property="store" javaType="StoreDto">
-            <id column="store_id" property="storeId"/>
+            <id      column="store_id"       property="storeId"/>
+            <result  column="store_name"     property="storeName"/>
+            <result  column="store_phone"    property="phone"/>
+            <result  column="store_address"  property="address"/>
         </association>
+        <collection property="orderProducts" javaType="list" ofType="OrderProductDto">
+            <result column="user_order_detail_quantity" property="quantity"/>
+            <result column="user_order_detail_price"    property="totalPrice"/>
+
+            <association property="product" javaType="StoreProductDto">
+                <id      column="product_id"             property="productId"/>
+                <result  column="product_name"           property="productName"/>
+                <result  column="store_detail_price"     property="storeProductPrice"/>
+                <result  column="store_detail_quantity"  property="storeProductQuantity"/>
+                <result  column="category_name"          property="category"/>
+                <result  column="product_brand_name"     property="brandName"/>
+                <result  column="store_detail_discount"  property="discount"/>
+            </association>
+        </collection>
     </resultMap>
 
-    <resultMap id="orderIdResultMap" type="OrderDto">
-        <id column="user_order_id" property="orderId"/>
-    </resultMap>
+
+    <select id="selectAllOrderDetailListByFilter" parameterType="OrderDetailFilterDto" resultMap="orderDetailsResultMap">
+        SELECT
+          o.user_order_id
+        , o.user_id
+        , o.user_order_status
+        , o.created_at
+        , o.user_order_memo
+
+        , o.store_id
+        , s.store_name
+        , s.store_phone
+        , s.store_address
+
+        , od.user_order_detail_quantity
+        , od.user_order_detail_price
+
+        , p.product_id
+        , p.product_name
+        , sd.store_detail_price
+        , sd.store_detail_quantity
+        , c.category_name
+        , p.product_brand_name
+        , sd.store_detail_discount
+        FROM
+            user_order o
+                JOIN user_order_detail od ON od.user_order_id = o.user_order_id
+                JOIN product p ON p.product_id = od.product_id
+                JOIN store s ON s.store_id = o.store_id
+                JOIN store_detail sd ON sd.store_id = o.store_id
+                    AND sd.product_id = p.product_id
+                LEFT JOIN category c ON c.category_id = p.category_id
+        <where>
+            <if test="orderId != null">
+                o.user_order_id = #{orderId}
+            </if>
+            <if test="userId != null">
+                AND o.user_id = #{userId}
+            </if>
+            <if test="orderStatus != null">
+                AND o.user_order_status = #{orderStatus}
+            </if>
+        </where>
+    </select>
+
 
     <insert id="insertOrder" parameterType="OrderDto"
             useGeneratedKeys="true" keyProperty="orderId">
@@ -43,15 +104,6 @@
             )
     </insert>
 
-
-    <select id="selectOrderListByUserId" parameterType="_int" resultMap="orderIdResultMap">
-        SELECT
-        user_order_id
-        FROM
-            user_order
-        WHERE
-        user_id = #{user_id}
-    </select>
 
 
 </mapper>
