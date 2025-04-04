@@ -42,7 +42,8 @@ public class StoreDetailView {
 
     // 등록, 수정, 삭제 요청시 결과를 출력해주는 화면
     public static void displayModifyResult(String type, int result){ // type:"메뉴 등록"|"메뉴 수정"|"메뉴 삭제" / result:최종결과
-        System.out.println(" " + type + " " + (result > 0 ? "상품 등록 성공" : "상품 등록 실패. 다시 확인해주세요") );
+        System.out.println( type + (result > 0 ? "상품 등록 성공" : "상품 등록 실패. 다시 확인해주세요") );
     }
 
+    // 없는번호 입력해도 등록성공 떠서 고쳐야돼
 }

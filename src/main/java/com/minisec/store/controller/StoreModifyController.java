@@ -15,14 +15,15 @@ public class StoreModifyController {
         StoreDetailView.displayProductList(list);
     }
 
-    public void insertStoreProduct(Map<String, String> requestParam) {
+    public void insertStoreProduct(Map<String, String> requestParam, int manageId) {
         StoreProductDto storeProduct = StoreProductDto.builder()
                 .productId(Integer.parseInt(requestParam.get("productId")))
                 .storeDetailPrice(Integer.parseInt(requestParam.get("storeDetailPrice")))
+                .storeId(manageId)
                 .build();
 
         int result = StoreModifyService.insertStoreProduct(storeProduct);
-        StoreDetailView.displayModifyResult("상품 등록", result);
+        StoreDetailView.displayModifyResult("", result);
 
     }
 
@@ -30,5 +31,6 @@ public class StoreModifyController {
         List<StoreProductDto> list = storeModifyService.selectStoreProductById(productId);
         StoreDetailView.displayProductList(list);
     }
+
 
 }

@@ -40,12 +40,14 @@
               store_id
             , product_id
             , store_detail_price
+            , store_detail_quantity
             )
         VALUES
             (
               #{storeId}
             , #{productId}
             , #{storeDetailPrice}
+            , 0
             )
     </insert>
 
@@ -69,6 +71,20 @@
     </select>
 
     <!-- 가맹점 상품 수정 -->
+    <update id="updateStoreProduct" parameterType="StoreProductDto">
+        UPDATE
+            store_detail sd
+                JOIN product p ON p.product_id = sd.product_id
+                JOIN store s ON s.store_id = sd.store_id
+        SET
+          , sd.store_detail_id = #{storeDetailId}
+          , sd.store_detail_price = #{storeDetailPrice}
+          , sd.is_discount = #{isDiscount}
+        WHERE
+            sd.product_id = #{productId}
+            AND s.user_id = #{manageId}
+
+    </update>
 
     <!-- 가맹점 상품 삭제 -->
 

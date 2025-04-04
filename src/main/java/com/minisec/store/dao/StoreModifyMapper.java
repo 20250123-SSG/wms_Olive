@@ -9,4 +9,6 @@ public interface StoreModifyMapper {
     List<StoreProductDto> productList();
     int insertStoreProduct(StoreProductDto storeProduct);
     List<StoreProductDto> selectStoreProductById();
+
 }
+

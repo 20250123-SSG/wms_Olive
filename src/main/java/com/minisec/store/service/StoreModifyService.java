@@ -34,7 +34,8 @@ public class StoreModifyService {
             sqlSession.rollback();
         } finally {
             sqlSession.close();
-        } return result;
+        }
+        return result;
     }
 
 
@@ -46,3 +47,5 @@ public class StoreModifyService {
         return list;
     }
 }
+
+

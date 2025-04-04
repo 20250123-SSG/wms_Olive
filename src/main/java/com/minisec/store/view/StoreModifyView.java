@@ -10,6 +10,7 @@ public class StoreModifyView {
     private Scanner sc = new Scanner(System.in);
     private StoreModifyController storeModifyController = new StoreModifyController();
 
+
     public void insertStoreProductDetail(int manageId) {
         while (true) {
             System.out.println("\n======================================");
@@ -30,15 +31,22 @@ public class StoreModifyView {
             );
 
             // 상품 등록
-            storeModifyController.insertStoreProduct(requestParam);
-            System.out.println("등록 성공");
+            storeModifyController.insertStoreProduct(requestParam, manageId);
             storeModifyController.selectStoreProductById(productId);
-            System.out.println("\n계속 등록하시겠습니까? (Y/N): ");
+            System.out.print("\n계속 등록하시겠습니까? (Y/N): ");
             if(sc.nextLine().toUpperCase().equals("N")){
                 break;
             }
         }
     }
+
+    public static void updateStoreProductDetail(int manageId) {
+        System.out.println("\n수정할 정보를 입력해주세요.");
+        System.out.println("");
+
+    }
+
+
 }
 
 // 계속 등록하시겠습니까? 와 같은 반복 추가필요!
