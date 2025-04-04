@@ -26,7 +26,12 @@ public class StorageController {
             }
 
             int finalQuantity = storageService.calculateFinalStorageQuantity(storage);
-            System.out.println("\n📦 최종 입고 수량: " + finalQuantity + "개 📦\n");
+
+            // db 업데이트
+            storageService.updateStorageQuantity(storage.getStorageId(), finalQuantity);
+
+            String supplierName = (storage.getSupplierName() != null) ? storage.getSupplierName() : "알 수 없음";
+            System.out.println("\n📝 " + supplierName + " - 최종 입고 수량: " + finalQuantity + "개\n");
         }
     }
 }

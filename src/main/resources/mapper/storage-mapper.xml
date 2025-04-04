@@ -26,4 +26,13 @@
             storage
     </select>
 
+    <update id="updateStorageQuantity">
+        UPDATE
+            storage
+        SET
+            storage_quantity = #{newQuantity}
+        WHERE
+            storage_id = #{storageId}
+    </update>
+
 </mapper>
