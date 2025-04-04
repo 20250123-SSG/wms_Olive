@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 
 public class StoreView {
+
     private Scanner sc = new Scanner(System.in);
     StoreOrderView sov = new StoreOrderView();
 
@@ -34,6 +35,5 @@ public class StoreView {
                     System.out.println("번호를 잘못 입력하셨습니다.");
             }
         }
-
     }
 }
