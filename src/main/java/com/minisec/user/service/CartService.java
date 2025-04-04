@@ -38,14 +38,34 @@ public class CartService {
         }
     }
 
-    /// 선택한 상품 삭제하기
-    public void deleteCartsByStoreProductCode(){
+    public int deleteCartListByCartId(List<Integer> cartIdList){
+        try(SqlSession sqlSession = getSqlSession()){
+            cartDao = sqlSession.getMapper(CartDao.class);
+
+            int result = cartDao.deleteCartListByCartId(cartIdList);
+            if(result == 0){
+                sqlSession.rollback();
+                return 0;
+            }
+            sqlSession.commit();
+            return 1;
+        }
 
     }
 
+    public int deleteAllCartListByUserId(int userId){
+        try(SqlSession sqlSession = getSqlSession()){
+            cartDao = sqlSession.getMapper(CartDao.class);
 
-    /// 카트 비우기
-    public void deleteAllCart(){
+            int executeResult = cartDao.selectAllCartCountByUserId(userId);
+            int result = cartDao.deleteAllCartListByUserId(userId);
 
+            if(result != executeResult){
+                sqlSession.rollback();
+                return 0;
+            }
+            sqlSession.commit();
+            return 1;
+        }
     }
 }

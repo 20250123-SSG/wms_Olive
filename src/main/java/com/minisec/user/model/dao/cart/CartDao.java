@@ -14,4 +14,9 @@ public interface CartDao {
 
     int deleteCartListByCartId(List<Integer> cartIdList);
 
+    int deleteAllCartListByUserId(int userId);
+
+    int selectAllCartCountByUserId(int userId);
+
+
 }

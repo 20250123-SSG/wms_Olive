@@ -34,7 +34,6 @@ public class OrderService {
 
     public int order(OrderProcessDto request){
         try (SqlSession sqlSession = getSqlSession()) {
-            orderDao = sqlSession.getMapper(OrderDao.class);
 
             int insertOrderListResult = insertOrderList(request,sqlSession);
             if(insertOrderListResult == 0){
@@ -50,7 +49,6 @@ public class OrderService {
 
     public int orderFromCart(CartOrderProcessDto request) {
         try (SqlSession sqlSession = getSqlSession()) {
-            orderDao = sqlSession.getMapper(OrderDao.class);
             cartDao = sqlSession.getMapper(CartDao.class);
 
             int insertOrderListResult = insertOrderList(request.orderProcessDto(),sqlSession);
@@ -72,7 +70,10 @@ public class OrderService {
     }
 
     private int insertOrderList(OrderProcessDto request, SqlSession sqlSession) {
-        initDaos(sqlSession);
+        storeProductDao = sqlSession.getMapper(StoreProductDao.class);
+        userDao = sqlSession.getMapper(UserDao.class);
+        orderDao = sqlSession.getMapper(OrderDao.class);
+        orderDetailDao = sqlSession.getMapper(OrderDetailDao.class);
 
         if (!decreaseStoreProductsQuantity(request.storeInventoryDeductionList())) {
             return 0;
@@ -125,14 +126,6 @@ public class OrderService {
             updateStoreProductQuantityResult += storeProductDao.decreaseStoreProductQuantity(storeProductDto);
         }
         return updateStoreProductQuantityResult == updateStoreProductQuantityList.size();
-    }
-
-    private void initDaos(SqlSession sqlSession) {
-        storeProductDao = sqlSession.getMapper(StoreProductDao.class);
-        userDao = sqlSession.getMapper(UserDao.class);
-        orderDao = sqlSession.getMapper(OrderDao.class);
-        orderDetailDao = sqlSession.getMapper(OrderDetailDao.class);
-        cartDao = sqlSession.getMapper(CartDao.class);
     }
 
 }

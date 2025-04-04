@@ -97,4 +97,21 @@
         </foreach>
     </delete>
 
+    <delete id="deleteAllCartListByUserId" parameterType="_int">
+        DELETE
+        FROM
+            cart
+        WHERE
+            user_id = #{userid}
+    </delete>
+
+    <select id="selectAllCartCountByUserId" parameterType="_int" resultType="_int">
+        SELECT
+            count(*)
+        FROM
+            cart
+        WHERE
+            user_id = #{userId}
+    </select>
+
 </mapper>

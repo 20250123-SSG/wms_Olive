@@ -7,6 +7,7 @@ import com.minisec.user.model.dto.order.*;
 import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
 import com.minisec.user.view.printer.CartDetailsPrinter;
+import com.minisec.user.view.printer.DeleteStatusPrinter;
 import com.minisec.user.view.printer.InsertStatusPrinter;
 import com.minisec.user.view.printer.OrderDetailsPrinter;
 
@@ -100,5 +101,27 @@ public class CartController {
         }
     }
 
+
+    public void deleteAllCartListByUserId(Login user) {
+        int deleteResult = cartService.deleteAllCartListByUserId(user.getUserId());
+        if (deleteResult == 0) {
+            DeleteStatusPrinter.printDeleteCart(false);
+        }
+        DeleteStatusPrinter.printDeleteCart(true);
+    }
+
+    public void deleteCartListByChoice(List<OrderProductDto> deleteCartList){
+        List<Integer> cartIdList = new ArrayList<>();
+
+        for (OrderProductDto orderProductDto : deleteCartList) {
+            cartIdList.add(orderProductDto.getOrderId());
+        }
+
+        int deleteResult = cartService.deleteCartListByCartId(cartIdList);
+        if (deleteResult == 0) {
+            DeleteStatusPrinter.printDeleteCart(false);
+        }
+        DeleteStatusPrinter.printDeleteCart(true);
+    }
 
 }

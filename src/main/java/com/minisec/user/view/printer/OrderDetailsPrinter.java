@@ -18,7 +18,7 @@ public class OrderDetailsPrinter {
         System.out.println("==========");
         System.out.printf("총 주문 수량 : %,d개\n", order.getTotalQuantity());
         System.out.printf("총 주문 가격 : %,d원\n", order.getTotalPrice());
-        System.out.printf("구매번호 : %s\n",        order.getOrderId() != 0 ? String.valueOf(order.getOrderId()) : "-");
+        System.out.printf("주문번호 : %s\n",        order.getOrderId() != 0 ? String.valueOf(order.getOrderId()) : "-");
         System.out.printf("구매 가맹점 : %s\n",     order.getStore().getStoreName());
         System.out.printf("주문 메모 : %s\n",       order.getOrderMemo() != null ? order.getOrderMemo() : "-");
         System.out.printf("주문일 : %s\n",          order.getOrderDate() != null ? order.getOrderDate() : "-");
