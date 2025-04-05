@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.warehouse.model.dao.WarehouseProductMapper">
+
+    <!-- Nested ResultMap: warehouse_detail과 product를 조인하여 매핑 -->
+    <resultMap id="warehouseProductDetailResultMap" type="WarehouseProductDetailDto">
+        <!-- warehouse_detail 테이블 매핑 -->
+        <id property="warehouseDetailId" column="warehouse_detail_id"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="warehouseDetailQuantity" column="warehouse_detail_quantity"/>
+
+        <!-- 연관된 product 정보 매핑 (association) -->
+        <association property="product" javaType="ProductDto">
+            <id property="productId" column="product_id"/>
+            <result property="categoryId" column="category_id"/>
+            <result property="productName" column="product_name"/>
+            <result property="productBrandName" column="product_brand_name"/>
+            <result property="productPrice" column="product_price"/>
+            <result property="productDescription" column="product_description"/>
+            <result property="createdAt" column="p_created_at"/>
+            <result property="modifiedAt" column="p_modified_at"/>
+        </association>
+    </resultMap>
+
+    <!-- 조회 쿼리: warehouse_detail과 product를 조인 -->
+    <select id="selectAllProducts" resultMap="warehouseProductDetailResultMap">
+        SELECT
+            wd.warehouse_detail_id,
+            wd.warehouse_id,
+            wd.warehouse_detail_quantity,
+            p.product_id,
+            p.category_id,
+            p.product_name,
+            p.product_brand_name,
+            p.product_price,
+            p.product_description,
+            p.created_at as p_created_at,
+            p.modified_at as p_modified_at
+        FROM warehouse_detail wd
+                 JOIN product p ON wd.product_id = p.product_id
+        WHERE wd.warehouse_id = #{warehouseId}
+        ORDER BY wd.warehouse_detail_id
+    </select>
+</mapper>
