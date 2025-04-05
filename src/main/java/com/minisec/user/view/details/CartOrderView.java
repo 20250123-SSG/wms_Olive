@@ -6,7 +6,7 @@ import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.model.helper.OrderWrapper;
-import com.minisec.user.view.printer.CartDetailsPrinter;
+import com.minisec.user.view.printer.cart.CartDetailsPrinter;
 
 import java.util.*;
 import java.util.stream.Collectors;

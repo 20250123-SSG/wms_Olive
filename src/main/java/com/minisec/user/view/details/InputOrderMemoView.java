@@ -5,7 +5,7 @@ import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.model.helper.OrderDtoAssembler;
-import com.minisec.user.view.printer.OrderDetailsPrinter;
+import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 
 import java.util.List;
 import java.util.Map;

@@ -8,7 +8,7 @@ import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
 import com.minisec.user.service.StoreService;
 import com.minisec.user.view.printer.InsertStatusPrinter;
-import com.minisec.user.view.printer.OrderDetailsPrinter;
+import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 
 import java.util.ArrayList;
 import java.util.List;

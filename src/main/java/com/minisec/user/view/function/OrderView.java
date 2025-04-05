@@ -8,8 +8,8 @@ import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.model.helper.OrderWrapper;
 import com.minisec.user.view.details.InputOrderMemoView;
-import com.minisec.user.view.printer.ShopProductPrinter;
-import com.minisec.user.view.printer.StoreListPrinter;
+import com.minisec.user.view.printer.store.ShopProductPrinter;
+import com.minisec.user.view.printer.store.StoreListPrinter;
 
 import java.util.*;
 
@@ -35,7 +35,14 @@ public class OrderView {
             OrderProductDto orderProduct = orderWrapper.addOrder(store, product, quantity);
             orderProduct.getProduct().deleteLocalStoreProductQuantity(quantity);
 
-            switch (inputOrderFunction()) {
+            System.out.print("""
+                1. 담은 상품 구매하기
+                2. 구매 목록 상품 담기
+                0. 장바구니에 담고 구매 종료하기
+                >> 입력:""");
+            int inputOrderFunction =Integer.parseInt(sc.nextLine());
+
+            switch (inputOrderFunction) {
                 case 0: addToCart(user, orderWrapper.getOrderListByStore()); return;
                 case 1: purchase(user, orderWrapper.getOrderListByStore()); return;
                 case 2: continue;
@@ -76,16 +83,6 @@ public class OrderView {
         ShopProductPrinter.printProductDetail(product);
         System.out.println("[ 구매할 상품의 수량을 입력해주세요. ]");
         System.out.print(">> 입력:");
-
-        return Integer.parseInt(sc.nextLine());
-    }
-
-    private int inputOrderFunction() {
-        System.out.print("""
-                1. 담은 상품 구매하기
-                2. 구매 목록 상품 담기
-                0. 장바구니에 담고 구매 종료하기
-                >> 입력:""");
 
         return Integer.parseInt(sc.nextLine());
     }

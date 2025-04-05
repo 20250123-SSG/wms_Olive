@@ -1,4 +1,4 @@
-package com.minisec.user.view.printer;
+package com.minisec.user.view.printer.store;
 
 import com.minisec.user.model.dto.order.StoreDto;
 

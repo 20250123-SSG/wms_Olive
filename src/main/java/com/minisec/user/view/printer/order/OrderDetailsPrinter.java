@@ -1,4 +1,4 @@
-package com.minisec.user.view.printer;
+package com.minisec.user.view.printer.order;
 
 import com.minisec.user.common.OrderStatus;
 import com.minisec.user.model.dto.order.OrderDto;

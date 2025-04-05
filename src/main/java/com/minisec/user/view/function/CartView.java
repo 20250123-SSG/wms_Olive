@@ -5,9 +5,8 @@ import com.minisec.user.controller.CartController;
 import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.view.details.CartOrderView;
-import com.minisec.user.view.printer.CartDetailsPrinter;
+import com.minisec.user.view.printer.cart.CartDetailsPrinter;
 
-import java.lang.ref.PhantomReference;
 import java.util.*;
 
 public class CartView {
@@ -35,7 +34,7 @@ public class CartView {
     }
 
     private void selectCartListByUserId(Login user) {
-        CartDetailsPrinter.printUniqueNumber(cartController.selectAllCartDetailListByUserId(user));;
+        CartDetailsPrinter.printUniqueNumber(cartController.selectAllCartDetailListByUserId(user));
     }
 
     public void deleteAllCartListByUserId(Login user) {

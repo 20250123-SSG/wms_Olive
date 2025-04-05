@@ -10,6 +10,7 @@
         <!-- Login -->
         <typeAlias alias="Login" type="com.minisec.common.login.Login"/>
         <!-- User -->
+        <typeAlias type="com.minisec.user.model.dto.user.UserInformationEditFilterDto" alias="UserInformationEditFilterDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.StoreDto" alias="StoreDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.OrderProductDto" alias="OrderProductDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.OrderDto" alias="OrderDto"/>
