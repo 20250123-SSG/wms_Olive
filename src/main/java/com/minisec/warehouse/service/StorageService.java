@@ -10,8 +10,6 @@ import static com.minisec.common.Template.getSqlSession;
 
 public class StorageService {
 
-    private WarehouseService warehouseService = new WarehouseService();
-
     // 입고된 모든 상품
     public List<StorageDto> selectAllStorage(){
         SqlSession sqlSession = getSqlSession();
