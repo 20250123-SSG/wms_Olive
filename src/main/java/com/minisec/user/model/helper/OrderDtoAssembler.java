@@ -15,7 +15,7 @@ public class OrderDtoAssembler {
     public List<OrderDto> getOrderList(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
         List<OrderDto> result = new ArrayList<>();
 
-        for(Map.Entry<StoreDto, List<OrderProductDto>> entry : orderListByStore.entrySet()) {
+        for (Map.Entry<StoreDto, List<OrderProductDto>> entry : orderListByStore.entrySet()) {
             StoreDto store = entry.getKey();
             List<OrderProductDto> orderProductList = entry.getValue();
 
@@ -31,7 +31,7 @@ public class OrderDtoAssembler {
         return result;
     }
 
-    private void validateUserAmount(){
+    private void validateUserAmount() {
 
     }
 }

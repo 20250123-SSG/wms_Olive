@@ -11,27 +11,29 @@ import java.util.*;
 
 public class CartView {
     private final Scanner sc = new Scanner(System.in);
+
     private final CartController cartController = new CartController();
 
     public void run(Login user) {
-       while (true) {
-           System.out.println("""
-                1. 장바구니 조회
-                2. 장바구니 물품 구매
-                3. 장바구니 삭제
-                4. 장바구니 비우기
-                0. 뒤로가기
-                >> 입력:""");
+        while (true) {
+            System.out.println("""
+                    1. 장바구니 조회
+                    2. 장바구니 물품 구매
+                    3. 장바구니 삭제
+                    4. 장바구니 비우기
+                    0. 뒤로가기
+                    >> 입력:""");
 
            switch (Integer.parseInt(sc.nextLine())) {
-               case 0: return;
-               case 1: selectCartListByUserId(user); break;
-               case 2: new CartOrderView().run(user); break;
-               case 3 : deleteCartListByChoice(user); break;
+               case 0:                                  return;
+               case 1: selectCartListByUserId(user);    break;
+               case 2: new CartOrderView().run(user);   break;
+               case 3 : deleteCartListByChoice(user);   break;
                case 4: deleteAllCartListByUserId(user); break;
            }
        }
     }
+
 
     private void selectCartListByUserId(Login user) {
         CartDetailsPrinter.printUniqueNumber(cartController.selectAllCartDetailListByUserId(user));
@@ -40,9 +42,6 @@ public class CartView {
     public void deleteAllCartListByUserId(Login user) {
         cartController.deleteAllCartListByUserId(user);
     }
-
-
-
 
     public void deleteCartListByChoice(Login user) {
         Map<StoreDto, List<OrderProductDto>> allCartList = cartController.selectAllCartDetailListByUserId(user);

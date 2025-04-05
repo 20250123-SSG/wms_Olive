@@ -14,15 +14,15 @@ public class UserInformationService {
     private UserDao userDao;
 
     public Login selectUserByUserId(int userId) {
-        try(SqlSession sqlSession = getSqlSession()) {
+        try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
 
             return userDao.selectUserByUserId(userId);
         }
     }
 
-    public int updateUserInformationByFilter(UserInformationEditFilterDto filter){
-        try(SqlSession sqlSession = getSqlSession()){
+    public int updateUserInformationByFilter(UserInformationEditFilterDto filter) {
+        try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
 
             int result = 0;
@@ -31,28 +31,29 @@ public class UserInformationService {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            if(result != 1){
+            if (result != 1) {
                 sqlSession.rollback();
                 return 0;
             }
+
             sqlSession.commit();
             return 1;
         }
     }
 
-    public int updateUserBalance(UserBalanceUpdateDto balanceUpdate){
-        try(SqlSession sqlSession = getSqlSession()){
+    public int updateUserBalance(UserBalanceUpdateDto balanceUpdate) {
+        try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
 
             int result = userDao.updateUserBalance(balanceUpdate);
-            if(result != 1){
+            if (result != 1) {
                 sqlSession.rollback();
                 return 0;
             }
+
             sqlSession.commit();
             return 1;
         }
-
     }
 
 }

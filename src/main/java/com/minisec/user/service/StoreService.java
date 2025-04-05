@@ -11,6 +11,7 @@ import java.util.List;
 import static com.minisec.common.Template.getSqlSession;
 
 public class StoreService {
+
     private StoreDao storeDao;
     private StoreProductDao storeProductDao;
 

@@ -5,9 +5,9 @@ public enum UserInformationEditOption {
     PASSWORD("비밀번호"),
     NAME("이름"),
     PHONE("전화번호"),
-    ADDRESS("주소")
-    ;
-    private String value;
+    ADDRESS("주소");
+
+    private final String value;
 
     UserInformationEditOption(String value) {
         this.value = value;

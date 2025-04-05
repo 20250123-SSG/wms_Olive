@@ -24,8 +24,8 @@ public class OrderService {
     private CartDao cartDao;
 
 
-    public List<OrderDto> selectAllOrderListByFilter(OrderDetailFilterDto orderDetailFilter){
-        try(SqlSession sqlSession = getSqlSession()) {
+    public List<OrderDto> selectAllOrderListByFilter(OrderDetailFilterDto orderDetailFilter) {
+        try (SqlSession sqlSession = getSqlSession()) {
             orderDao = sqlSession.getMapper(OrderDao.class);
 
             return orderDao.selectAllOrderListByFilter(orderDetailFilter); //이거를
@@ -37,16 +37,15 @@ public class OrderService {
         try (SqlSession sqlSession = getSqlSession()) {
             orderDao = sqlSession.getMapper(OrderDao.class);
 
-            List<OrderDto> orderList = orderDao.selectAllOrderDetailListByFilter(orderDetailFilter);
-            return orderList;
+            return orderDao.selectAllOrderDetailListByFilter(orderDetailFilter);
         }
     }
 
-    public int order(OrderProcessDto request){
+    public int order(OrderProcessDto request) {
         try (SqlSession sqlSession = getSqlSession()) {
 
-            int insertOrderListResult = insertOrderList(request,sqlSession);
-            if(insertOrderListResult == 0){
+            int insertOrderListResult = insertOrderList(request, sqlSession);
+            if (insertOrderListResult == 0) {
                 sqlSession.rollback();
                 return 0;
             }
@@ -61,8 +60,8 @@ public class OrderService {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
-            int insertOrderListResult = insertOrderList(request.orderProcessDto(),sqlSession);
-            if(insertOrderListResult == 0){
+            int insertOrderListResult = insertOrderList(request.orderProcessDto(), sqlSession);
+            if (insertOrderListResult == 0) {
                 sqlSession.rollback();
                 return 0;
             }
@@ -70,7 +69,7 @@ public class OrderService {
             CartProductDeleteDto cartProductDeleteList = request.productDeleteList();
 
             int deleteFromCart = cartDao.deleteCartList(cartProductDeleteList);
-            if(deleteFromCart == 0){
+            if (deleteFromCart == 0) {
                 sqlSession.rollback();
                 return 0;
             }

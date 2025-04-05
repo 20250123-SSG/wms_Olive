@@ -28,9 +28,9 @@ public class UserMainView {
             }
             switch(functionNum){
                 case 1: new UserManagementView().run(loginInfo); break;
-                case 2: new CartView().run(loginInfo); break;
-                case 3: new OrderView().run(loginInfo); break;
-                case 4: new OrderHistoryView().run(loginInfo); break;
+                case 2: new CartView().run(loginInfo);           break;
+                case 3: new OrderView().run(loginInfo);          break;
+                case 4: new OrderHistoryView().run(loginInfo);   break;
                 default:
                     System.out.println("존재하지 않는 기능입니다.");
                     continue;

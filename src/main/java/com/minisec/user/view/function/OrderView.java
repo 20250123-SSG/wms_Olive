@@ -15,8 +15,8 @@ import java.util.*;
 
 public class OrderView {
     private final Scanner sc = new Scanner(System.in);
-    private final OrderController orderController = new OrderController();
 
+    private final OrderController orderController = new OrderController();
 
     public void run(Login user) {
         OrderWrapper orderWrapper = new OrderWrapper();
@@ -40,11 +40,10 @@ public class OrderView {
                 2. 구매 목록 상품 담기
                 0. 장바구니에 담고 구매 종료하기
                 >> 입력:""");
-            int inputOrderFunction =Integer.parseInt(sc.nextLine());
 
-            switch (inputOrderFunction) {
+            switch (Integer.parseInt(sc.nextLine())) {
                 case 0: addToCart(user, orderWrapper.getOrderListByStore()); return;
-                case 1: purchase(user, orderWrapper.getOrderListByStore()); return;
+                case 1: purchase(user, orderWrapper.getOrderListByStore());  return;
                 case 2: continue;
             }
         }

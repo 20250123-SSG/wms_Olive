@@ -23,7 +23,7 @@ public class OrderDetailsPrinter {
     }
 
     public static void printList(List<OrderDto> orders) {
-        if(orders.isEmpty()) {
+        if (orders.isEmpty()) {
             System.out.println("비어있습니다.");
             return;
         }

@@ -11,18 +11,19 @@ import java.util.List;
 import static com.minisec.common.Template.getSqlSession;
 
 public class CartService {
+
     private CartDao cartDao;
 
     public List<CartDetailByStoreDto> selectAllCartDetailListByUserId(int userId) {
-        try(SqlSession sqlSession = getSqlSession()) {
+        try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
             return cartDao.selectAllCartDetailListByUserId(userId);
         }
     }
 
-    public int insertCartList(List<CartDto> cartList){
-        try(SqlSession sqlSession = getSqlSession()){
+    public int insertCartList(List<CartDto> cartList) {
+        try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
             int result = 0;
@@ -37,32 +38,34 @@ public class CartService {
         }
     }
 
-    public int deleteCartList(CartProductDeleteDto deleteList){
-        try(SqlSession sqlSession = getSqlSession()){
+    public int deleteCartList(CartProductDeleteDto deleteList) {
+        try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
             int result = cartDao.deleteCartList(deleteList);
-            if(result == 0){
+            if (result == 0) {
                 sqlSession.rollback();
                 return 0;
             }
+
             sqlSession.commit();
             return 1;
         }
 
     }
 
-    public int deleteAllCartListByUserId(int userId){
-        try(SqlSession sqlSession = getSqlSession()){
+    public int deleteAllCartListByUserId(int userId) {
+        try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
             int executeResult = cartDao.selectAllCartCountByUserId(userId);
             int result = cartDao.deleteAllCartListByUserId(userId);
 
-            if(result != executeResult){
+            if (result != executeResult) {
                 sqlSession.rollback();
                 return 0;
             }
+
             sqlSession.commit();
             return 1;
         }

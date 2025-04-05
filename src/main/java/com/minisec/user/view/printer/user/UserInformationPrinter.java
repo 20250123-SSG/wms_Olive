@@ -4,7 +4,7 @@ import com.minisec.common.login.Login;
 
 public class UserInformationPrinter {
 
-    public static void print(Login user){
+    public static void print(Login user) {
         System.out.println("\n\n\n========== 개인 정보 ==========");
         System.out.printf("이름 : %s\n", user.getUserName());
         System.out.printf("아이디 : %s\n", user.getUserLoginId());
@@ -16,8 +16,8 @@ public class UserInformationPrinter {
         System.out.println();
     }
 
-    public static void printBalance(Login user){
-        System.out.printf("보유 잔액 : %,d원\n",user.getUserBalance());
+    public static void printBalance(Login user) {
+        System.out.printf("보유 잔액 : %,d원\n", user.getUserBalance());
     }
 
 }

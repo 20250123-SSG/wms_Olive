@@ -6,13 +6,13 @@
 <mapper namespace="com.minisec.user.model.dao.UserDao">
 
     <resultMap id="userResultMap" type="Login">
-        <id column="user_id" property="userId"/>
+        <id     column="user_id"       property="userId"/>
         <result column="user_login_id" property="userLoginId"/>
-        <result column="user_pwd" property="userPwd"/>
-        <result column="user_name" property="userName"/>
-        <result column="user_phone" property="userPhone"/>
-        <result column="user_address" property="userAddress"/>
-        <result column="user_balance" property="userBalance"/>
+        <result column="user_pwd"      property="userPwd"/>
+        <result column="user_name"     property="userName"/>
+        <result column="user_phone"    property="userPhone"/>
+        <result column="user_address"  property="userAddress"/>
+        <result column="user_balance"  property="userBalance"/>
     </resultMap>
 
 

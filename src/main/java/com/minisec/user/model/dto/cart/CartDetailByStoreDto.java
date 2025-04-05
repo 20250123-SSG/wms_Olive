@@ -14,9 +14,11 @@ import java.util.Objects;
 @ToString
 @Builder
 public class CartDetailByStoreDto {
+
     private int cartId;
-    private StoreDto store;
     private int userId;
+
+    private StoreDto store;
     private List<OrderProductDto> orderProductList;
 
     @Override

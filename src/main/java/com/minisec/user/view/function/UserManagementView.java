@@ -20,19 +20,19 @@ public class UserManagementView {
                     3. 보유 금액 충전
                     0. 뒤로가기
                     >> 입력:""");
-            int functionNum = Integer.parseInt(sc.nextLine());
 
-            switch (functionNum) {
-                case 0: return;
+            switch (Integer.parseInt(sc.nextLine())) {
+                case 0:                              return;
                 case 1: selectUserInformation(user); break;
                 case 2: updateUserInformation(user); break;
-                case 3: updateUserBalance(user); break;
+                case 3: updateUserBalance(user);     break;
                 default:
                     System.out.println("존재하지 않는 기능입니다.");
                     continue;
             }
         }
     }
+
 
     private void selectUserInformation(Login user) {
         UserInformationPrinter.print(userManagementController.selectUserByUserId(user));

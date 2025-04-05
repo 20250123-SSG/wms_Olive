@@ -15,9 +15,11 @@ public class StoreProductDto {
     private int storeProductId;
     private int productId;
     private String productName;
+
     private int storeProductPrice;
     private int storeProductPriceAfterDiscount;
     private int storeProductQuantity;
+
     private String category;
     private String brandName;
     private int discount;

@@ -6,45 +6,46 @@
 <mapper namespace="com.minisec.user.model.dao.order.OrderDao">
 
     <resultMap id="orderDetailsResultMap" type="OrderDto">
-        <id      column="user_order_id"      property="orderId"/>
-        <result  column="user_id"            property="userId"/>
-        <result  column="user_order_status"  property="orderStatus"/>
-        <result  column="created_at"         property="orderDate"/>
-        <result  column="user_order_memo"    property="orderMemo"/>
+        <id     column="user_order_id"     property="orderId"/>
+        <result column="user_id"           property="userId"/>
+        <result column="user_order_status" property="orderStatus"/>
+        <result column="created_at"        property="orderDate"/>
+        <result column="user_order_memo"   property="orderMemo"/>
         <association property="store" javaType="StoreDto">
-            <id      column="store_id"       property="storeId"/>
-            <result  column="store_name"     property="storeName"/>
-            <result  column="store_phone"    property="phone"/>
-            <result  column="store_address"  property="address"/>
+            <id     column="store_id"      property="storeId"/>
+            <result column="store_name"    property="storeName"/>
+            <result column="store_phone"   property="phone"/>
+            <result column="store_address" property="address"/>
         </association>
         <collection property="orderProducts" javaType="list" ofType="OrderProductDto">
             <result column="user_order_detail_quantity" property="quantity"/>
             <result column="user_order_detail_price"    property="totalPrice"/>
             <association property="product" javaType="StoreProductDto">
-                <id      column="product_id"             property="productId"/>
-                <result  column="product_name"           property="productName"/>
-                <result  column="store_detail_price"     property="storeProductPrice"/>
-                <result  column="store_detail_quantity"  property="storeProductQuantity"/>
-                <result  column="category_name"          property="category"/>
-                <result  column="product_brand_name"     property="brandName"/>
-                <result  column="store_detail_discount"  property="discount"/>
+                <id     column="product_id"            property="productId"/>
+                <result column="product_name"          property="productName"/>
+                <result column="store_detail_price"    property="storeProductPrice"/>
+                <result column="store_detail_quantity" property="storeProductQuantity"/>
+                <result column="category_name"         property="category"/>
+                <result column="product_brand_name"    property="brandName"/>
+                <result column="store_detail_discount" property="discount"/>
             </association>
         </collection>
     </resultMap>
 
     <resultMap id="orderSimpleResultMap" type="OrderDto">
-        <id      column="user_order_id"      property="orderId"/>
-        <result  column="user_id"            property="userId"/>
-        <result  column="user_order_status"  property="orderStatus"/>
-        <result  column="created_at"         property="orderDate"/>
-        <result  column="user_order_memo"    property="orderMemo"/>
+        <id     column="user_order_id"     property="orderId"/>
+        <result column="user_id"           property="userId"/>
+        <result column="user_order_status" property="orderStatus"/>
+        <result column="created_at"        property="orderDate"/>
+        <result column="user_order_memo"   property="orderMemo"/>
         <association property="store" javaType="StoreDto">
-            <id      column="store_id"       property="storeId"/>
-            <result  column="store_name"     property="storeName"/>
-            <result  column="store_phone"    property="phone"/>
-            <result  column="store_address"  property="address"/>
+            <id     column="store_id"      property="storeId"/>
+            <result column="store_name"    property="storeName"/>
+            <result column="store_phone"   property="phone"/>
+            <result column="store_address" property="address"/>
         </association>
     </resultMap>
+
 
     <select id="selectAllOrderDetailListByFilter" parameterType="OrderDetailFilterDto" resultMap="orderDetailsResultMap">
         SELECT
@@ -87,6 +88,7 @@
         </where>
     </select>
 
+
     <select id="selectAllOrderListByFilter" parameterType="OrderDetailFilterDto" resultMap="orderSimpleResultMap">
         SELECT
             o.user_order_id
@@ -113,6 +115,7 @@
             </if>
         </where>
     </select>
+
 
     <insert id="insertOrder" parameterType="OrderDto"
             useGeneratedKeys="true" keyProperty="orderId">

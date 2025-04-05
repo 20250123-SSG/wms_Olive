@@ -20,8 +20,8 @@ public class OrderWrapper {
 
     public OrderProductDto addOrder(StoreDto store, StoreProductDto product, int quantity) {
         OrderProductDto orderProduct = new OrderProductDto(product,
-                                                           quantity,
-                                                  product.getStoreProductPriceAfterDiscount() * quantity);
+                quantity,
+                product.getStoreProductPriceAfterDiscount() * quantity);
 
         List<OrderProductDto> orderProductList = checkExistStore(store);
 

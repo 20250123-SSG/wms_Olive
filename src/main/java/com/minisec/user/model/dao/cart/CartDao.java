@@ -18,5 +18,4 @@ public interface CartDao {
 
     int selectAllCartCountByUserId(int userId);
 
-
 }

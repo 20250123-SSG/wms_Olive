@@ -9,26 +9,27 @@
         <id column="user_id"  property="userId"/>
         <id column="store_id" property="store.storeId"/>
         <association property="store" javaType="StoreDto">
-            <id     column="store_id"    property="storeId"/>
-            <result column="store_name"  property="storeName"/>
+            <id     column="store_id"   property="storeId"/>
+            <result column="store_name" property="storeName"/>
         </association>
         <collection property="orderProductList" javaType="list" ofType="OrderProductDto">
-            <result column="cart_quantity" property="quantity"/>
+            <result column="cart_quantity"    property="quantity"/>
             <result column="cart_total_price" property="totalPrice"/>
-            <result column="cart_id"   property="detailId"/>
+            <result column="cart_id"          property="detailId"/>
             <association property="product" javaType="StoreProductDto">
-                <id      column="store_detail_id"        property="storeProductId"/>
-                <result  column="product_id"             property="productId"/>
-                <result  column="product_name"           property="productName"/>
-                <result  column="store_detail_price"     property="storeProductPrice"/>
-                <result  column="store_detail_price_after_discount"     property="storeProductPriceAfterDiscount"/>
-                <result  column="store_detail_quantity"  property="storeProductQuantity"/>
-                <result  column="category_name"          property="category"/>
-                <result  column="product_brand_name"     property="brandName"/>
-                <result  column="product_description"    property="productDescription"/>
+                <id     column="store_detail_id"       property="storeProductId"/>
+                <result column="product_id"            property="productId"/>
+                <result column="product_name"          property="productName"/>
+                <result column="store_detail_price"    property="storeProductPrice"/>
+                <result column="store_detail_price_after_discount" property="storeProductPriceAfterDiscount"/>
+                <result column="store_detail_quantity" property="storeProductQuantity"/>
+                <result column="category_name"         property="category"/>
+                <result column="product_brand_name"    property="brandName"/>
+                <result column="product_description"   property="productDescription"/>
             </association>
         </collection>
     </resultMap>
+
 
     <select id="selectAllCartDetailListByUserId" parameterType="_int" resultMap="cartDetailsResultMap">
         SELECT

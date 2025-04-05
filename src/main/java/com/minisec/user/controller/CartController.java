@@ -21,6 +21,10 @@ public class CartController {
     private final CartService cartService = new CartService();
     private final OrderService orderService = new OrderService();
 
+    public CartController() {
+    }
+
+
     public Map<StoreDto,List<OrderProductDto>> selectAllCartDetailListByUserId(Login user) {
         Map<StoreDto, List<OrderProductDto>> result = new HashMap<>();
 

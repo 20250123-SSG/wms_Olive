@@ -16,8 +16,10 @@ public class OrderDto {
     private int userId;
     private String orderStatus;
     private String orderDate;
+
     private int totalQuantity;
     private int totalPrice;
+
     private String orderMemo;
 
     private StoreDto store;

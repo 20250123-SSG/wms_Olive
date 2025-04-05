@@ -10,7 +10,11 @@ import com.minisec.user.view.printer.user.UserInformationPrinter;
 import com.minisec.user.view.printer.user.UserUpdateInformationPrinter;
 
 public class UserManagementController {
+
     private final UserInformationService userInfoService = new UserInformationService();
+
+    public UserManagementController() {
+    }
 
 
     public Login selectUserByUserId(Login user){
@@ -24,11 +28,11 @@ public class UserManagementController {
         filterDto.setUserId(user.getUserId());
 
         switch (editOption) {
-            case ID : filterDto.setUserLoginId(after); break;
-            case PASSWORD : filterDto.setUserPwd(after); break;
-            case NAME : filterDto.setUserName(after); break;
-            case PHONE : filterDto.setUserPhone(after); break;
-            case ADDRESS : filterDto.setUserAddress(after); break;
+            case ID :       filterDto.setUserLoginId(after); break;
+            case PASSWORD : filterDto.setUserPwd(after);     break;
+            case NAME :     filterDto.setUserName(after);    break;
+            case PHONE :    filterDto.setUserPhone(after);   break;
+            case ADDRESS :  filterDto.setUserAddress(after); break;
             default: return;
         }
 
@@ -41,13 +45,13 @@ public class UserManagementController {
         UserUpdateInformationPrinter.print(before,after);
     }
 
-    public void chargingBalance(Login user, String inputChargingBalance){
+    public void chargingBalance(Login user, String inputChargingBalance) {
         int updateResult = userInfoService.updateUserBalance(new UserBalanceUpdateDto(
                 user.getUserId(),
                 Integer.parseInt(inputChargingBalance)
         ));
 
-        if(updateResult != 1){
+        if (updateResult != 1) {
             UpdateStatusPrinter.printUpdateBalanceInfo(false);
             return;
         }
