@@ -1,31 +1,33 @@
 package com.minisec.warehouse.controller;
 
-import com.minisec.warehouse.model.dto.WarehouseDto;
-import com.minisec.warehouse.service.WarehouseService;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.minisec.warehouse.model.dto.WarehouseLogDto;
+import com.minisec.warehouse.model.dto.WarehouseProductDetailDto;
+import com.minisec.warehouse.service.WarehouseProductService;
+import com.minisec.warehouse.view.WarehouseResultView;
 
 public class WarehouseController {
-    private WarehouseService warehouseService = new WarehouseService();
+
+    private final WarehouseProductService warehouseService = new WarehouseProductService();
 
     // 창고 내 전체 상품 조회
-    public void selectAllProducts() {
+    public Map<Integer, Integer> selectAllProducts(int warehouseId) {
         System.out.println("\n📦 창고 내 전체 상품 조회 📦");
-        List<WarehouseDto> list = warehouseService.selectAllProducts();
-
-        System.out.println("────────────────────────────────────────────────────────────────────────────────");
-        System.out.printf("%-5s | %-5s | %-10s | %-10s | %-20s%n",
-                "ID", "창고", "상품 ID", "수량", "등록일");
-        System.out.println("────────────────────────────────────────────────────────────────────────────────");
-
-        for (WarehouseDto product : list) {
-            System.out.printf("%-5d | %-7d | %-12d | %-12d | %-20s%n",
-                    product.getWarehouseDetailId(),
-                    product.getWarehouseId(),
-                    product.getProductId(),
-                    product.getWarehouseDetailQuantity(),
-                    product.getCreatedAt());
+        List<WarehouseProductDetailDto> list = warehouseService.selectAllProducts(warehouseId);
+        WarehouseResultView.displayProductList(list);
+        // <출력번호:상품번호> map을 생성후 return
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            WarehouseProductDetailDto item = list.get(i);
+            map.put(i+1, item.getProduct().getProductId());
         }
-        System.out.println("────────────────────────────────────────────────────────────────────────────────");
+        return map;
+    }
+
+    public void selectSearchProductLog(int searchProductId) {
+        List<WarehouseLogDto> list = warehouseService.selectSearchProductLog(searchProductId);
     }
 }

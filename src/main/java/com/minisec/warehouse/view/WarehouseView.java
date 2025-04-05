@@ -23,18 +23,22 @@ public class WarehouseView {
                     1. 전체 상품 목록 조회
                     2. 입고 내역 조회
                     3. 발주 요청 확인
+                    4. 상품 입출고 기록 확인
                     0. 프로그램 종료
                     ==================================
                     > 입력:""");
             switch (this.sc.nextLine()) {
                 case "1":
-                    warehouseController.selectAllProducts();
+                    warehouseController.selectAllProducts(manageId);
                     break;
                 case "2":
                     storageController.selectFilteredStorageList();
                     break;
                 case "3":
                     this.selectOrderList(manageId);
+                    break;
+                case "4":
+                    selectProductLog(manageId);
                     break;
                 case "0":
                     System.out.println("프로그램을 종료합니다.");
@@ -43,6 +47,15 @@ public class WarehouseView {
                     System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
             }
         }
+    }
+    public void selectProductLog(int manageId) {
+        Map<Integer, Integer> map = warehouseController.selectAllProducts(manageId);
+        System.out.println(map.toString());
+        System.out.println("입출고 내역을 확인하길 원한다면 번호를 입력, 돌아가기를 원한다면 0번을 입력하세요.");
+        int choice = sc.nextInt();
+        int searchProductId = map.get(choice);
+        sc.nextLine();
+        warehouseController.selectSearchProductLog(searchProductId);
     }
 
     public void selectOrderList(int manageId) {
@@ -63,7 +76,7 @@ public class WarehouseView {
         System.out.println("\n────────────────────────────────────────────────────────────────────────────────");
         System.out.println("주문번호\t 주문명\t\t\t 주문메모\t 주문상태\t 주문발생일");
 
-        for(int i = 0; i < orders.size(); ++i) {
+        for (int i = 0; i < orders.size(); ++i) {
             ShipmentDto order = orders.get(i);
             System.out.printf("%d\t\t\t %s\t %s\t\t %s\t\t %s \n", i + 1, order.getStoreOrderSubject(), order.getStoreOrderMemo(), this.getOrderStatus(order.getStoreOrderStatus()), order.getCreatedAt());
             map.put(i, order.getStoreOrderId());

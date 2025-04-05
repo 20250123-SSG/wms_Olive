@@ -9,6 +9,8 @@
     <typeAliases>
         <!-- Login -->
         <typeAlias alias="Login" type="com.minisec.common.login.Login"/>
+        <!-- Product -->
+        <typeAlias alias="ProductDto" type="com.minisec.common.product.ProductDto"/>
         <!-- User -->
         <typeAlias type="com.minisec.user.model.dto.order.StoreDto" alias="StoreDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.OrderProductDto" alias="OrderProductDto"/>
@@ -17,14 +19,16 @@
         <typeAlias type="com.minisec.user.model.dto.order.UserBalanceUpdateDto" alias="UserBalanceUpdateDto"/>
         <typeAlias type="com.minisec.user.model.dto.StoreProductDto" alias="StoreProductDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartDto" alias="CartDto"/>
-
         <!-- Warehouse -->
         <typeAlias alias="WarehouseDto" type="com.minisec.warehouse.model.dto.WarehouseDto"/>
+        <typeAlias alias="WarehouseProductDetailDto" type="com.minisec.warehouse.model.dto.WarehouseProductDetailDto"/>
         <typeAlias alias="StorageDto" type="com.minisec.warehouse.model.dto.StorageDto"/>
         <typeAlias alias="ShipmentDto" type="com.minisec.warehouse.model.dto.ShipmentDto"/>
         <typeAlias alias="ShipmentDetailDto" type="com.minisec.warehouse.model.dto.ShipmentDetailDto"/>
         <!-- Store -->
         <typeAlias alias="StoreDetailProductDto" type="com.minisec.store.dto.StoreProductDto"/>
+
+
     </typeAliases>
 
     <environments default="dev">
@@ -52,6 +56,7 @@
         <mapper resource="mapper/user-mapper.xml"/>
         <!-- WareHouse -->
         <mapper resource="mapper/warehouse-mapper.xml"/>
+        <mapper resource="mapper/warehouse-product-mapper.xml"/>
         <mapper resource="mapper/storage-mapper.xml"/>
         <mapper resource="mapper/shipment-mapper.xml"/>
         <!-- Store -->
