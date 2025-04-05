@@ -11,8 +11,13 @@ public class UserInformationPrinter {
         System.out.printf("비밀번호 : %s\n", user.getUserPwd());
         System.out.printf("전화번호 : %s\n", user.getUserPhone());
         System.out.printf("주소 : %s\n", user.getUserAddress());
-        System.out.printf("보유 잔액 : %s\n", user.getUserBalance());
+        System.out.printf("보유 잔액 : %,d원\n", user.getUserBalance());
         System.out.println();
         System.out.println();
     }
+
+    public static void printBalance(Login user){
+        System.out.printf("보유 잔액 : %,d원\n",user.getUserBalance());
+    }
+
 }

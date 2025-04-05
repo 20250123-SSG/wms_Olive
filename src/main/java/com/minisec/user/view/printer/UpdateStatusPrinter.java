@@ -9,4 +9,12 @@ public class UpdateStatusPrinter {
             System.out.println("수정에 실패하였습니다.");
         }
     }
+
+    public static void printUpdateBalanceInfo(boolean isSuccess) {
+        if (isSuccess) {
+            System.out.println("잔액이 충전되었습니다.");
+        } else {
+            System.out.println("충전에 실패하였습니다.");
+        }
+    }
 }

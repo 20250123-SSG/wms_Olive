@@ -44,7 +44,6 @@
     </update>
 
 
-
     <update id="updateUserInformationByFilter" parameterType="UserInformationEditFilterDto">
         UPDATE
             user

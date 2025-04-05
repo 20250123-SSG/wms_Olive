@@ -2,6 +2,7 @@ package com.minisec.user.controller;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.common.UserInformationEditOption;
+import com.minisec.user.model.dto.order.UserBalanceUpdateDto;
 import com.minisec.user.model.dto.user.UserInformationEditFilterDto;
 import com.minisec.user.service.UserInformationService;
 import com.minisec.user.view.printer.UpdateStatusPrinter;
@@ -12,10 +13,8 @@ public class UserManagementController {
     private final UserInformationService userInfoService = new UserInformationService();
 
 
-    public void selectUserByUserId(Login user){
-        Login login = userInfoService.selectUserByUserId(user.getUserId());
-
-        UserInformationPrinter.print(login);
+    public Login selectUserByUserId(Login user){
+        return userInfoService.selectUserByUserId(user.getUserId());
     }
 
     public void updateUserInformationByFilter(Login user,
@@ -40,6 +39,21 @@ public class UserManagementController {
         }
         UpdateStatusPrinter.printUpdateUserInfo(true);
         UserUpdateInformationPrinter.print(before,after);
+    }
+
+    public void chargingBalance(Login user, String inputChargingBalance){
+        int updateResult = userInfoService.updateUserBalance(new UserBalanceUpdateDto(
+                user.getUserId(),
+                Integer.parseInt(inputChargingBalance)
+        ));
+
+        if(updateResult != 1){
+            UpdateStatusPrinter.printUpdateBalanceInfo(false);
+            return;
+        }
+        UpdateStatusPrinter.printUpdateBalanceInfo(true);
+        user = userInfoService.selectUserByUserId(user.getUserId());
+        UserInformationPrinter.printBalance(user);
     }
 
 }
