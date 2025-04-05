@@ -23,6 +23,8 @@
         <typeAlias alias="StorageDto" type="com.minisec.warehouse.model.dto.StorageDto"/>
         <typeAlias alias="ShipmentDto" type="com.minisec.warehouse.model.dto.ShipmentDto"/>
         <typeAlias alias="ShipmentDetailDto" type="com.minisec.warehouse.model.dto.ShipmentDetailDto"/>
+        <!-- Store -->
+        <typeAlias alias="StoreDetailProductDto" type="com.minisec.store.dto.StoreProductDto"/>
     </typeAliases>
 
     <environments default="dev">
@@ -52,6 +54,9 @@
         <mapper resource="mapper/warehouse-mapper.xml"/>
         <mapper resource="mapper/storage-mapper.xml"/>
         <mapper resource="mapper/shipment-mapper.xml"/>
+        <!-- Store -->
+        <mapper resource="mapper/store-select-mapper.xml"/>
+        <mapper resource="mapper/store-modify-mapper.xml"/>
 
     </mappers>
 </configuration>
