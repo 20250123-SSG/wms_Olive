@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-    <properties resource="config/connection-config.properties"/>
+    <properties resource= "config/connection-config.properties"/>
 
     <typeAliases>
         <!-- Login -->
@@ -57,6 +57,9 @@
         <!-- Store -->
         <mapper resource="mapper/store-select-mapper.xml"/>
         <mapper resource="mapper/store-modify-mapper.xml"/>
+
+        <!-- StoreOrder -->
+        <mapper resource="mapper/storeorder-mapper.xml"/>
 
     </mappers>
 </configuration>
