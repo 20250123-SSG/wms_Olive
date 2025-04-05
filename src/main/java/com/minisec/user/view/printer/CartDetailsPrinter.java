@@ -46,7 +46,6 @@ public class CartDetailsPrinter {
                 OrderProductDto orderProductDetail = products.get(i);
                 StoreProductDto product = orderProductDetail.getProduct();
 
-                orderProductDetail.calculateTotalPrice();
                 System.out.printf(CART_DETAILS,
                         i+1,
                         product.getProductName(),
@@ -81,6 +80,7 @@ public class CartDetailsPrinter {
             for(OrderProductDto orderProductDetail : productList){
                 StoreProductDto product = orderProductDetail.getProduct();
 
+//                orderProductDetail.calculateTotalPrice();
                 System.out.printf(CART_DETAILS,
                         uniqueNumber,
                         product.getProductName(),

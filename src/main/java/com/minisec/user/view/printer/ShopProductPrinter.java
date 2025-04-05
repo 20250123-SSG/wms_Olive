@@ -19,7 +19,7 @@ public class ShopProductPrinter {
             System.out.printf("%d. %s %,d원 - %,d개\n"
                     , i + 1
                     , productList.get(i).getProductName()
-                    , productList.get(i).getProductPriceAfterDiscount()
+                    , productList.get(i).getStoreProductPriceAfterDiscount()
                     , productList.get(i).getStoreProductQuantity()
             );
         }
@@ -29,7 +29,7 @@ public class ShopProductPrinter {
     public static void printProductDetail(StoreProductDto product) {
         System.out.println("========== 상품 디테일 ==========");
         System.out.printf("이름 : %s\n",      product.getProductName());
-        System.out.printf("가격 : %,d\n",     product.getProductPriceAfterDiscount());
+        System.out.printf("가격 : %,d\n",     product.getStoreProductPriceAfterDiscount());
         System.out.printf("수량 : %,d\n",     product.getStoreProductQuantity());
         System.out.printf("카테고리 : %s\n",  product.getCategory());
         System.out.printf("브랜드 : %s\n",    product.getBrandName());

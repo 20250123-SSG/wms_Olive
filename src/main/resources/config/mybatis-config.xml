@@ -19,6 +19,7 @@
         <typeAlias type="com.minisec.user.model.dto.StoreProductDto" alias="StoreProductDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartDto" alias="CartDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartDetailByStoreDto" alias="CartDetailByStoreDto"/>
+        <typeAlias type="com.minisec.user.model.dto.cart.CartProductDeleteDto" alias="CartProductDeleteDto"/>
 
         <!-- Warehouse Product -->
         <typeAlias alias="ProductDto" type="com.minisec.warehouse.model.dto.ProductDto"/>

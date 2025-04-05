@@ -10,6 +10,7 @@
         <result  column="product_id"             property="productId"/>
         <result  column="product_name"           property="productName"/>
         <result  column="store_detail_price"     property="storeProductPrice"/>
+        <result  column="store_detail_price_after_discount"     property="storeProductPriceAfterDiscount"/>
         <result  column="store_detail_quantity"  property="storeProductQuantity"/>
         <result  column="category_name"          property="category"/>
         <result  column="product_brand_name"     property="brandName"/>
@@ -23,6 +24,7 @@
           , p.product_id
           , p.product_name
           , sd.store_detail_price
+          , (sd.store_detail_price * (1-(sd.store_detail_discount/100.0))) AS store_detail_price_after_discount
           , sd.store_detail_quantity
           , c.category_name
           , p.product_brand_name

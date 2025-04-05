@@ -19,18 +19,19 @@ public class OrderWrapper {
     }
 
     public OrderProductDto addOrder(StoreDto store, StoreProductDto product, int quantity) {
-        OrderProductDto orderProduct = new OrderProductDto(product, quantity);
+        OrderProductDto orderProduct = new OrderProductDto(product,
+                                                           quantity,
+                                                  product.getStoreProductPriceAfterDiscount() * quantity);
 
         List<OrderProductDto> orderProductList = checkExistStore(store);
 
         return checkExistProduct(quantity, orderProductList, orderProduct);
     }
 
-    public void addOrderFromCart(StoreDto store, OrderProductDto product, int quantity){
+    public void addOrderFromCart(StoreDto store, OrderProductDto product, int quantity) {
         List<OrderProductDto> orderProductList = checkExistStore(store);
         checkExistProduct(quantity, orderProductList, product);
     }
-
 
 
     private OrderProductDto checkExistProduct(int quantity, List<OrderProductDto> orderProductList, OrderProductDto orderProduct) {

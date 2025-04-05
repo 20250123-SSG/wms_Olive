@@ -10,9 +10,10 @@ public class OrderDetailsPrinter {
     private final static String PRODUCT_DETAILS = "%d) %s - %,d | %,d원\n";
 
     public static void printOne(OrderDto order) {
+        order.calculateTotalPriceAndQuantity();
+
         List<OrderProductDto> orderProductList = order.getOrderProducts();
 
-        order.calculateTotalPriceAndQuantity();
         System.out.println("========== 주문서 ===========");
         System.out.print(getOrderProductDetails(orderProductList));
         System.out.println("==========");

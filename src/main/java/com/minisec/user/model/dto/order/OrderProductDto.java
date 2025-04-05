@@ -14,15 +14,16 @@ import java.util.Objects;
 @ToString
 public class OrderProductDto {
 
-    private int orderId; //티데일아이디여야하는데
-    private StoreProductDto product;
+    private int detailId;
     private int quantity;
     private int totalPrice;
 
-    public OrderProductDto(StoreProductDto product, int quantity) {
+    private StoreProductDto product;
+
+    public OrderProductDto(StoreProductDto product, int quantity, int totalPrice) {
         this.product = product;
         this.quantity = quantity;
-        calculateTotalPrice();
+        this.totalPrice = totalPrice;
     }
 
     public void updateQuantity(int quantity) {
@@ -30,11 +31,13 @@ public class OrderProductDto {
 
         }
         this.quantity += quantity;
+        calculateTotalPrice(product);
     }
 
-    public void calculateTotalPrice() {
-        this.totalPrice = product.getProductPriceAfterDiscount() * quantity;
+    private void calculateTotalPrice(StoreProductDto product) {
+        this.totalPrice = product.getStoreProductPriceAfterDiscount() * quantity;
     }
+
 
     @Override
     public boolean equals(Object o) {

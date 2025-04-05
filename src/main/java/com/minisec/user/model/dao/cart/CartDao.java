@@ -2,7 +2,7 @@ package com.minisec.user.model.dao.cart;
 
 import com.minisec.user.model.dto.cart.CartDetailByStoreDto;
 import com.minisec.user.model.dto.cart.CartDto;
-import com.minisec.user.model.dto.order.OrderDto;
+import com.minisec.user.model.dto.cart.CartProductDeleteDto;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface CartDao {
 
     List<CartDetailByStoreDto> selectAllCartDetailListByUserId(int userId);
 
-    int deleteCartListByCartId(List<Integer> cartIdList);
+    int deleteCartList(CartProductDeleteDto deleteList);
 
     int deleteAllCartListByUserId(int userId);
 

@@ -14,6 +14,7 @@ public class CartDto {
 
     private int cartId;
     private int storeId;
+    private String storeName;
     private int userId;
     private OrderProductDto orderProduct;
 

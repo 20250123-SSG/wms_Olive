@@ -11,16 +11,16 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderDto {
-    private int orderId;
-    private StoreDto store;
-    private int userId;
 
+    private int orderId;
+    private int userId;
     private String orderStatus;
     private String orderDate;
     private int totalQuantity;
     private int totalPrice;
     private String orderMemo;
 
+    private StoreDto store;
     private List<OrderProductDto> orderProducts;
 
 

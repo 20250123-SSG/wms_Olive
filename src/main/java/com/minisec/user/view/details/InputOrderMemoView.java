@@ -4,7 +4,7 @@ import com.minisec.common.login.Login;
 import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
-import com.minisec.user.model.helper.OrderAssembler;
+import com.minisec.user.model.helper.OrderDtoAssembler;
 import com.minisec.user.view.printer.OrderDetailsPrinter;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class InputOrderMemoView {
     private final Scanner sc = new Scanner(System.in);
 
     public List<OrderDto> run(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
-        List<OrderDto> orderList = new OrderAssembler().getOrderList(user, orderListByStore);
+        List<OrderDto> orderList = new OrderDtoAssembler().getOrderList(user, orderListByStore);
 
         for (OrderDto order : orderList) {
             OrderDetailsPrinter.printOne(order);
@@ -27,6 +27,7 @@ public class InputOrderMemoView {
                 continue;
             }
             order.setOrderMemo(inputOrderMemo);
+
             System.out.println("저장되었습니다.");
         }
 

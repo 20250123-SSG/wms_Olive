@@ -71,12 +71,12 @@ public class CartOrderView {
             }
         }
         List<OrderDto> orderList = new InputOrderMemoView().run(user,orderWrapper.getOrderListByStore());
-        cartController.orderFromCart(orderList);
+        cartController.orderFromCart(user,orderList);
     }
 
     public void orderAllFromCart(Login user, Map<StoreDto, List<OrderProductDto>> localUserCartList){
         List<OrderDto> orderList = new InputOrderMemoView().run(user,localUserCartList);
-        cartController.orderFromCart(orderList);
+        cartController.orderFromCart(user,orderList);
     }
 
     private List<Integer> inputOrderProductNum() {

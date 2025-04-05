@@ -1,10 +1,9 @@
 package com.minisec.user.service;
 
-import com.minisec.common.Template;
 import com.minisec.user.model.dao.cart.CartDao;
-import com.minisec.user.model.dao.order.OrderDao;
 import com.minisec.user.model.dto.cart.CartDetailByStoreDto;
 import com.minisec.user.model.dto.cart.CartDto;
+import com.minisec.user.model.dto.cart.CartProductDeleteDto;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -38,11 +37,11 @@ public class CartService {
         }
     }
 
-    public int deleteCartListByCartId(List<Integer> cartIdList){
+    public int deleteCartList(CartProductDeleteDto deleteList){
         try(SqlSession sqlSession = getSqlSession()){
             cartDao = sqlSession.getMapper(CartDao.class);
 
-            int result = cartDao.deleteCartListByCartId(cartIdList);
+            int result = cartDao.deleteCartList(deleteList);
             if(result == 0){
                 sqlSession.rollback();
                 return 0;
@@ -68,4 +67,5 @@ public class CartService {
             return 1;
         }
     }
+
 }

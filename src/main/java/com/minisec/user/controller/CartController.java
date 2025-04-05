@@ -1,12 +1,13 @@
 package com.minisec.user.controller;
 
 import com.minisec.common.login.Login;
+import com.minisec.user.model.dto.StoreProductDto;
 import com.minisec.user.model.dto.cart.CartDetailByStoreDto;
 import com.minisec.user.model.dto.cart.CartOrderProcessDto;
+import com.minisec.user.model.dto.cart.CartProductDeleteDto;
 import com.minisec.user.model.dto.order.*;
 import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
-import com.minisec.user.view.printer.CartDetailsPrinter;
 import com.minisec.user.view.printer.DeleteStatusPrinter;
 import com.minisec.user.view.printer.InsertStatusPrinter;
 import com.minisec.user.view.printer.OrderDetailsPrinter;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class CartController {
 
@@ -26,7 +26,9 @@ public class CartController {
         Map<StoreDto, List<OrderProductDto>> result = new HashMap<>();
 
         List<CartDetailByStoreDto> cartDetailByStoreList = cartService.selectAllCartDetailListByUserId(user.getUserId());
+
         for(CartDetailByStoreDto cartDetailByStoreDto : cartDetailByStoreList) {
+
             StoreDto storeDto = cartDetailByStoreDto.getStore();
             List<OrderProductDto> orderProductList = new ArrayList<>();
 
@@ -39,16 +41,16 @@ public class CartController {
                 }
                 orderProductList.add(orderProduct);
             }
-
             result.put(storeDto,orderProductList);
         }
         return result;
     }
 
-    public void orderFromCart(List<OrderDto> orderList){
+
+    public void orderFromCart(Login user, List<OrderDto> orderList){
         List<StoreInventoryDeductionDto> storeInventoryDeductionList = new ArrayList<>(); ///1
         List<UserBalanceUpdateDto> userAmountDeductionList = new ArrayList<>(); ///2
-        List<Integer> cartIdList = new ArrayList<>();
+        List<Integer> storeProductIdList = new ArrayList<>();
 
         for (OrderDto orderDto : orderList) {
             for (OrderProductDto orderProduct : orderDto.getOrderProducts()) {
@@ -60,7 +62,7 @@ public class CartController {
                         userOrderQuantity
                 ));
 
-                cartIdList.add(orderProduct.getOrderId());
+                storeProductIdList.add(orderProduct.getProduct().getStoreProductId());
             }
             int userId = orderDto.getUserId();
             int totalPrice = orderDto.getTotalPrice();
@@ -76,9 +78,11 @@ public class CartController {
                         userAmountDeductionList,
                         orderList
                 ),
-                cartIdList
+                new CartProductDeleteDto(
+                        user.getUserId(),
+                        storeProductIdList
+                )
         ));
-
         if (orderResult == 0) {
             InsertStatusPrinter.printInsertOrderList(false);
             return;
@@ -110,14 +114,27 @@ public class CartController {
         DeleteStatusPrinter.printDeleteCart(true);
     }
 
-    public void deleteCartListByChoice(List<OrderProductDto> deleteCartList){
-        List<Integer> cartIdList = new ArrayList<>();
 
-        for (OrderProductDto orderProductDto : deleteCartList) {
-            cartIdList.add(orderProductDto.getOrderId());
+    public void deleteCartListByChoice(Login user,
+                                       Map<StoreDto,List<OrderProductDto>> allCartList,
+                                       String inputDeleteCartNumber){
+        List<Integer> storeProductIdList = new ArrayList<>();
+
+        List<OrderProductDto> allCartProduct = new ArrayList<>();
+        for(StoreDto storeDto : allCartList.keySet()) {
+            allCartProduct.addAll(allCartList.get(storeDto));
+        }
+        for(String input : inputDeleteCartNumber.split(",")) {
+            int index = Integer.parseInt(input.trim())-1;
+            OrderProductDto cartProduct = allCartProduct.get(index);
+
+            storeProductIdList.add(cartProduct.getProduct().getStoreProductId());
         }
 
-        int deleteResult = cartService.deleteCartListByCartId(cartIdList);
+        int deleteResult = cartService.deleteCartList(new CartProductDeleteDto(
+                user.getUserId(),
+                storeProductIdList
+        ));
         if (deleteResult == 0) {
             DeleteStatusPrinter.printDeleteCart(false);
         }

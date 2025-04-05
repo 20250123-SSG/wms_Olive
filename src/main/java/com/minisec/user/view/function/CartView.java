@@ -35,31 +35,24 @@ public class CartView {
     }
 
     private void selectCartListByUserId(Login user) {
-        CartDetailsPrinter.printUniqueNumber(cartController.selectAllCartDetailListByUserId(user));
+        CartDetailsPrinter.printUniqueNumber(cartController.selectAllCartDetailListByUserId(user));;
     }
 
     public void deleteAllCartListByUserId(Login user) {
         cartController.deleteAllCartListByUserId(user);
     }
 
-    public void deleteCartListByChoice(Login user) {
-        List<OrderProductDto> deleteCartList = new ArrayList<>();
 
-        Map<StoreDto,List<OrderProductDto>> allCartList = cartController.selectAllCartDetailListByUserId(user);
+
+
+    public void deleteCartListByChoice(Login user) {
+        Map<StoreDto, List<OrderProductDto>> allCartList = cartController.selectAllCartDetailListByUserId(user);
         CartDetailsPrinter.printUniqueNumber(allCartList);
 
-        List<OrderProductDto> allCartProduct = new ArrayList<>();
-        for(StoreDto storeDto : allCartList.keySet()) {
-            allCartProduct.addAll(allCartList.get(storeDto));
-        }
-
         System.out.println("[ 삭제하고 싶은 장바구니 번호를 입력해주세요. ex)1,2,3,4 ]");
-        for(String input : sc.nextLine().split(",")) {
-            int index = Integer.parseInt(input.trim())-1;
+        String inputDeleteCartNumber = sc.nextLine();
 
-            deleteCartList.add(allCartProduct.get(index));
-        }
-        cartController.deleteCartListByChoice(deleteCartList);
+        cartController.deleteCartListByChoice(user, allCartList, inputDeleteCartNumber);
     }
 
 }

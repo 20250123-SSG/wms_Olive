@@ -5,14 +5,12 @@
 
 <mapper namespace="com.minisec.user.model.dao.order.OrderDao">
 
-
     <resultMap id="orderDetailsResultMap" type="OrderDto">
         <id      column="user_order_id"      property="orderId"/>
         <result  column="user_id"            property="userId"/>
         <result  column="user_order_status"  property="orderStatus"/>
         <result  column="created_at"         property="orderDate"/>
         <result  column="user_order_memo"    property="orderMemo"/>
-
         <association property="store" javaType="StoreDto">
             <id      column="store_id"       property="storeId"/>
             <result  column="store_name"     property="storeName"/>
@@ -22,7 +20,6 @@
         <collection property="orderProducts" javaType="list" ofType="OrderProductDto">
             <result column="user_order_detail_quantity" property="quantity"/>
             <result column="user_order_detail_price"    property="totalPrice"/>
-
             <association property="product" javaType="StoreProductDto">
                 <id      column="product_id"             property="productId"/>
                 <result  column="product_name"           property="productName"/>
@@ -38,27 +35,24 @@
 
     <select id="selectAllOrderDetailListByFilter" parameterType="OrderDetailFilterDto" resultMap="orderDetailsResultMap">
         SELECT
-          o.user_order_id
-        , o.user_id
-        , o.user_order_status
-        , o.created_at
-        , o.user_order_memo
-
-        , o.store_id
-        , s.store_name
-        , s.store_phone
-        , s.store_address
-
-        , od.user_order_detail_quantity
-        , od.user_order_detail_price
-
-        , p.product_id
-        , p.product_name
-        , sd.store_detail_price
-        , sd.store_detail_quantity
-        , c.category_name
-        , p.product_brand_name
-        , sd.store_detail_discount
+            o.user_order_id
+          , o.user_id
+          , o.user_order_status
+          , o.created_at
+          , o.user_order_memo
+          , o.store_id
+          , s.store_name
+          , s.store_phone
+          , s.store_address
+          , od.user_order_detail_quantity
+          , od.user_order_detail_price
+          , p.product_id
+          , p.product_name
+          , sd.store_detail_price
+          , sd.store_detail_quantity
+          , c.category_name
+          , p.product_brand_name
+          , sd.store_detail_discount
         FROM
             user_order o
                 JOIN user_order_detail od ON od.user_order_id = o.user_order_id
@@ -79,7 +73,6 @@
             </if>
         </where>
     </select>
-
 
     <insert id="insertOrder" parameterType="OrderDto"
             useGeneratedKeys="true" keyProperty="orderId">
@@ -103,7 +96,5 @@
             , NOW()
             )
     </insert>
-
-
 
 </mapper>

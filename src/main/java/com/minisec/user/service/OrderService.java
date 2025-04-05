@@ -7,6 +7,7 @@ import com.minisec.user.model.dao.order.OrderDao;
 import com.minisec.user.model.dao.order.OrderDetailDao;
 import com.minisec.user.model.dao.order.StoreProductDao;
 import com.minisec.user.model.dto.cart.CartOrderProcessDto;
+import com.minisec.user.model.dto.cart.CartProductDeleteDto;
 import com.minisec.user.model.dto.order.*;
 import org.apache.ibatis.session.SqlSession;
 
@@ -57,9 +58,10 @@ public class OrderService {
                 return 0;
             }
 
-            List<Integer> deleteCartIdList = request.cartIdList();
-            int deleteFromCart = cartDao.deleteCartListByCartId(deleteCartIdList);
-            if(deleteFromCart != deleteCartIdList.size()){
+            CartProductDeleteDto cartProductDeleteList = request.productDeleteList();
+
+            int deleteFromCart = cartDao.deleteCartList(cartProductDeleteList);
+            if(deleteFromCart == 0){
                 sqlSession.rollback();
                 return 0;
             }

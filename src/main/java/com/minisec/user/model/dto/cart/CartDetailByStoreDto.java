@@ -19,8 +19,6 @@ public class CartDetailByStoreDto {
     private int userId;
     private List<OrderProductDto> orderProductList;
 
-
-    //Map 만들때 필요함
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
