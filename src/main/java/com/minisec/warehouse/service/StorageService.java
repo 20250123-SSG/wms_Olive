@@ -10,6 +10,8 @@ import static com.minisec.common.Template.getSqlSession;
 
 public class StorageService {
 
+    private WarehouseService warehouseService = new WarehouseService();
+
     // 입고된 모든 상품
     public List<StorageDto> selectAllStorage(){
         SqlSession sqlSession = getSqlSession();
@@ -25,5 +27,21 @@ public class StorageService {
         int min = (int) (storage.getStorageQuantity() * 0.75); // 최소 75% 입고
         int max = storage.getStorageQuantity(); // 최대 100% 입고
         return rand.nextInt((max - min) + 1) + min;
+    }
+
+    // 최종 입고 수량 db 업데이트
+    public void updateStorageQuantity(int storageId, int newQuantity) {
+        SqlSession sqlSession = getSqlSession();
+        StorageMapper storageMapper = sqlSession.getMapper(StorageMapper.class);
+
+        try {
+            storageMapper.updateStorageQuantity(storageId, newQuantity);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+            e.printStackTrace();
+        } finally {
+            sqlSession.close();
+        }
     }
 }

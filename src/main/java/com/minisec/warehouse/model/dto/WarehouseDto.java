@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 @ToString
 @Builder
-public class ProductDto {
+public class WarehouseDto {
     private int warehouseDetailId;
     private int warehouseId;
     private int productId;
