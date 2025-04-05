@@ -32,6 +32,19 @@
         </collection>
     </resultMap>
 
+    <resultMap id="orderSimpleResultMap" type="OrderDto">
+        <id      column="user_order_id"      property="orderId"/>
+        <result  column="user_id"            property="userId"/>
+        <result  column="user_order_status"  property="orderStatus"/>
+        <result  column="created_at"         property="orderDate"/>
+        <result  column="user_order_memo"    property="orderMemo"/>
+        <association property="store" javaType="StoreDto">
+            <id      column="store_id"       property="storeId"/>
+            <result  column="store_name"     property="storeName"/>
+            <result  column="store_phone"    property="phone"/>
+            <result  column="store_address"  property="address"/>
+        </association>
+    </resultMap>
 
     <select id="selectAllOrderDetailListByFilter" parameterType="OrderDetailFilterDto" resultMap="orderDetailsResultMap">
         SELECT
@@ -61,6 +74,33 @@
                     AND sd.product_id = p.product_id
                 JOIN store s ON s.store_id = o.store_id
                 LEFT JOIN category c ON c.category_id = p.category_id
+        <where>
+            <if test="orderId != null">
+                o.user_order_id = #{orderId}
+            </if>
+            <if test="userId != null">
+                AND o.user_id = #{userId}
+            </if>
+            <if test="orderStatus != null">
+                AND o.user_order_status = #{orderStatus}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectAllOrderListByFilter" parameterType="OrderDetailFilterDto" resultMap="orderSimpleResultMap">
+        SELECT
+            o.user_order_id
+          , o.user_id
+          , o.user_order_status
+          , o.created_at
+          , o.user_order_memo
+          , o.store_id
+          , s.store_name
+          , s.store_phone
+          , s.store_address
+        FROM
+            user_order o
+                JOIN store s ON s.store_id = o.store_id
         <where>
             <if test="orderId != null">
                 o.user_order_id = #{orderId}

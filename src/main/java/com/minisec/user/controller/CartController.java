@@ -99,7 +99,7 @@ public class CartController {
                     .build());
         }
         for (OrderDetailFilterDto orderDetailFilterDto : orderDetailFilterList) {
-            orderList = orderService.selectAllOrderDetailListByOrderId(orderDetailFilterDto);
+            orderList = orderService.selectAllOrderDetailListByFilter(orderDetailFilterDto);
             OrderDetailsPrinter.printList(orderList);
         }
     }

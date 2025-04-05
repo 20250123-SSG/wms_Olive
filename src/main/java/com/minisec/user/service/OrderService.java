@@ -24,7 +24,16 @@ public class OrderService {
     private CartDao cartDao;
 
 
-    public List<OrderDto> selectAllOrderDetailListByOrderId(OrderDetailFilterDto orderDetailFilter) {
+    public List<OrderDto> selectAllOrderListByFilter(OrderDetailFilterDto orderDetailFilter){
+        try(SqlSession sqlSession = getSqlSession()) {
+            orderDao = sqlSession.getMapper(OrderDao.class);
+
+            return orderDao.selectAllOrderListByFilter(orderDetailFilter); //이거를
+        }
+    }
+
+    //재사용가능할거같다.
+    public List<OrderDto> selectAllOrderDetailListByFilter(OrderDetailFilterDto orderDetailFilter) {
         try (SqlSession sqlSession = getSqlSession()) {
             orderDao = sqlSession.getMapper(OrderDao.class);
 

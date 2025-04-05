@@ -1,6 +1,7 @@
 package com.minisec.user.controller;
 
 import com.minisec.common.login.Login;
+import com.minisec.user.common.OrderStatus;
 import com.minisec.user.model.dto.StoreProductDto;
 import com.minisec.user.model.dto.cart.CartDto;
 import com.minisec.user.model.dto.order.*;
@@ -31,22 +32,38 @@ public class OrderController {
     public List<StoreProductDto> selectStoreAllProductByStoreId(StoreDto storeDto) {
         return storeService.selectStoreAllProductByStoreId(storeDto.getStoreId());
     }
+    
 
-    public void selectAllOrderDetailListByUserId() {
+    public List<OrderDto> selectAllOrderListByUserId(Login user) {
+        OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
+        orderDetailFilter.setUserId(user.getUserId());
 
+        return orderService.selectAllOrderListByFilter(orderDetailFilter);
     }
 
-    private void selectAllOrderDetailListByOrderId(List<OrderDto> orderList) {
-        List<OrderDetailFilterDto> orderDetailFilterList = new ArrayList<>();
-        for (OrderDto orderDto : orderList) {
-            orderDetailFilterList.add(OrderDetailFilterDto.builder()
-                    .orderId(orderDto.getOrderId())
-                    .build());
-        }
-        for (OrderDetailFilterDto orderDetailFilterDto : orderDetailFilterList) {
-            orderList = orderService.selectAllOrderDetailListByOrderId(orderDetailFilterDto);
-            OrderDetailsPrinter.printList(orderList);
-        }
+    public void selectOneOrderDetailByOrderId(String inputOrderId,
+                                               List<OrderDto> simpleOrderList){
+        int orderId = Integer.parseInt(inputOrderId);
+
+        simpleOrderList.stream() ///있나왁인해야도미
+                .filter(orderDto -> orderDto.getOrderId() == orderId)
+                .findFirst()
+                .orElseThrow();
+
+        OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
+        orderDetailFilter.setOrderId(orderId);
+
+        List<OrderDto> resultOrder = orderService.selectAllOrderDetailListByFilter(orderDetailFilter);
+        OrderDetailsPrinter.printOne(resultOrder.get(0));
+    }
+
+    public void selectCanceledStatusOrder(Login user) {
+        OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
+        orderDetailFilter.setUserId(user.getUserId());
+        orderDetailFilter.setOrderStatus(OrderStatus.OBSERVATION_IMPOSSIBLE.getValue());
+
+        List<OrderDto> canceledOrderList = orderService.selectAllOrderDetailListByFilter(orderDetailFilter);
+        OrderDetailsPrinter.printList(canceledOrderList);
     }
 
 
@@ -84,6 +101,19 @@ public class OrderController {
 
         InsertStatusPrinter.printInsertOrderList(true);
         selectAllOrderDetailListByOrderId(orderList);
+    }
+
+    private void selectAllOrderDetailListByOrderId(List<OrderDto> orderList) {
+        List<OrderDetailFilterDto> orderDetailFilterList = new ArrayList<>();
+        for (OrderDto orderDto : orderList) {
+            orderDetailFilterList.add(OrderDetailFilterDto.builder()
+                    .orderId(orderDto.getOrderId())
+                    .build());
+        }
+        for (OrderDetailFilterDto orderDetailFilterDto : orderDetailFilterList) {
+            orderList = orderService.selectAllOrderDetailListByFilter(orderDetailFilterDto);
+            OrderDetailsPrinter.printList(orderList);
+        }
     }
 
 

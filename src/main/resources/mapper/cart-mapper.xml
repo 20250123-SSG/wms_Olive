@@ -6,10 +6,10 @@
 <mapper namespace="com.minisec.user.model.dao.cart.CartDao">
 
     <resultMap id="cartDetailsResultMap" type="CartDetailByStoreDto">
-        <id column="user_id" property="userId"/>
+        <id column="user_id"  property="userId"/>
         <id column="store_id" property="store.storeId"/>
         <association property="store" javaType="StoreDto">
-            <id column="store_id" property="storeId"/>
+            <id     column="store_id"    property="storeId"/>
             <result column="store_name"  property="storeName"/>
         </association>
         <collection property="orderProductList" javaType="list" ofType="OrderProductDto">

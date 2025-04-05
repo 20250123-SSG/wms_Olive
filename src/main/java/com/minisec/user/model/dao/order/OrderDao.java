@@ -9,6 +9,8 @@ public interface OrderDao {
 
     int insertOrder(OrderDto order);
 
+    List<OrderDto> selectAllOrderListByFilter(OrderDetailFilterDto filter);
+
     List<OrderDto> selectAllOrderDetailListByFilter(OrderDetailFilterDto filter);
 
 }
