@@ -31,5 +31,13 @@
             user_login_id = #{userId}
         AND user_pwd = #{userPwd}
     </select>
+    
+    <select id="getWareHouseManageId" parameterType="int" resultType="int" >
+        SELECT warehouse_id FROM warehouse_user WHERE user_id = #{userId}
+    </select>
+
+    <select id="getStoreManageId" parameterType="int" resultType="int" >
+        SELECT store_id FROM store_user WHERE user_id = #{userId}
+    </select>
 
 </mapper>

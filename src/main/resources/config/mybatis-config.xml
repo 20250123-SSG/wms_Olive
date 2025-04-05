@@ -9,7 +9,22 @@
     <typeAliases>
         <!-- Login -->
         <typeAlias alias="Login" type="com.minisec.common.login.Login"/>
+        <!-- User -->
+        <typeAlias type="com.minisec.user.model.dto.order.StoreDto" alias="StoreDto"/>
+        <typeAlias type="com.minisec.user.model.dto.order.OrderProductDto" alias="OrderProductDto"/>
+        <typeAlias type="com.minisec.user.model.dto.order.OrderDto" alias="OrderDto"/>
+        <typeAlias type="com.minisec.user.model.dto.order.StoreInventoryDeductionDto" alias="StoreInventoryDeductionDto"/>
+        <typeAlias type="com.minisec.user.model.dto.order.UserBalanceUpdateDto" alias="UserBalanceUpdateDto"/>
+        <typeAlias type="com.minisec.user.model.dto.StoreProductDto" alias="StoreProductDto"/>
+        <typeAlias type="com.minisec.user.model.dto.cart.CartDto" alias="CartDto"/>
 
+        <!-- Warehouse -->
+        <typeAlias alias="WarehouseDto" type="com.minisec.warehouse.model.dto.WarehouseDto"/>
+        <typeAlias alias="StorageDto" type="com.minisec.warehouse.model.dto.StorageDto"/>
+        <typeAlias alias="ShipmentDto" type="com.minisec.warehouse.model.dto.ShipmentDto"/>
+        <typeAlias alias="ShipmentDetailDto" type="com.minisec.warehouse.model.dto.ShipmentDetailDto"/>
+        <!-- Store -->
+        <typeAlias alias="StoreDetailProductDto" type="com.minisec.store.dto.StoreProductDto"/>
     </typeAliases>
 
     <environments default="dev">
@@ -28,6 +43,20 @@
         <mapper resource="mapper/healthcheck-mapper.xml"/>
         <!-- Login -->
         <mapper resource="mapper/login-mapper.xml"/>
+        <!-- User -->
+        <mapper resource="mapper/store-mapper.xml"/>
+        <mapper resource="mapper/store-product-mapper.xml"/>
+        <mapper resource="mapper/user-order-mapper.xml"/>
+        <mapper resource="mapper/user-order-detail-mapper.xml"/>
+        <mapper resource="mapper/cart-mapper.xml"/>
+        <mapper resource="mapper/user-mapper.xml"/>
+        <!-- WareHouse -->
+        <mapper resource="mapper/warehouse-mapper.xml"/>
+        <mapper resource="mapper/storage-mapper.xml"/>
+        <mapper resource="mapper/shipment-mapper.xml"/>
+        <!-- Store -->
+        <mapper resource="mapper/store-select-mapper.xml"/>
+        <mapper resource="mapper/store-modify-mapper.xml"/>
 
         <!-- StoreOrder -->
         <mapper resource="mapper/storeorder-mapper.xml"/>

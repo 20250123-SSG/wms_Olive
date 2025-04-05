@@ -7,9 +7,12 @@ import java.util.Scanner;
 
 public class StoreView {
     private Scanner sc = new Scanner(System.in);
+    private StoreSelectView storeSelectView = new StoreSelectView();
+    private StoreProductView storeProductView = new StoreProductView();
     StoreOrderView sov = new StoreOrderView();
 
-    public void viewStore(Login loginInfo) {
+    public void viewStore(Login loginInfo, int manageId) {
+
         while (true) {
             System.out.print("""
                     \n======================================
@@ -23,17 +26,19 @@ public class StoreView {
 
             String storeMenu = sc.nextLine();
             switch (storeMenu) {
+
                 case "1":
                     sov.orderView();
                     break;
-//                case "2": storeController.storeProductDetail(); break;
-//                case "3": storeController.storeCheckUserOrder; break;
+                case "2":
+                    storeProductView.storeProductDetail(manageId);
+                    break;
+//                case "3": storeCheckUserOrder(); break;
                 case "0":
                     return;
                 default:
                     System.out.println("번호를 잘못 입력하셨습니다.");
             }
         }
-
     }
 }
