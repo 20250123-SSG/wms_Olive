@@ -5,14 +5,11 @@
 
 <mapper namespace="com.minisec.warehouse.model.dao.WarehouseProductMapper">
 
-    <!-- Nested ResultMap: warehouse_detail과 product를 조인하여 매핑 -->
     <resultMap id="warehouseProductDetailResultMap" type="WarehouseProductDetailDto">
-        <!-- warehouse_detail 테이블 매핑 -->
         <id property="warehouseDetailId" column="warehouse_detail_id"/>
         <result property="warehouseId" column="warehouse_id"/>
         <result property="warehouseDetailQuantity" column="warehouse_detail_quantity"/>
 
-        <!-- 연관된 product 정보 매핑 (association) -->
         <association property="product" javaType="ProductDto">
             <id property="productId" column="product_id"/>
             <result property="categoryId" column="category_id"/>
@@ -25,7 +22,6 @@
         </association>
     </resultMap>
 
-    <!-- 조회 쿼리: warehouse_detail과 product를 조인 -->
     <select id="selectAllProducts" resultMap="warehouseProductDetailResultMap">
         SELECT
             wd.warehouse_detail_id,

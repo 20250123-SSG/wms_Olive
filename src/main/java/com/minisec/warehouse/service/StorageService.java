@@ -10,8 +10,6 @@ import static com.minisec.common.Template.getSqlSession;
 
 public class StorageService {
 
-    private WarehouseService warehouseService = new WarehouseService();
-
     // 입고된 모든 상품
     public List<StorageDto> selectAllStorage(){
         SqlSession sqlSession = getSqlSession();
@@ -36,6 +34,22 @@ public class StorageService {
 
         try {
             storageMapper.updateStorageQuantity(storageId, newQuantity);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+            e.printStackTrace();
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    public void insertWarehouseProduct(StorageDto storage) {
+
+        SqlSession sqlSession = getSqlSession();
+        StorageMapper mapper = sqlSession.getMapper(StorageMapper.class);
+
+        try {
+            mapper.insertWarehouseReceiveLog(storage);
             sqlSession.commit();
         } catch (Exception e) {
             sqlSession.rollback();

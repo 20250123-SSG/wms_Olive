@@ -11,4 +11,7 @@ public interface StorageMapper {
 
     // 입고 수량 db 업데이트
     void updateStorageQuantity(@Param("storageId") int storageId, @Param("newQuantity") int newQuantity);
+    
+    // 입고 로그 기록
+    void insertWarehouseReceiveLog(StorageDto storage);
 }

@@ -32,7 +32,12 @@ public class StorageController {
             storageService.updateStorageQuantity(storage.getStorageId(), finalQuantity);
 
             String supplierName = (storage.getSupplierName() != null) ? storage.getSupplierName() : "알 수 없음";
-            System.out.println("\n📝 " + supplierName + " - 최종 입고 수량: " + finalQuantity + "개\n");        }
+
+            System.out.println("\n📝 " + supplierName + " - 최종 입고 수량: " + finalQuantity + "개\n");
+
+            // 로그 기록
+            storageService.insertWarehouseProduct(storage);
+        }
         System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
     }
 }

@@ -22,6 +22,8 @@
         <!-- Warehouse -->
         <typeAlias alias="WarehouseDto" type="com.minisec.warehouse.model.dto.WarehouseDto"/>
         <typeAlias alias="WarehouseProductDetailDto" type="com.minisec.warehouse.model.dto.WarehouseProductDetailDto"/>
+        <typeAlias alias="WarehouseReceiveLogDto" type="com.minisec.warehouse.model.dto.WarehouseReceiveLogDto"/>
+        <typeAlias alias="WarehouseShipmentLogDto" type="com.minisec.warehouse.model.dto.WarehouseShipmentLogDto"/>
         <typeAlias alias="StorageDto" type="com.minisec.warehouse.model.dto.StorageDto"/>
         <typeAlias alias="ShipmentDto" type="com.minisec.warehouse.model.dto.ShipmentDto"/>
         <typeAlias alias="ShipmentDetailDto" type="com.minisec.warehouse.model.dto.ShipmentDetailDto"/>
@@ -55,8 +57,10 @@
         <mapper resource="mapper/cart-mapper.xml"/>
         <mapper resource="mapper/user-mapper.xml"/>
         <!-- WareHouse -->
-        <mapper resource="mapper/warehouse-mapper.xml"/>
+<!--        <mapper resource="mapper/warehouse-mapper.xml"/>-->
         <mapper resource="mapper/warehouse-product-mapper.xml"/>
+        <mapper resource="mapper/warehouse-product-receive-log-mapper.xml"/>
+        <mapper resource="mapper/warehouse-product-shipping-log-mapper.xml"/>
         <mapper resource="mapper/storage-mapper.xml"/>
         <mapper resource="mapper/shipment-mapper.xml"/>
         <!-- Store -->
