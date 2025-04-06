@@ -1,4 +1,4 @@
-package com.minisec.user.model.helper;
+package com.minisec.user.model.manager.helper;
 
 import com.minisec.user.model.dto.StoreProductDto;
 import com.minisec.user.model.dto.order.OrderDto;
@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 구매 물품을 추가함
+ * 상점, 재품에 따라 추가될 수 있도록 관리함
+ */
 public class OrderWrapper {
     private final Map<StoreDto, List<OrderProductDto>> orderListByStore = new HashMap<>();
 
@@ -19,14 +23,22 @@ public class OrderWrapper {
     }
 
     public OrderProductDto addOrder(StoreDto store, StoreProductDto product, int quantity) {
-        OrderProductDto orderProduct = new OrderProductDto(product, quantity);
+        OrderProductDto orderProduct = new OrderProductDto(product,
+                quantity,
+                product.getStoreProductPriceAfterDiscount() * quantity);
 
         List<OrderProductDto> orderProductList = checkExistStore(store);
 
         return checkExistProduct(quantity, orderProductList, orderProduct);
     }
 
-    private static OrderProductDto checkExistProduct(int quantity, List<OrderProductDto> orderProductList, OrderProductDto orderProduct) {
+    public void addOrderFromCart(StoreDto store, OrderProductDto product, int quantity) {
+        List<OrderProductDto> orderProductList = checkExistStore(store);
+        checkExistProduct(quantity, orderProductList, product);
+    }
+
+
+    private OrderProductDto checkExistProduct(int quantity, List<OrderProductDto> orderProductList, OrderProductDto orderProduct) {
         if (orderProductList.contains(orderProduct)) {
             orderProduct = orderProductList.get(orderProductList.indexOf(orderProduct));
             orderProduct.updateQuantity(quantity);
