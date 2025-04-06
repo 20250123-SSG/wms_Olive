@@ -5,12 +5,13 @@
 
 <mapper namespace="com.minisec.warehouse.model.dao.WarehouseProductMapper">
 
-    <resultMap id="warehouseReceiveLogMap" type="com.minisec.warehouse.model.dto.WarehouseReceiveLogDto">
+    <resultMap id="warehouseReceiveLogMap" type="WarehouseReceiveLogDto">
+        <id property="warehouseReceiveLogId" column="warehouse_receive_id"/>
         <result property="supplierName" column="supplier_name"/>
         <result property="warehouseReceiveQuantity" column="warehouse_receive_quantity"/>
         <result property="warehouseLogTime" column="created_at"/>
 
-        <association property="product" javaType="com.minisec.common.product.ProductDto">
+        <association property="product" javaType="ProductDto">
             <id property="productId" column="product_id"/>
             <result property="categoryId" column="category_id"/>
             <result property="productName" column="product_name"/>

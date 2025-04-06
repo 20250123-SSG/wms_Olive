@@ -22,6 +22,8 @@
         <!-- Warehouse -->
         <typeAlias alias="WarehouseDto" type="com.minisec.warehouse.model.dto.WarehouseDto"/>
         <typeAlias alias="WarehouseProductDetailDto" type="com.minisec.warehouse.model.dto.WarehouseProductDetailDto"/>
+        <typeAlias alias="WarehouseReceiveLogDto" type="com.minisec.warehouse.model.dto.WarehouseReceiveLogDto"/>
+        <typeAlias alias="WarehouseShipmentLogDto" type="com.minisec.warehouse.model.dto.WarehouseShipmentLogDto"/>
         <typeAlias alias="StorageDto" type="com.minisec.warehouse.model.dto.StorageDto"/>
         <typeAlias alias="ShipmentDto" type="com.minisec.warehouse.model.dto.ShipmentDto"/>
         <typeAlias alias="ShipmentDetailDto" type="com.minisec.warehouse.model.dto.ShipmentDetailDto"/>

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class WarehouseReceiveLogDto {
-    private int storeOrderId;
+    private int warehouseReceiveLogId;
     private String supplierName;
     private int warehouseReceiveQuantity;
     private LocalDateTime warehouseLogTime;

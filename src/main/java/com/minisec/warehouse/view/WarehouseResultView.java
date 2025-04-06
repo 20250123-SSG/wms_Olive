@@ -42,16 +42,15 @@ public class WarehouseResultView {
     }
 
     public static void displayProductReceiveLogList(List<WarehouseReceiveLogDto> list) {
-        System.out.printf("%-5s %-10s %-10s %-10s %n", "번호", "보급처", "수량", "입고일" );
+        System.out.printf("%-5s %-10s %-10s %-10s %n", "번호", "보급처", "입고수량", "입고일" );
 
         for (int i = 0; i < list.size(); i++) {
             WarehouseReceiveLogDto item = list.get(i);
-            System.out.printf("%-5s %-10s %-10s %-10s %-20s%n"
+            System.out.printf("%-5s %-10s %-10s %-10s %n"
                     ,
                     i + 1,
                     item.getSupplierName(),
                     item.getWarehouseReceiveQuantity(),
-                    item.getProduct().getProductName(),
                     item.getWarehouseLogTime());
         };
 

@@ -42,4 +42,20 @@ public class StorageService {
             sqlSession.close();
         }
     }
+
+    public void insertWarehouseProduct(StorageDto storage) {
+
+        SqlSession sqlSession = getSqlSession();
+        StorageMapper mapper = sqlSession.getMapper(StorageMapper.class);
+
+        try {
+            mapper.insertWarehouseReceiveLog(storage);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+            e.printStackTrace();
+        } finally {
+            sqlSession.close();
+        }
+    }
 }
