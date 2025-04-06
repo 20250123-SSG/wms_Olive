@@ -22,7 +22,7 @@ public class CartService {
         }
     }
 
-    public boolean insertCartList(List<CartDto> cartList) {
+    public void insertCartList(List<CartDto> cartList) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
@@ -33,39 +33,37 @@ public class CartService {
                     int insertNewCartResult = cartDao.insertCart(cart);
                     if(insertNewCartResult != 1){
                         sqlSession.rollback();
-                        return false;
+                        throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
                     }
                 }else {
                     cart.setCartId(existCartId);
                     int updateExistedCartResult = cartDao.updateCartByCartId(cart);
                     if(updateExistedCartResult != 1){
                         sqlSession.rollback();
-                        return false;
+                        throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
                     }
                 }
             }
 
             sqlSession.commit();
-            return true;
         }
     }
 
-    public boolean deleteCartList(CartProductDeleteDto deleteList) {
+    public void deleteCartList(CartProductDeleteDto deleteList) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
             int result = cartDao.deleteCartList(deleteList);
             if (result == 0) {
                 sqlSession.rollback();
-                return false;
+                throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
             }
 
             sqlSession.commit();
-            return true;
         }
     }
 
-    public boolean deleteAllCartListByUserId(int userId) {
+    public void deleteAllCartListByUserId(int userId) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
@@ -74,26 +72,24 @@ public class CartService {
 
             if (result != executeResult) {
                 sqlSession.rollback();
-                return false;
+                throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
             }
 
             sqlSession.commit();
-            return true;
         }
     }
 
-    public boolean updateCartProductQuantity(CartDto cart){
+    public void updateCartProductQuantity(CartDto cart){
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
             int result = cartDao.updateCartProductQuantity(cart);
             if (result == 0) {
                 sqlSession.rollback();
-                return false;
+                throw new IllegalArgumentException("장바구니 수량 수정에 실패하였습니다.");
             }
 
             sqlSession.commit();
-            return true;
         }
     }
 

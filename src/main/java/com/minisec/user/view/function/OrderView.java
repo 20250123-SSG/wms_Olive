@@ -49,7 +49,11 @@ public class OrderView {
         List<OrderDto> orderList = localOrderManager.getOrderList(user);
         orderList = new InputOrderMemoView().run(orderList);
 
-        orderController.insertOrder(orderList);
+        try {
+            orderController.insertOrder(orderList);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     private void addToCart(Login user) {

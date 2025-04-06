@@ -47,7 +47,7 @@
         WHERE
             store_detail_id = #{storeDetailId}
         AND store_detail_quantity > 0
-        AND ( store_detail_quantity - #{userOrderQuantity} ) > 0
+        AND ( store_detail_quantity - #{userOrderQuantity} ) >= 0
     </update>
 
 </mapper>

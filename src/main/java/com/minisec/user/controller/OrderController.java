@@ -8,6 +8,7 @@ import com.minisec.user.model.dto.order.*;
 import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
 import com.minisec.user.service.StoreService;
+import com.minisec.user.view.printer.ExceptionPrinter;
 import com.minisec.user.view.printer.InsertStatusPrinter;
 import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 
@@ -73,7 +74,7 @@ public class OrderController {
 
         for (OrderDto orderDto : orderList) {
             for (OrderProductDto orderProduct : orderDto.getOrderProducts()) {
-                /// 1. store_detail UPDATE - 재고차감
+                /// 재고차감
                 int storeDetailId = orderProduct.getProduct().getStoreProductId();
                 int userOrderQuantity = orderProduct.getQuantity();
                 storeInventoryDeductionList.add(new StoreInventoryDeductionDto(
@@ -81,7 +82,7 @@ public class OrderController {
                         userOrderQuantity
                 ));
             }
-            /// 2. user - 금액차감
+            ///금액차감
             int userId = orderDto.getUserId();
             int totalPrice = orderDto.getTotalPrice();
             userAmountDeductionList.add(new UserBalanceUpdateDto(
@@ -89,16 +90,16 @@ public class OrderController {
                     Math.negateExact(totalPrice)
             ));
         }
-        boolean insertResult = orderService.order(new OrderProcessDto(
-                storeInventoryDeductionList,
-                userAmountDeductionList,
-                orderList
-        ));
-        if (!insertResult) {
-            InsertStatusPrinter.printInsertOrderList(false);
+        try {
+            orderService.order(new OrderProcessDto(
+                    storeInventoryDeductionList,
+                    userAmountDeductionList,
+                    orderList
+            ));
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
             return;
         }
-
         InsertStatusPrinter.printInsertOrderList(true);
         selectAllOrderDetailListByOrderId(orderList);
     }
@@ -131,8 +132,13 @@ public class OrderController {
                 ));
             }
         }
-        boolean insertResult = cartService.insertCartList(cartList);
-        InsertStatusPrinter.printInsertCartList(insertResult);
+        try {
+            cartService.insertCartList(cartList);
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
+            return;
+        }
+        InsertStatusPrinter.printInsertCartList(true);
     }
 
 }

@@ -5,6 +5,7 @@ import com.minisec.user.common.UserInformationEditOption;
 import com.minisec.user.model.dto.order.UserBalanceUpdateDto;
 import com.minisec.user.model.dto.user.UserInformationEditFilterDto;
 import com.minisec.user.service.UserInformationService;
+import com.minisec.user.view.printer.ExceptionPrinter;
 import com.minisec.user.view.printer.UpdateStatusPrinter;
 import com.minisec.user.view.printer.user.UserInformationPrinter;
 import com.minisec.user.view.printer.user.UserUpdateInformationPrinter;
@@ -36,9 +37,10 @@ public class UserManagementController {
             default: return;
         }
 
-        boolean updateResult = userInfoService.updateUserInformationByFilter(filterDto);
-        if(!updateResult){
-            UpdateStatusPrinter.printUpdateUserInfo(false);
+        try {
+            userInfoService.updateUserInformationByFilter(filterDto);
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
             return;
         }
         UpdateStatusPrinter.printUpdateUserInfo(true);
@@ -46,13 +48,13 @@ public class UserManagementController {
     }
 
     public void chargingBalance(Login user, String inputChargingBalance) {
-        boolean updateResult = userInfoService.updateUserBalance(new UserBalanceUpdateDto(
-                user.getUserId(),
-                Integer.parseInt(inputChargingBalance)
-        ));
-
-        if (!updateResult) {
-            UpdateStatusPrinter.printUpdateBalanceInfo(false);
+        try {
+            userInfoService.updateUserBalance(new UserBalanceUpdateDto(
+                    user.getUserId(),
+                    Integer.parseInt(inputChargingBalance)
+            ));
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
             return;
         }
         UpdateStatusPrinter.printUpdateBalanceInfo(true);

@@ -28,7 +28,7 @@ public class OrderService {
         try (SqlSession sqlSession = getSqlSession()) {
             orderDao = sqlSession.getMapper(OrderDao.class);
 
-            return orderDao.selectAllOrderListByFilter(orderDetailFilter); //이거를
+            return orderDao.selectAllOrderListByFilter(orderDetailFilter);
         }
     }
 
@@ -40,29 +40,30 @@ public class OrderService {
         }
     }
 
-    public boolean order(OrderProcessDto request) {
+    public void order(OrderProcessDto request) {
         try (SqlSession sqlSession = getSqlSession()) {
 
-            boolean insertOrderListResult = insertOrderList(request, sqlSession);
-            if (!insertOrderListResult) {
+            try {
+                insertOrderList(request, sqlSession);
+            } catch (IllegalArgumentException e) {
                 sqlSession.rollback();
-                return false;
+                throw e;
             }
 
             sqlSession.commit();
-            return true;
         }
     }
 
 
-    public boolean orderFromCart(CartOrderProcessDto request) {
+    public void orderFromCart(CartOrderProcessDto request) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
-            boolean insertOrderListResult = insertOrderList(request.orderProcessDto(), sqlSession);
-            if (!insertOrderListResult) {
+            try {
+                insertOrderList(request.orderProcessDto(), sqlSession);
+            } catch (IllegalArgumentException e) {
                 sqlSession.rollback();
-                return false;
+                throw e;
             }
 
             CartProductDeleteDto cartProductDeleteList = request.productDeleteList();
@@ -70,36 +71,33 @@ public class OrderService {
             int deleteFromCart = cartDao.deleteCartList(cartProductDeleteList);
             if (deleteFromCart == 0) {
                 sqlSession.rollback();
-                return false;
+                throw new IllegalArgumentException("주문에 실패하였습니다.");
             }
 
             sqlSession.commit();
-            return true;
         }
     }
 
-    private boolean insertOrderList(OrderProcessDto request, SqlSession sqlSession) {
+    private void insertOrderList(OrderProcessDto request, SqlSession sqlSession) {
         storeProductDao = sqlSession.getMapper(StoreProductDao.class);
         userDao = sqlSession.getMapper(UserDao.class);
         orderDao = sqlSession.getMapper(OrderDao.class);
         orderDetailDao = sqlSession.getMapper(OrderDetailDao.class);
 
         if (!decreaseStoreProductsQuantity(request.storeInventoryDeductionList())) {
-            return false;
+            throw new IllegalArgumentException("수량이 부족합니다.");
         }
         if (!decreaseUserBalance(request.userBalanceUpdateList())) {
-            return false;
+            throw new IllegalArgumentException("잔액이 부족합니다.");
         }
 
         List<OrderDto> orderList = request.orderDtoList();
         if (!insertOrderListAndGetOrderId(orderList)) {
-            return false;
+            throw new IllegalArgumentException("주문에 실패하였습니다.");
         }
         if (!insertOrderDetailList(orderList)) {
-            return false;
+            throw new IllegalArgumentException("주문에 실패하였습니다.");
         }
-
-        return true;
     }
 
 

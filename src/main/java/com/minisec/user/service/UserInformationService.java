@@ -21,38 +21,31 @@ public class UserInformationService {
         }
     }
 
-    public boolean updateUserInformationByFilter(UserInformationEditFilterDto filter) {
+    public void updateUserInformationByFilter(UserInformationEditFilterDto filter) {
         try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
 
-            int result = 0;
-            try {
-                result = userDao.updateUserInformationByFilter(filter); //todo 아이디 중복 예외 처리
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            int result = userDao.updateUserInformationByFilter(filter);
             if (result != 1) {
                 sqlSession.rollback();
-                return false;
+                throw new RuntimeException("개인정보 수정에 실패하였습니다.");
             }
 
             sqlSession.commit();
-            return true;
         }
     }
 
-    public boolean updateUserBalance(UserBalanceUpdateDto balanceUpdate) {
+    public void updateUserBalance(UserBalanceUpdateDto balanceUpdate) {
         try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
 
             int result = userDao.updateUserBalance(balanceUpdate);
             if (result != 1) {
                 sqlSession.rollback();
-                return false;
+                throw new IllegalArgumentException("잔액 충전에 실패하였습니다.");
             }
 
             sqlSession.commit();
-            return true;
         }
     }
 

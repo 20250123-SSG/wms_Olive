@@ -9,6 +9,7 @@ import com.minisec.user.model.dto.order.*;
 import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
 import com.minisec.user.view.printer.DeleteStatusPrinter;
+import com.minisec.user.view.printer.ExceptionPrinter;
 import com.minisec.user.view.printer.InsertStatusPrinter;
 import com.minisec.user.view.printer.UpdateStatusPrinter;
 import com.minisec.user.view.printer.order.OrderDetailsPrinter;
@@ -77,19 +78,20 @@ public class CartController {
             ));
         }
 
-        boolean orderResult = orderService.orderFromCart(new CartOrderProcessDto(
-                new OrderProcessDto(
-                        storeInventoryDeductionList,
-                        userAmountDeductionList,
-                        orderList
-                ),
-                new CartProductDeleteDto(
-                        user.getUserId(),
-                        storeProductIdList
-                )
-        ));
-        if (!orderResult) {
-            InsertStatusPrinter.printInsertOrderList(false);
+        try {
+            orderService.orderFromCart(new CartOrderProcessDto(
+                    new OrderProcessDto(
+                            storeInventoryDeductionList,
+                            userAmountDeductionList,
+                            orderList
+                    ),
+                    new CartProductDeleteDto(
+                            user.getUserId(),
+                            storeProductIdList
+                    )
+            ));
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
             return;
         }
         InsertStatusPrinter.printInsertOrderList(true);
@@ -112,9 +114,13 @@ public class CartController {
 
 
     public void deleteAllCartListByUserId(Login user) {
-        boolean deleteResult = cartService.deleteAllCartListByUserId(user.getUserId());
-
-        DeleteStatusPrinter.printDeleteCart(deleteResult);
+        try {
+            cartService.deleteAllCartListByUserId(user.getUserId());
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
+            return;
+        }
+        DeleteStatusPrinter.printDeleteCart(true);
     }
 
 
@@ -134,11 +140,16 @@ public class CartController {
             storeProductIdList.add(cartProduct.getProduct().getStoreProductId());
         }
 
-        boolean deleteResult = cartService.deleteCartList(new CartProductDeleteDto(
-                user.getUserId(),
-                storeProductIdList
-        ));
-        DeleteStatusPrinter.printDeleteCart(deleteResult);
+        try {
+            cartService.deleteCartList(new CartProductDeleteDto(
+                    user.getUserId(),
+                    storeProductIdList
+            ));
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
+            return;
+        }
+        DeleteStatusPrinter.printDeleteCart(true);
     }
 
 
@@ -161,8 +172,13 @@ public class CartController {
         editCart.setCartId(editQuantityProduct.getDetailId());
         editCart.setOrderProduct(editQuantityProduct);
 
-        boolean updateResult = cartService.updateCartProductQuantity(editCart);
-        UpdateStatusPrinter.printUpdateCartQuantity(updateResult);
+        try {
+            cartService.updateCartProductQuantity(editCart);
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
+            return;
+        }
+        UpdateStatusPrinter.printUpdateCartQuantity(true);
     }
 
 }
