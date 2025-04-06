@@ -1,4 +1,4 @@
-package com.minisec.store.dto;
+package com.minisec.store.model.dto.order;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreOrderProduct {
+public class StoreOrderSelectProductByInsertDto {
     private int productId;
     private String productName;
     private String productBrandName;

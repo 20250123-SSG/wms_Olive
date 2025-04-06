@@ -57,12 +57,12 @@ public class Main {
             if (userType == 'W') {
                 int manageId = loginService.getWareHouseManageId(userId);
                 WarehouseView warehouseView = new WarehouseView();
-                warehouseView.mainWarehouseView(loginInfo, manageId);
+                warehouseView.mainWarehouseView(loginInfo,manageId);
             }
             if (userType == 'S') {
                 int manageId = loginService.getStoreManageId(userId);
                 StoreView storeView = new StoreView();
-                storeView.viewStore(loginInfo, manageId);
+                storeView.viewStore(loginInfo,manageId);
             }
         }
     }

@@ -53,7 +53,9 @@
         <mapper resource="mapper/storage-mapper.xml"/>
 
         <!-- StoreOrder -->
-        <mapper resource="mapper/storeorder-mapper.xml"/>
+        <mapper resource="mapper/store-order-mapper.xml"/>
+        <!-- StoreUser -->
+        <mapper resource="mapper/store-user-mapper.xml"/>
 
     </mappers>
 </configuration>

@@ -1,6 +1,4 @@
-package com.minisec.store.dto;
-
-
+package com.minisec.store.model.dto.order;
 
 import lombok.*;
 
@@ -11,13 +9,12 @@ import java.time.LocalDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class StoreOrderDto {
-    private int storeOrderId;
-    private int warehouseId;
-    private int storeId;
+public class StoreOrderSelectByUpdateDto {
+    private int storeOrderDetailId;
     private String storeOrderSubject;
-    private String storeOrderStatus;
     private String storeOrderMemo;
-    private LocalDateTime shipmentDate;
+    private String productName;
     private LocalDateTime modifiedAt;
+    private int productId;
+    private int storeOrderDetailQuantity;
 }
