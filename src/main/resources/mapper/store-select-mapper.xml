@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.minisec.store.dao.StoreProductMapper">
+
+    <resultMap id="storeProductMap" type="StoreDetailProductDto">
+        <id column="product_id" property="productId"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_brand_name" property="productBrandName"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="product_price" property="productPrice"/>
+        <result column="store_detail_id" property="storeDetailId"/>
+        <result column="store_id" property="storeId"/>
+        <result column="store_detail_price" property="storeDetailPrice"/>
+        <result column="store_detail_quantity" property="storeDetailQuantity"/>
+        <result column="is_discount" property="isDiscount"/>
+    </resultMap>
+
+    <!-- 상품 목록 전체 조회 -->
+    <select id="selectAllProduct" resultMap="storeProductMap">
+        SELECT
+            p.product_id
+          , p.product_name
+          , p.product_brand_name
+          , c.category_name
+          , sd.store_detail_price
+          , sd.store_detail_quantity
+          , sd.is_discount
+        FROM
+            store_detail sd
+                JOIN product p ON p.product_id = sd.product_id
+                JOIN category c ON p.category_id = c.category_id
+                JOIN store s ON s.store_id = sd.store_id
+        WHERE
+            s.user_id = #{manageId}
+    </select>
+    
+    
+    <!-- 상품명 검색 -->
+    <select id="selectNameSearch" parameterType="String" resultMap="storeProductMap">
+        SELECT
+            p.product_id
+          , p.product_name
+          , p.product_brand_name
+          , c.category_name
+          , sd.store_detail_price
+          , sd.store_detail_quantity
+          , sd.is_discount
+        FROM
+            store_detail sd
+                JOIN product p ON p.product_id = sd.product_id
+                JOIN category c ON p.category_id = c.category_id
+                JOIN store s ON s.store_id = sd.store_id
+        WHERE
+            s.user_id = #{manageId}
+            AND p.product_name LIKE CONCAT('%', #{searchName}, '%')
+    </select>
+    
+    
+    <!-- 카테고리명 검색-->
+    <select id="selectCategorySearch" parameterType="String" resultMap="storeProductMap">
+        SELECT
+            p.product_id
+          , p.product_name
+          , p.product_brand_name
+          , c.category_name
+          , sd.store_detail_price
+          , sd.store_detail_quantity
+          , sd.is_discount
+        FROM
+            store_detail sd
+                JOIN product p ON p.product_id = sd.product_id
+                JOIN category c ON p.category_id = c.category_id
+                JOIN store s ON s.store_id = sd.store_id
+        WHERE
+            s.user_id = #{manageId}
+            AND c.category_name LIKE CONCAT('%', #{searchCategory}, '%')
+    </select>
+
+    <!-- 5개 이하 재고 검색 -->
+    <select id="selectProductLowStock" resultMap="storeProductMap">
+        SELECT
+            p.product_id
+          , p.product_name
+          , p.product_brand_name
+          , c.category_name
+          , sd.store_detail_price
+          , sd.store_detail_quantity
+          , sd.is_discount
+        FROM
+            store_detail sd
+                JOIN product p ON p.product_id = sd.product_id
+                JOIN category c ON p.category_id = c.category_id
+                JOIN store s ON s.store_id = sd.store_id
+        WHERE
+            s.user_id = #{manageId}
+            AND sd.store_detail_quantity <![CDATA[<=]]> 10
+    </select>
+
+</mapper>

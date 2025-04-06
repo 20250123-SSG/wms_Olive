@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.warehouse.model.dao.ShipmentDao">
+
+    <resultMap id="StoreOrderMap" type="ShipmentDto">
+        <id property="storeOrderId" column="store_order_id"/>
+        <result property="storeOrderSubject" column="store_order_subject"/>
+        <result property="storeOrderStatus" column="store_order_status"/>
+        <result property="storeOrderMemo" column="store_order_memo"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="orderDetails" ofType="ShipmentDetailDto">
+            <result property="productId" column="product_id"/>
+            <result property="productName" column="product_name"/>
+            <result property="storeOrderDetailQuantity" column="store_order_detail_quantity"/>
+            <result property="createdAt" column="created_at"/>
+        </collection>
+    </resultMap>
+
+    <!--db 업데이트 -->
+    <update id="updateOrderStatus">
+        UPDATE store_order
+        SET store_order_status = #{status}
+        WHERE store_order_id = #{orderId}
+    </update>
+
+    <select id="selectOrderList" resultMap="StoreOrderMap">
+        SELECT
+    so.store_order_id, so.store_order_subject, so.store_order_status, so.store_order_memo, so.created_at,
+    sod.product_id, p.product_name, sod.store_order_detail_quantity, sod.created_at
+    FROM
+    store_order so
+    JOIN store_order_detail sod ON so.store_order_id = sod.store_order_id
+    JOIN product p ON sod.product_id = p.product_id
+    WHERE so.warehouse_id = #{warehouseId}
+    <if test="choice == 1">
+        AND so.store_order_status IN ('1')
+    </if>
+    <if test="choice == 2">
+        AND so.store_order_status IN ('2', '3')
+    </if>
+    ORDER BY so.created_at DESC
+</select>
+
+</mapper>
