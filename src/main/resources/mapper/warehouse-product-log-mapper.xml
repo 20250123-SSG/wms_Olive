@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.minisec.warehouse.model.dao.WarehouseProductMapper">
+
+    <!-- WarehouseLogDto와 연관 객체(ProductDto, StoreOrderDto) 매핑 -->
+    <resultMap id="warehouseLogMap" type="com.minisec.warehouse.model.dto.WarehouseLogDto">
+        <result property="productId" column="product_id"/>
+        <result property="storeOrderId" column="store_order_id"/>
+        <result property="warehouseLogType" column="warehouse_log_type"/>
+        <result property="warehouseLogQuantity" column="warehouse_log_quantity"/>
+        <result property="warehouseLogTime" column="warehouse_log_time"/>
+
+        <association property="product" javaType="com.minisec.common.product.ProductDto">
+            <result property="productId" column="p_product_id"/>
+            <result property="categoryId" column="category_id"/>
+            <result property="productName" column="product_name"/>
+            <result property="productBrandName" column="product_brand_name"/>
+            <result property="productPrice" column="product_price"/>
+            <result property="productDescription" column="product_description"/>
+        </association>
+
+        <association property="storeOrder" javaType="com.minisec.store.dto.StoreOrderDto">
+            <result property="storeOrderId" column="so_store_order_id"/>
+            <result property="storeOrderSubject" column="store_order_subject"/>
+            <result property="storeOrderStatus" column="store_order_status"/>
+        </association>
+    </resultMap>
+
+    <!-- 입출/반출 로그 조회 -->
+    <select id="getProductLog" parameterType="int" resultMap="warehouseLogMap">
+        SELECT
+            wl.product_id,
+            wl.store_order_id,
+            wl.warehouse_log_type,
+            wl.warehouse_log_quantity,
+            wl.created_at,
+
+            p.product_id,
+            p.category_id,
+            p.product_name,
+            p.product_brand_name,
+            p.product_price,
+            p.product_description,
+
+            so.store_order_id,
+            so.store_order_subject,
+            so.store_order_status
+        FROM
+            warehouse_log wl
+        JOIN product p ON wl.product_id = p.product_id
+        LEFT JOIN store_order so ON wl.store_order_id = so.store_order_id
+        WHERE wl.product_id = #{productId}
+        ORDER BY wl.created_at DESC
+    </select>
+
+</mapper>

@@ -26,8 +26,9 @@ public class WarehouseController {
         }
         return map;
     }
-
+    // 상품 입출고 로그 조회
     public void selectSearchProductLog(int searchProductId) {
         List<WarehouseLogDto> list = warehouseService.selectSearchProductLog(searchProductId);
+        WarehouseResultView.displayProductLogList(list);
     }
 }
