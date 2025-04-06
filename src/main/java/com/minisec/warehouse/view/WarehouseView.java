@@ -15,7 +15,7 @@ public class WarehouseView {
     private ShipmentController wareHouseController = new ShipmentController();
     private Scanner sc = new Scanner(System.in);
 
-
+    // Main view
     public void mainWarehouseView(Login loginInfo, int manageId) {
         while (true) {
             System.out.print("""
@@ -48,16 +48,8 @@ public class WarehouseView {
             }
         }
     }
-    public void selectProductLog(int manageId) {
-        Map<Integer, Integer> map = warehouseController.selectAllProducts(manageId);
-        System.out.println(map.toString());
-        System.out.println("입출고 내역을 확인하길 원한다면 번호를 입력, 돌아가기를 원한다면 0번을 입력하세요.");
-        int choice = sc.nextInt();
-        int searchProductId = map.get(choice);
-        sc.nextLine();
-        warehouseController.selectSearchProductLog(searchProductId);
-    }
 
+    // 발주 내역 조회
     public void selectOrderList(int manageId) {
         System.out.println("\n1. 현재 대기중인 발주 목록 확인");
         System.out.println("2. 완료한 발주 목록 확인");
@@ -139,6 +131,21 @@ public class WarehouseView {
         }
 
         return orderStatus;
+    }
+
+    // 상품별 입출고 로그 조회
+    public void selectProductLog(int manageId) {
+        // 상품 목록
+        Map<Integer, Integer> map = warehouseController.selectAllProducts(manageId);
+        System.out.println("입출고 내역을 확인하길 원한다면 번호를 입력, 돌아가기를 원한다면 0번을 입력하세요.");
+        int choice = sc.nextInt();
+        sc.nextLine();
+        if(choice == 0){
+            return;
+        }
+        int searchProductId = map.get(choice);
+
+        warehouseController.selectSearchProductLog(searchProductId);
     }
 
 }

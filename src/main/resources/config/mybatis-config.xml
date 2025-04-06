@@ -57,7 +57,8 @@
         <!-- WareHouse -->
 <!--        <mapper resource="mapper/warehouse-mapper.xml"/>-->
         <mapper resource="mapper/warehouse-product-mapper.xml"/>
-        <mapper resource="mapper/warehouse-product-log-mapper.xml"/>
+        <mapper resource="mapper/warehouse-product-receive-log-mapper.xml"/>
+        <mapper resource="mapper/warehouse-product-shipping-log-mapper.xml"/>
         <mapper resource="mapper/storage-mapper.xml"/>
         <mapper resource="mapper/shipment-mapper.xml"/>
         <!-- Store -->

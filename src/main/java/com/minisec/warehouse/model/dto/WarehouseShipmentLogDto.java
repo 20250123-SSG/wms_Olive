@@ -1,12 +1,10 @@
 package com.minisec.warehouse.model.dto;
 
 import com.minisec.common.product.ProductDto;
+import com.minisec.store.dto.StoreDto;
 import com.minisec.store.dto.StoreOrderDto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,13 +12,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
-public class WarehouseLogDto {
+public class WarehouseShipmentLogDto {
     private int productId;
     private int storeOrderId;
-    private char warehouseLogType;
-    private int warehouseLogQuantity;
+    private int warehouseShippingQuantity;
     private LocalDateTime warehouseLogTime;
 
     private ProductDto product;
     private StoreOrderDto storeOrder;
+    private StoreDto store;
 }
