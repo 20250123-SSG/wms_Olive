@@ -1,4 +1,4 @@
-package com.minisec.user.model.helper;
+package com.minisec.user.model.manager.helper;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.common.OrderStatus;

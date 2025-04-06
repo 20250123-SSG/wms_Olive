@@ -5,7 +5,10 @@ import com.minisec.user.controller.CartController;
 import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
-import com.minisec.user.model.helper.OrderWrapper;
+
+import com.minisec.user.model.manager.LocalCartOrderManager;
+import com.minisec.user.model.manager.helper.OrderDtoAssembler;
+import com.minisec.user.model.manager.helper.OrderWrapper;
 import com.minisec.user.view.printer.cart.CartDetailsPrinter;
 
 import java.util.*;
@@ -15,17 +18,17 @@ public class CartOrderView {
     private final Scanner sc = new Scanner(System.in);
 
     private final CartController cartController = new CartController();
+    private LocalCartOrderManager localCartOrderManager;
+
 
     public void run(Login user) {
-        OrderWrapper orderWrapper = new OrderWrapper();
 
-        Map<StoreDto, List<OrderProductDto>> localUserCartList = cartController.selectAllCartDetailListByUserId(user);
+        if (!readUserCartList(user)) return;
 
-        if (localUserCartList.isEmpty()) {
-            System.out.println("[ 장바구니가 비어있습니다. ]");
-            return;
-        }
-        CartDetailsPrinter.print(localUserCartList, orderWrapper.getOrderListByStore());
+        CartDetailsPrinter.print(
+                localCartOrderManager.getLocalUserCartList(),
+                localCartOrderManager.getOrderListByStore()
+        );
         System.out.println("""
                 1. 모두 구매
                 2. 선택 구매
@@ -33,31 +36,24 @@ public class CartOrderView {
                 >> 입력:""");
 
         switch (Integer.parseInt(sc.nextLine())) {
-            case 0:                                            return;
-            case 1: orderAllFromCart(user, localUserCartList); break;
-            case 2: orderByChoice(user, localUserCartList);    break;
+            case 0:                         return;
+            case 1: orderAllFromCart(user); break;
+            case 2: orderByChoice(user);    break;
         }
     }
 
 
-    public void orderByChoice(Login user, Map<StoreDto, List<OrderProductDto>> localUserCartList) {
-        OrderWrapper orderWrapper = new OrderWrapper();
-
+    public void orderByChoice(Login user) {
         while (true) {
-            StoreDto storeDto = inputStore(localUserCartList);
-            List<OrderProductDto> orderProductListByStore = localUserCartList.get(storeDto);
+            StoreDto storeDto = inputStore();
             List<Integer> orderProductIndex = inputOrderProductNum();
 
-            for (int index : orderProductIndex) {
-                OrderProductDto orderProductDto = orderProductListByStore.get(index);
-                int quantity = orderProductDto.getQuantity();
+            localCartOrderManager.addOrder(storeDto, orderProductIndex);
 
-                orderWrapper.addOrderFromCart(storeDto, orderProductDto, quantity);
-            }
-            deleteOrderCartFromLocalList(localUserCartList, storeDto, orderProductIndex);
-
-
-            CartDetailsPrinter.print(localUserCartList, orderWrapper.getOrderListByStore());
+            CartDetailsPrinter.print(
+                    localCartOrderManager.getLocalUserCartList(),
+                    localCartOrderManager.getOrderListByStore()
+            );
             System.out.println("""
                     1. 구매 확정하기
                     2. 구매 목록에 상품 담기
@@ -71,53 +67,43 @@ public class CartOrderView {
                 break;
             }
         }
-        List<OrderDto> orderList = new InputOrderMemoView().run(
-                user,
-                orderWrapper.getOrderListByStore());
+
+        List<OrderDto> orderList = localCartOrderManager.getOrderListWhenChoice(user);
+        orderList = new InputOrderMemoView().run(orderList);
+
         cartController.orderFromCart(user, orderList);
     }
 
-    public void orderAllFromCart(Login user, Map<StoreDto, List<OrderProductDto>> localUserCartList) {
-        List<OrderDto> orderList = new InputOrderMemoView().run(user, localUserCartList);
+
+    public void orderAllFromCart(Login user) {
+        List<OrderDto> orderList = localCartOrderManager.getOrderListWhenAllFromCart(user);
+        orderList = new InputOrderMemoView().run(orderList);
 
         cartController.orderFromCart(user, orderList);
     }
 
     private List<Integer> inputOrderProductNum() {
-        Set<Integer> notDuplicationResult = new HashSet<>();
-
         System.out.println("[ 구매할 상품의 장바구니 코드를 모두 입력하세요. ex)1,2,3,4 ]");
-        for (String input : sc.nextLine().split(",")) {
-            notDuplicationResult.add(Integer.parseInt(input.trim()) - 1);
-        }
-        return notDuplicationResult.stream().sorted().collect(Collectors.toList());
+
+        return localCartOrderManager.getOrderProductIndexList(sc.nextLine());
     }
 
-    private StoreDto inputStore(Map<StoreDto, List<OrderProductDto>> userCartList) {
+    private StoreDto inputStore() {
         System.out.println("[ 구매할 가맹점을 입력해주세요. ]");
         System.out.print(">>입력:");
-        String storeName = sc.nextLine();
 
-        for (StoreDto storeDto : userCartList.keySet()) {
-            if (storeDto.getStoreName().equals(storeName)) {
-                return storeDto;
-            }
-        }
-        return null;
+        return localCartOrderManager.getStoreByStoreName(sc.nextLine());
     }
 
-    private void deleteOrderCartFromLocalList(Map<StoreDto, List<OrderProductDto>> localUserCartList,
-                                              StoreDto storeDto,
-                                              List<Integer> orderProductIndex) {
-        orderProductIndex.sort(Comparator.reverseOrder());
-
-        List<OrderProductDto> localUserCartListByStore = localUserCartList.get(storeDto);
-        for (int index : orderProductIndex) {
-            localUserCartListByStore.remove(index);
+    private boolean readUserCartList(Login user) {
+        localCartOrderManager = new LocalCartOrderManager(
+                cartController.selectAllCartDetailListByUserId(user)
+        );
+        if (localCartOrderManager.isCartEmpty()) {
+            System.out.println("[ 장바구니가 비어있습니다. ]");
+            return false;
         }
-        if (localUserCartListByStore.isEmpty()) {
-            localUserCartList.remove(storeDto);
-        }
+        return true;
     }
 
 }

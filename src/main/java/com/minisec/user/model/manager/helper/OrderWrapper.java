@@ -1,4 +1,4 @@
-package com.minisec.user.model.helper;
+package com.minisec.user.model.manager.helper;
 
 import com.minisec.user.model.dto.StoreProductDto;
 import com.minisec.user.model.dto.order.OrderDto;
@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 구매 물품을 추가함
+ * 상점, 재품에 따라 추가될 수 있도록 관리함
+ */
 public class OrderWrapper {
     private final Map<StoreDto, List<OrderProductDto>> orderListByStore = new HashMap<>();
 

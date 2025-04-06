@@ -4,7 +4,6 @@ import com.minisec.common.login.Login;
 import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
-import com.minisec.user.model.helper.OrderDtoAssembler;
 import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 
 import java.util.List;
@@ -14,8 +13,7 @@ import java.util.Scanner;
 public class InputOrderMemoView {
     private final Scanner sc = new Scanner(System.in);
 
-    public List<OrderDto> run(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
-        List<OrderDto> orderList = new OrderDtoAssembler().getOrderList(user, orderListByStore);
+    public List<OrderDto> run(List<OrderDto> orderList) {
 
         for (OrderDto order : orderList) {
             OrderDetailsPrinter.printOne(order);
