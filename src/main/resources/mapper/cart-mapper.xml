@@ -33,11 +33,11 @@
 
     <select id="selectCartId" parameterType="CartDto" resultType="integer">
         SELECT
-        cart_id
+            cart_id
         FROM
-        cart
+            cart
         WHERE
-        store_id = #{storeId}
+            store_id = #{storeId}
         AND user_id = #{userId}
         AND product_id = #{orderProduct.product.productId}
     </select>
@@ -75,45 +75,56 @@
 
     <select id="selectAllCartCountByUserId" parameterType="_int" resultType="_int">
         SELECT
-        count(*)
+            count(*)
         FROM
-        cart
+            cart
         WHERE
-        user_id = #{userId}
+            user_id = #{userId}
     </select>
 
 
     <insert id="insertCart" parameterType="CartDto">
         INSERT INTO
             cart
-        (
-        store_id
-        , user_id
-        , product_id
-        , cart_quantity
-        , created_at
-        , modified_at
-        )
+            (
+              store_id
+            , user_id
+            , product_id
+            , cart_quantity
+            , created_at
+            , modified_at
+            )
         VALUES
-        (
-        #{storeId}
-        , #{userId}
-        , #{orderProduct.product.productId}
-        , #{orderProduct.quantity}
-        , NOW()
-        , NOW()
-        )
+            (
+              #{storeId}
+            , #{userId}
+            , #{orderProduct.product.productId}
+            , #{orderProduct.quantity}
+            , NOW()
+            , NOW()
+            )
     </insert>
 
 
     <update id="updateCartByCartId" parameterType="CartDto">
         UPDATE
-        cart
+            cart
         SET
-        cart_quantity = cart_quantity + #{orderProduct.quantity}
-        , modified_at = NOW()
+            cart_quantity = (cart_quantity + #{orderProduct.quantity})
+          , modified_at = NOW()
         WHERE
-        cart_id = #{cartId}
+            cart_id = #{cartId}
+    </update>
+
+
+    <update id="updateCartProductQuantity" parameterType="CartDto">
+        UPDATE
+            cart
+        SET
+            cart_quantity = #{orderProduct.quantity}
+          , modified_at = NOW()
+        WHERE
+            cart_id = #{cartId}
     </update>
 
 

@@ -18,6 +18,8 @@ public interface CartDao {
 
     int updateCartByCartId(CartDto cart);
 
+    int updateCartProductQuantity(CartDto cart);
+
     int deleteCartList(CartProductDeleteDto deleteList);
 
     int deleteAllCartListByUserId(int userId);

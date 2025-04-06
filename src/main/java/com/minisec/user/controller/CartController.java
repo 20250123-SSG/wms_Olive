@@ -2,6 +2,7 @@ package com.minisec.user.controller;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.model.dto.cart.CartDetailByStoreDto;
+import com.minisec.user.model.dto.cart.CartDto;
 import com.minisec.user.model.dto.cart.CartOrderProcessDto;
 import com.minisec.user.model.dto.cart.CartProductDeleteDto;
 import com.minisec.user.model.dto.order.*;
@@ -9,6 +10,7 @@ import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
 import com.minisec.user.view.printer.DeleteStatusPrinter;
 import com.minisec.user.view.printer.InsertStatusPrinter;
+import com.minisec.user.view.printer.UpdateStatusPrinter;
 import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 
 import java.util.ArrayList;
@@ -124,8 +126,8 @@ public class CartController {
         List<Integer> storeProductIdList = new ArrayList<>();
 
         List<OrderProductDto> allCartProduct = new ArrayList<>();
-        for(StoreDto storeDto : allCartList.keySet()) {
-            allCartProduct.addAll(allCartList.get(storeDto));
+        for(StoreDto store : allCartList.keySet()) {
+            allCartProduct.addAll(allCartList.get(store));
         }
         for(String input : inputDeleteCartNumber.split(",")) {
             int index = Integer.parseInt(input.trim())-1;
@@ -142,6 +144,34 @@ public class CartController {
             DeleteStatusPrinter.printDeleteCart(false);
         }
         DeleteStatusPrinter.printDeleteCart(true);
+    }
+
+
+    public void updateCartProductQuantity(Map<StoreDto, List<OrderProductDto>> allCartList,
+                                          String inputUpdateCartProductQuantity,
+                                          String inputEditQuantity) {
+
+        List<OrderProductDto> allCartProduct = new ArrayList<>();
+        for (StoreDto store : allCartList.keySet()) {
+            allCartProduct.addAll(allCartList.get(store));
+        }
+
+        int index = Integer.parseInt(inputUpdateCartProductQuantity.trim()) - 1;
+        int editQuantity = Integer.parseInt(inputEditQuantity.trim());
+
+        OrderProductDto editQuantityProduct = allCartProduct.get(index);
+        editQuantityProduct.setQuantity(editQuantity);
+
+        CartDto editCart = new CartDto();
+        editCart.setCartId(editQuantityProduct.getDetailId());
+        editCart.setOrderProduct(editQuantityProduct);
+
+        int updateResult = cartService.updateCartProductQuantity(editCart);
+        if (updateResult == 0) {
+            UpdateStatusPrinter.printUpdateCartQuantity(false);
+            return;
+        }
+        UpdateStatusPrinter.printUpdateCartQuantity(true);
     }
 
 }

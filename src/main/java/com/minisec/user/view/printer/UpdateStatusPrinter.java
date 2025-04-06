@@ -17,4 +17,13 @@ public class UpdateStatusPrinter {
             System.out.println("충전에 실패하였습니다.");
         }
     }
+
+    public static void printUpdateCartQuantity(boolean isSuccess) {
+        if (isSuccess) {
+            System.out.println("수량이 변경되었습니다.");
+        } else {
+            System.out.println("수량 변경에 실패하였습니다.");
+        }
+    }
+
 }
