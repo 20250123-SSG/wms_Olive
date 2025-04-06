@@ -30,20 +30,20 @@ public class CartController {
 
         List<CartDetailByStoreDto> cartDetailByStoreList = cartService.selectAllCartDetailListByUserId(user.getUserId());
 
-        for(CartDetailByStoreDto cartDetailByStoreDto : cartDetailByStoreList) {
+        for(CartDetailByStoreDto cartDetailByStore : cartDetailByStoreList) {
 
-            StoreDto storeDto = cartDetailByStoreDto.getStore();
-            List<OrderProductDto> orderProductList = new ArrayList<>();
-
-            for(OrderProductDto orderProduct : cartDetailByStoreDto.getOrderProductList()) {
-                if(orderProductList.contains(orderProduct)) {
-                    int newQuantity = orderProduct.getQuantity();
-                    orderProduct = orderProductList.get(orderProductList.indexOf(orderProduct));
-                    orderProduct.updateQuantity(newQuantity);
-                    continue;
-                }
-                orderProductList.add(orderProduct);
-            }
+            StoreDto storeDto = cartDetailByStore.getStore();
+            List<OrderProductDto> orderProductList = cartDetailByStore.getOrderProductList();
+///db 셈플 데이터 변경하면 지워도될듯
+//            for(OrderProductDto orderProduct : cartDetailByStoreDto.getOrderProductList()) { ///상품을 통합하여 저장하기 때문에 필요 없다, 단 유니크제약이 아니라
+//                if(orderProductList.contains(orderProduct)) {
+//                    int newQuantity = orderProduct.getQuantity();
+//                    orderProduct = orderProductList.get(orderProductList.indexOf(orderProduct));
+//                    orderProduct.updateQuantity(newQuantity);
+//                    continue;
+//                }
+//                orderProductList.add(orderProduct);
+//            }
             result.put(storeDto,orderProductList);
         }
         return result;

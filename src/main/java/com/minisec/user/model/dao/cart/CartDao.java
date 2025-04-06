@@ -8,14 +8,18 @@ import java.util.List;
 
 public interface CartDao {
 
-    int insertCartList(List<CartDto> cartList);
+    Integer selectCartId(CartDto cart);
+
+    int selectAllCartCountByUserId(int userId);
 
     List<CartDetailByStoreDto> selectAllCartDetailListByUserId(int userId);
+
+    int insertCart(CartDto cart);
+
+    int updateCartByCartId(CartDto cart);
 
     int deleteCartList(CartProductDeleteDto deleteList);
 
     int deleteAllCartListByUserId(int userId);
-
-    int selectAllCartCountByUserId(int userId);
 
 }
