@@ -36,8 +36,8 @@ public class UserManagementController {
             default: return;
         }
 
-        int updateResult = userInfoService.updateUserInformationByFilter(filterDto);
-        if(updateResult == 0){
+        boolean updateResult = userInfoService.updateUserInformationByFilter(filterDto);
+        if(!updateResult){
             UpdateStatusPrinter.printUpdateUserInfo(false);
             return;
         }
@@ -46,12 +46,12 @@ public class UserManagementController {
     }
 
     public void chargingBalance(Login user, String inputChargingBalance) {
-        int updateResult = userInfoService.updateUserBalance(new UserBalanceUpdateDto(
+        boolean updateResult = userInfoService.updateUserBalance(new UserBalanceUpdateDto(
                 user.getUserId(),
                 Integer.parseInt(inputChargingBalance)
         ));
 
-        if (updateResult != 1) {
+        if (!updateResult) {
             UpdateStatusPrinter.printUpdateBalanceInfo(false);
             return;
         }

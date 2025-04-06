@@ -22,7 +22,7 @@ public class CartService {
         }
     }
 
-    public int insertCartList(List<CartDto> cartList) {
+    public boolean insertCartList(List<CartDto> cartList) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
@@ -33,39 +33,39 @@ public class CartService {
                     int insertNewCartResult = cartDao.insertCart(cart);
                     if(insertNewCartResult != 1){
                         sqlSession.rollback();
-                        return 0;
+                        return false;
                     }
                 }else {
                     cart.setCartId(existCartId);
                     int updateExistedCartResult = cartDao.updateCartByCartId(cart);
                     if(updateExistedCartResult != 1){
                         sqlSession.rollback();
-                        return 0;
+                        return false;
                     }
                 }
             }
 
             sqlSession.commit();
-            return 1;
+            return true;
         }
     }
 
-    public int deleteCartList(CartProductDeleteDto deleteList) {
+    public boolean deleteCartList(CartProductDeleteDto deleteList) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
             int result = cartDao.deleteCartList(deleteList);
             if (result == 0) {
                 sqlSession.rollback();
-                return 0;
+                return false;
             }
 
             sqlSession.commit();
-            return 1;
+            return true;
         }
     }
 
-    public int deleteAllCartListByUserId(int userId) {
+    public boolean deleteAllCartListByUserId(int userId) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
@@ -74,26 +74,26 @@ public class CartService {
 
             if (result != executeResult) {
                 sqlSession.rollback();
-                return 0;
+                return false;
             }
 
             sqlSession.commit();
-            return 1;
+            return true;
         }
     }
 
-    public int updateCartProductQuantity(CartDto cart){
+    public boolean updateCartProductQuantity(CartDto cart){
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
             int result = cartDao.updateCartProductQuantity(cart);
             if (result == 0) {
                 sqlSession.rollback();
-                return 0;
+                return false;
             }
 
             sqlSession.commit();
-            return 1;
+            return true;
         }
     }
 

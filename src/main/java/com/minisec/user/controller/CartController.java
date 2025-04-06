@@ -77,7 +77,7 @@ public class CartController {
             ));
         }
 
-        int orderResult = orderService.orderFromCart(new CartOrderProcessDto(
+        boolean orderResult = orderService.orderFromCart(new CartOrderProcessDto(
                 new OrderProcessDto(
                         storeInventoryDeductionList,
                         userAmountDeductionList,
@@ -88,7 +88,7 @@ public class CartController {
                         storeProductIdList
                 )
         ));
-        if (orderResult == 0) {
+        if (!orderResult) {
             InsertStatusPrinter.printInsertOrderList(false);
             return;
         }
@@ -112,11 +112,9 @@ public class CartController {
 
 
     public void deleteAllCartListByUserId(Login user) {
-        int deleteResult = cartService.deleteAllCartListByUserId(user.getUserId());
-        if (deleteResult == 0) {
-            DeleteStatusPrinter.printDeleteCart(false);
-        }
-        DeleteStatusPrinter.printDeleteCart(true);
+        boolean deleteResult = cartService.deleteAllCartListByUserId(user.getUserId());
+
+        DeleteStatusPrinter.printDeleteCart(deleteResult);
     }
 
 
@@ -136,14 +134,11 @@ public class CartController {
             storeProductIdList.add(cartProduct.getProduct().getStoreProductId());
         }
 
-        int deleteResult = cartService.deleteCartList(new CartProductDeleteDto(
+        boolean deleteResult = cartService.deleteCartList(new CartProductDeleteDto(
                 user.getUserId(),
                 storeProductIdList
         ));
-        if (deleteResult == 0) {
-            DeleteStatusPrinter.printDeleteCart(false);
-        }
-        DeleteStatusPrinter.printDeleteCart(true);
+        DeleteStatusPrinter.printDeleteCart(deleteResult);
     }
 
 
@@ -166,12 +161,8 @@ public class CartController {
         editCart.setCartId(editQuantityProduct.getDetailId());
         editCart.setOrderProduct(editQuantityProduct);
 
-        int updateResult = cartService.updateCartProductQuantity(editCart);
-        if (updateResult == 0) {
-            UpdateStatusPrinter.printUpdateCartQuantity(false);
-            return;
-        }
-        UpdateStatusPrinter.printUpdateCartQuantity(true);
+        boolean updateResult = cartService.updateCartProductQuantity(editCart);
+        UpdateStatusPrinter.printUpdateCartQuantity(updateResult);
     }
 
 }

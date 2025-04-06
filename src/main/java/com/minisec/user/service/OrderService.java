@@ -32,7 +32,6 @@ public class OrderService {
         }
     }
 
-    //재사용가능할거같다.
     public List<OrderDto> selectAllOrderDetailListByFilter(OrderDetailFilterDto orderDetailFilter) {
         try (SqlSession sqlSession = getSqlSession()) {
             orderDao = sqlSession.getMapper(OrderDao.class);
@@ -41,29 +40,29 @@ public class OrderService {
         }
     }
 
-    public int order(OrderProcessDto request) {
+    public boolean order(OrderProcessDto request) {
         try (SqlSession sqlSession = getSqlSession()) {
 
-            int insertOrderListResult = insertOrderList(request, sqlSession);
-            if (insertOrderListResult == 0) {
+            boolean insertOrderListResult = insertOrderList(request, sqlSession);
+            if (!insertOrderListResult) {
                 sqlSession.rollback();
-                return 0;
+                return false;
             }
 
             sqlSession.commit();
-            return 1;
+            return true;
         }
     }
 
 
-    public int orderFromCart(CartOrderProcessDto request) {
+    public boolean orderFromCart(CartOrderProcessDto request) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 
-            int insertOrderListResult = insertOrderList(request.orderProcessDto(), sqlSession);
-            if (insertOrderListResult == 0) {
+            boolean insertOrderListResult = insertOrderList(request.orderProcessDto(), sqlSession);
+            if (!insertOrderListResult) {
                 sqlSession.rollback();
-                return 0;
+                return false;
             }
 
             CartProductDeleteDto cartProductDeleteList = request.productDeleteList();
@@ -71,36 +70,36 @@ public class OrderService {
             int deleteFromCart = cartDao.deleteCartList(cartProductDeleteList);
             if (deleteFromCart == 0) {
                 sqlSession.rollback();
-                return 0;
+                return false;
             }
 
             sqlSession.commit();
-            return 1;
+            return true;
         }
     }
 
-    private int insertOrderList(OrderProcessDto request, SqlSession sqlSession) {
+    private boolean insertOrderList(OrderProcessDto request, SqlSession sqlSession) {
         storeProductDao = sqlSession.getMapper(StoreProductDao.class);
         userDao = sqlSession.getMapper(UserDao.class);
         orderDao = sqlSession.getMapper(OrderDao.class);
         orderDetailDao = sqlSession.getMapper(OrderDetailDao.class);
 
         if (!decreaseStoreProductsQuantity(request.storeInventoryDeductionList())) {
-            return 0;
+            return false;
         }
         if (!decreaseUserBalance(request.userBalanceUpdateList())) {
-            return 0;
+            return false;
         }
 
         List<OrderDto> orderList = request.orderDtoList();
         if (!insertOrderListAndGetOrderId(orderList)) {
-            return 0;
+            return false;
         }
         if (!insertOrderDetailList(orderList)) {
-            return 0;
+            return false;
         }
 
-        return 1;
+        return true;
     }
 
 

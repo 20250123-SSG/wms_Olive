@@ -89,12 +89,12 @@ public class OrderController {
                     Math.negateExact(totalPrice)
             ));
         }
-        int insertResult = orderService.order(new OrderProcessDto(
+        boolean insertResult = orderService.order(new OrderProcessDto(
                 storeInventoryDeductionList,
                 userAmountDeductionList,
                 orderList
         ));
-        if (insertResult == 0) {
+        if (!insertResult) {
             InsertStatusPrinter.printInsertOrderList(false);
             return;
         }
@@ -131,8 +131,8 @@ public class OrderController {
                 ));
             }
         }
-        int insertResult = cartService.insertCartList(cartList);
-        InsertStatusPrinter.printInsertCartList(insertResult == cartList.size());
+        boolean insertResult = cartService.insertCartList(cartList);
+        InsertStatusPrinter.printInsertCartList(insertResult);
     }
 
 }

@@ -21,7 +21,7 @@ public class UserInformationService {
         }
     }
 
-    public int updateUserInformationByFilter(UserInformationEditFilterDto filter) {
+    public boolean updateUserInformationByFilter(UserInformationEditFilterDto filter) {
         try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
 
@@ -33,26 +33,26 @@ public class UserInformationService {
             }
             if (result != 1) {
                 sqlSession.rollback();
-                return 0;
+                return false;
             }
 
             sqlSession.commit();
-            return 1;
+            return true;
         }
     }
 
-    public int updateUserBalance(UserBalanceUpdateDto balanceUpdate) {
+    public boolean updateUserBalance(UserBalanceUpdateDto balanceUpdate) {
         try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
 
             int result = userDao.updateUserBalance(balanceUpdate);
             if (result != 1) {
                 sqlSession.rollback();
-                return 0;
+                return false;
             }
 
             sqlSession.commit();
-            return 1;
+            return true;
         }
     }
 
