@@ -19,7 +19,7 @@
 
     <!-- 상품 전체 목록 조회 -->
     <select id="productList" resultMap="storeProductMap">
-        SELECT
+        SELECT DISTINCT
             p.product_id
           , p.product_name
           , p.product_brand_name
@@ -33,7 +33,7 @@
 
 
     <!-- 가맹점 상품 등록 -->
-    <insert id="insertStoreProduct" parameterType="StoreProductDto">
+    <insert id="insertStoreProduct" parameterType="map">
         INSERT INTO
             store_detail
             (
@@ -53,39 +53,50 @@
 
 
     <!-- 상품 등록 후 확인 목록 -->
-    <select id="selectStoreProductById" parameterType="String" resultMap="storeProductMap">
+    <select id="selectStoreProductById" parameterType="map" resultMap="storeProductMap">
         SELECT
             p.product_id
           , p.product_name
           , p.product_brand_name
           , c.category_name
-          , s.store_detail_price
-          , s.store_detail_quantity
-          , s.is_discount
+          , sd.store_detail_price
+          , sd.store_detail_quantity
+          , sd.is_discount
         FROM
             product p
-                LEFT JOIN store_detail s ON p.product_id = s.product_id
+                LEFT JOIN store_detail sd ON p.product_id = sd.product_id
                 LEFT JOIN category c ON p.category_id = c.category_id
+                LEFT JOIN store_user su ON sd.store_id = su.store_id
         WHERE
             p.product_id = #{productId}
+            AND su.user_id = #{manageID}
+
     </select>
 
     <!-- 가맹점 상품 수정 -->
-    <update id="updateStoreProduct" parameterType="StoreProductDto">
+    <update id="updateStoreProduct" parameterType="map">
         UPDATE
             store_detail sd
-                JOIN product p ON p.product_id = sd.product_id
-                JOIN store s ON s.store_id = sd.store_id
+                JOIN store_user su ON sd.store_id = su.store_id
         SET
-          , sd.store_detail_id = #{storeDetailId}
-          , sd.store_detail_price = #{storeDetailPrice}
+            sd.store_detail_price = #{storeDetailPrice}
           , sd.is_discount = #{isDiscount}
+          , sd.store_detail_status = #{storeDetailStatus}
         WHERE
             sd.product_id = #{productId}
-            AND s.user_id = #{manageId}
-
+            AND su.user_id = #{manageId}
     </update>
 
     <!-- 가맹점 상품 삭제 -->
+    <delete id="deleteStoreProduct" parameterType="map">
+        DELETE sd
+        FROM
+            store_detail sd
+                JOIN store_user su ON sd.store_id = su.store_id
+        WHERE
+            sd.product_id = #{productId}
+            AND su.user_id = #{manageId}
+
+    </delete>
 
 </mapper>

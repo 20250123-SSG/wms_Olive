@@ -21,5 +21,8 @@ public class StoreProductDto {
     public int storeDetailPrice;
     public int storeDetailQuantity;
     public int isDiscount;
+    public int storeDetailStatus;
+    private int manageId;
+
 
 }

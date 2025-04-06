@@ -3,12 +3,14 @@ package com.minisec.store.dao;
 import com.minisec.store.dto.StoreProductDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StoreModifyMapper {
 
-    List<StoreProductDto> productList();
-    int insertStoreProduct(StoreProductDto storeProduct);
-    List<StoreProductDto> selectStoreProductById();
-
+    List<StoreProductDto> productList(int storeId);
+    int insertStoreProduct(Map<String, Object> param);
+    List<StoreProductDto> selectStoreProductById(Map<String, String> param);
+    int updateStoreProduct(Map<String, Object> param);
+    int deleteStoreProduct(Map<String, Object> param);
 }
 
