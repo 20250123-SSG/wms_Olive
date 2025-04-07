@@ -37,6 +37,7 @@
         WHERE
             store_id = #{storeId}
         AND store_detail_status = 1
+        AND sd.store_detail_quantity > 0
     </select>
 
     <update id="decreaseStoreProductQuantity" parameterType="StoreInventoryDeductionDto">
