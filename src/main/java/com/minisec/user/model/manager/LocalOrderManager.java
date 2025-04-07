@@ -2,10 +2,10 @@ package com.minisec.user.model.manager;
 
 
 import com.minisec.common.login.Login;
-import com.minisec.user.model.dto.StoreProductDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
 import com.minisec.user.model.dto.order.OrderDto;
-import com.minisec.user.model.dto.order.OrderProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
 import com.minisec.user.model.manager.helper.OrderDtoAssembler;
 import com.minisec.user.model.manager.helper.OrderWrapper;
 import lombok.NoArgsConstructor;
@@ -37,6 +37,12 @@ public class LocalOrderManager {
     }
 
 
+    public void addOrder(StoreDto store, StoreProductDto storeProduct, int quantity) {
+        orderWrapper.addOrder(store, storeProduct, quantity);
+        storeProduct.deleteLocalStoreProductQuantity(quantity);
+    }
+
+
     public StoreDto getStoreByStoreId(List<StoreDto> storeList, String inputStoreId) {
         try {
             return storeList.get(Integer.parseInt(inputStoreId.trim()) - 1);
@@ -47,6 +53,7 @@ public class LocalOrderManager {
         }
     }
 
+
     public StoreProductDto getOrderProduct(String inputProductId) {
         try {
             return storeProductList.get(Integer.parseInt(inputProductId.trim()) - 1);
@@ -56,6 +63,7 @@ public class LocalOrderManager {
             throw new IllegalArgumentException("상품 번호를 입력해주세요.");
         }
     }
+
 
     public int getOrderQuantity(String inputQuantity) {
         int quantity = 0;
@@ -72,23 +80,21 @@ public class LocalOrderManager {
     }
 
 
-    public void addOrder(StoreDto store, StoreProductDto storeProduct, int quantity) {
-        orderWrapper.addOrder(store, storeProduct, quantity);
-        storeProduct.deleteLocalStoreProductQuantity(quantity);
-    }
-
 
     public Map<StoreDto, List<OrderProductDto>> getOrderListByStore() {
         return orderWrapper.getOrderListByStore();
     }
 
+
     public List<OrderDto> getOrderList(Login user) {
         return orderDtoAssembler.getOrderList(user, orderWrapper.getOrderListByStore());
     }
 
+
     public Map<String, List<StoreProductDto>> getStoreProductByCategoryForPrint() {
         return storeProductByCategory;
     }
+
 
     private void groupingByCategoryForPrint(List<StoreProductDto> storeProductList) {
         Comparator<StoreProductDto> productComparator = Comparator.comparing(StoreProductDto::getProductName);

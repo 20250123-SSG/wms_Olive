@@ -1,4 +1,4 @@
-package com.minisec.user.model.dto.order;
+package com.minisec.user.model.dto.store;
 
 import lombok.*;
 
@@ -16,6 +16,7 @@ public class StoreDto {
     private String storeName;
     private String phone;
     private String address;
+
 
     @Override
     public boolean equals(Object o) {

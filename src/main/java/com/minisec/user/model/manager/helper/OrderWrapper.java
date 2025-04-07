@@ -1,8 +1,8 @@
 package com.minisec.user.model.manager.helper;
 
-import com.minisec.user.model.dto.StoreProductDto;
-import com.minisec.user.model.dto.order.OrderProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
+import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ public class OrderWrapper {
     }
 
 
+
     public OrderProductDto addOrder(StoreDto store, StoreProductDto product, int quantity) {
         OrderProductDto orderProduct = new OrderProductDto(product,
                 quantity,
@@ -28,21 +29,12 @@ public class OrderWrapper {
         return checkExistProduct(quantity, orderProductList, orderProduct);
     }
 
+
     public void addOrderFromCart(StoreDto store, OrderProductDto product, int quantity) {
         List<OrderProductDto> orderProductList = checkExistStore(store);
         checkExistProduct(quantity, orderProductList, product);
     }
 
-
-    private OrderProductDto checkExistProduct(int quantity, List<OrderProductDto> orderProductList, OrderProductDto orderProduct) {
-        if (orderProductList.contains(orderProduct)) {
-            orderProduct = orderProductList.get(orderProductList.indexOf(orderProduct));
-            orderProduct.updateQuantity(quantity);
-            return orderProduct;
-        }
-        orderProductList.add(orderProduct);
-        return orderProduct;
-    }
 
     private List<OrderProductDto> checkExistStore(StoreDto store) {
         if (orderListByStore.containsKey(store)) {
@@ -50,7 +42,23 @@ public class OrderWrapper {
         }
         List<OrderProductDto> orderProductList = new ArrayList<>();
         orderListByStore.put(store, orderProductList);
+
         return orderProductList;
+    }
+
+
+    private OrderProductDto checkExistProduct(int quantity,
+                                              List<OrderProductDto> orderProductList,
+                                              OrderProductDto orderProduct) {
+
+        if (orderProductList.contains(orderProduct)) {
+            orderProduct = orderProductList.get(orderProductList.indexOf(orderProduct));
+            orderProduct.updateQuantity(quantity);
+            return orderProduct;
+        }
+
+        orderProductList.add(orderProduct);
+        return orderProduct;
     }
 
 }

@@ -2,9 +2,13 @@ package com.minisec.user.controller;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.common.OrderStatus;
-import com.minisec.user.model.dto.StoreProductDto;
+import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
+import com.minisec.user.model.dto.store.StoreInventoryDeductionDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
 import com.minisec.user.model.dto.cart.CartDto;
 import com.minisec.user.model.dto.order.*;
+import com.minisec.user.model.dto.user.UserBalanceUpdateDto;
 import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
 import com.minisec.user.service.StoreService;
@@ -26,14 +30,16 @@ public class OrderController {
     }
 
 
+
     public List<StoreDto> selectStoreList() {
         return storeService.selectStoreList();
     }
 
+
     public List<StoreProductDto> selectStoreAllProductByStoreId(StoreDto storeDto) {
         return storeService.selectStoreAllProductByStoreId(storeDto.getStoreId());
     }
-    
+
 
     public List<OrderDto> selectAllOrderListByUserId(Login user) {
         OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
@@ -42,9 +48,9 @@ public class OrderController {
         return orderService.selectAllOrderListByFilter(orderDetailFilter);
     }
 
-    public void selectOneOrderDetailByOrderId(String inputOrderId,
-                                               List<OrderDto> simpleOrderList){
-       final int orderId;
+
+    public void selectOneOrderDetailByOrderId(String inputOrderId, List<OrderDto> simpleOrderList) {
+        final int orderId;
         try {
             orderId = Integer.parseInt(inputOrderId);
         } catch (NumberFormatException e) {
@@ -63,6 +69,7 @@ public class OrderController {
         OrderDetailsPrinter.printOne(resultOrder.get(0));
     }
 
+
     public void selectCanceledStatusOrder(Login user) {
         OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
         orderDetailFilter.setUserId(user.getUserId());
@@ -79,7 +86,7 @@ public class OrderController {
 
         for (OrderDto orderDto : orderList) {
             for (OrderProductDto orderProduct : orderDto.getOrderProducts()) {
-                /// 재고차감
+
                 int storeDetailId = orderProduct.getProduct().getStoreProductId();
                 int userOrderQuantity = orderProduct.getQuantity();
                 storeInventoryDeductionList.add(new StoreInventoryDeductionDto(
@@ -87,7 +94,6 @@ public class OrderController {
                         userOrderQuantity
                 ));
             }
-            ///금액차감
             int userId = orderDto.getUserId();
             int totalPrice = orderDto.getTotalPrice();
             userAmountDeductionList.add(new UserBalanceUpdateDto(
@@ -121,6 +127,7 @@ public class OrderController {
             OrderDetailsPrinter.printList(orderList);
         }
     }
+
 
     public void insertCartList(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
         List<CartDto> cartList = new ArrayList<>();

@@ -1,14 +1,17 @@
 package com.minisec.user.service;
 
 
-import com.minisec.user.model.dao.UserDao;
+import com.minisec.user.model.dao.user.UserDao;
 import com.minisec.user.model.dao.cart.CartDao;
 import com.minisec.user.model.dao.order.OrderDao;
 import com.minisec.user.model.dao.order.OrderDetailDao;
-import com.minisec.user.model.dao.order.StoreProductDao;
+import com.minisec.user.model.dao.store.StoreProductDao;
+import com.minisec.user.model.dto.OrderProductDto;
 import com.minisec.user.model.dto.cart.CartOrderProcessDto;
 import com.minisec.user.model.dto.cart.CartProductDeleteDto;
 import com.minisec.user.model.dto.order.*;
+import com.minisec.user.model.dto.store.StoreInventoryDeductionDto;
+import com.minisec.user.model.dto.user.UserBalanceUpdateDto;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -32,6 +35,7 @@ public class OrderService {
         }
     }
 
+
     public List<OrderDto> selectAllOrderDetailListByFilter(OrderDetailFilterDto orderDetailFilter) {
         try (SqlSession sqlSession = getSqlSession()) {
             orderDao = sqlSession.getMapper(OrderDao.class);
@@ -39,6 +43,7 @@ public class OrderService {
             return orderDao.selectAllOrderDetailListByFilter(orderDetailFilter);
         }
     }
+
 
     public void order(OrderProcessDto request) {
         try (SqlSession sqlSession = getSqlSession()) {
@@ -78,6 +83,7 @@ public class OrderService {
         }
     }
 
+
     private void insertOrderList(OrderProcessDto request, SqlSession sqlSession) {
         storeProductDao = sqlSession.getMapper(StoreProductDao.class);
         userDao = sqlSession.getMapper(UserDao.class);
@@ -101,23 +107,14 @@ public class OrderService {
     }
 
 
-    private boolean insertOrderDetailList(List<OrderDto> orderList) {
-        int insertCheckCount = 0;
-        for (OrderDto orderDto : orderList) {
-            List<OrderProductDto> orderProductList = orderDto.getOrderProducts();
-            insertCheckCount += orderProductList.size();
+    private boolean decreaseStoreProductsQuantity(List<StoreInventoryDeductionDto> updateStoreProductQuantityList) {
+        int updateStoreProductQuantityResult = 0;
+        for (StoreInventoryDeductionDto storeProductDto : updateStoreProductQuantityList) {
+            updateStoreProductQuantityResult += storeProductDao.decreaseStoreProductQuantity(storeProductDto);
         }
-        int insertOrderDetailResult = orderDetailDao.insertOrderDetailList(orderList);
-        return insertCheckCount == insertOrderDetailResult;
+        return updateStoreProductQuantityResult == updateStoreProductQuantityList.size();
     }
 
-    private boolean insertOrderListAndGetOrderId(List<OrderDto> orderList) {
-        int insertOrderResult = 0;
-        for (OrderDto orderDto : orderList) {
-            insertOrderResult += orderDao.insertOrder(orderDto);
-        }
-        return insertOrderResult == orderList.size();
-    }
 
     private boolean decreaseUserBalance(List<UserBalanceUpdateDto> updateUserBalanceList) {
         int updateUserBalanceDeductionResult = 0;
@@ -127,12 +124,24 @@ public class OrderService {
         return updateUserBalanceDeductionResult == updateUserBalanceList.size();
     }
 
-    private boolean decreaseStoreProductsQuantity(List<StoreInventoryDeductionDto> updateStoreProductQuantityList) {
-        int updateStoreProductQuantityResult = 0;
-        for (StoreInventoryDeductionDto storeProductDto : updateStoreProductQuantityList) {
-            updateStoreProductQuantityResult += storeProductDao.decreaseStoreProductQuantity(storeProductDto);
+
+    private boolean insertOrderListAndGetOrderId(List<OrderDto> orderList) {
+        int insertOrderResult = 0;
+        for (OrderDto orderDto : orderList) {
+            insertOrderResult += orderDao.insertOrder(orderDto);
         }
-        return updateStoreProductQuantityResult == updateStoreProductQuantityList.size();
+        return insertOrderResult == orderList.size();
+    }
+
+
+    private boolean insertOrderDetailList(List<OrderDto> orderList) {
+        int insertCheckCount = 0;
+        for (OrderDto orderDto : orderList) {
+            List<OrderProductDto> orderProductList = orderDto.getOrderProducts();
+            insertCheckCount += orderProductList.size();
+        }
+        int insertOrderDetailResult = orderDetailDao.insertOrderDetailList(orderList);
+        return insertCheckCount == insertOrderDetailResult;
     }
 
 }

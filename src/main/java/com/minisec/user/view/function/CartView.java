@@ -2,8 +2,8 @@ package com.minisec.user.view.function;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.controller.CartController;
-import com.minisec.user.model.dto.order.OrderProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
 import com.minisec.user.view.details.CartOrderView;
 import com.minisec.user.view.details.InputFunctionNumberView;
 import com.minisec.user.view.printer.ExceptionPrinter;

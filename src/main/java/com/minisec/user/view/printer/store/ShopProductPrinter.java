@@ -1,7 +1,7 @@
 package com.minisec.user.view.printer.store;
 
-import com.minisec.user.model.dto.StoreProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
 
 import java.util.List;
 import java.util.Map;

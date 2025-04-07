@@ -7,7 +7,7 @@ public enum OrderStatus {
     private String value;
     private String desc;
 
-    private OrderStatus(String value, String desc) {
+    OrderStatus(String value, String desc) {
         this.value = value;
         this.desc = desc;
     }

@@ -2,9 +2,9 @@ package com.minisec.user.view.function;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.controller.OrderController;
-import com.minisec.user.model.dto.StoreProductDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
 import com.minisec.user.model.dto.order.OrderDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.store.StoreDto;
 import com.minisec.user.model.manager.LocalOrderManager;
 import com.minisec.user.view.details.InputFunctionNumberView;
 import com.minisec.user.view.details.InputOrderMemoView;

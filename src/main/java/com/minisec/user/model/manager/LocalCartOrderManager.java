@@ -2,8 +2,8 @@ package com.minisec.user.model.manager;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.model.dto.order.OrderDto;
-import com.minisec.user.model.dto.order.OrderProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
 import com.minisec.user.model.manager.helper.OrderDtoAssembler;
 import com.minisec.user.model.manager.helper.OrderWrapper;
 import lombok.Getter;
@@ -19,6 +19,7 @@ public class LocalCartOrderManager {
     @Getter
     private Map<StoreDto, List<OrderProductDto>> localUserCartList;
 
+
     public LocalCartOrderManager(Map<StoreDto, List<OrderProductDto>> localUserCartList) {
         this.localUserCartList = localUserCartList;
     }
@@ -26,30 +27,6 @@ public class LocalCartOrderManager {
 
     public boolean isCartEmpty() {
         return localUserCartList.isEmpty();
-    }
-
-
-    public StoreDto getStoreByStoreName(String inputStoreName) {
-        return localUserCartList.keySet().stream()
-                .filter(store -> store.getStoreName().equals(inputStoreName))
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("장바구니에 존재하지 않는 가맹점입니다."));
-
-    }
-
-    public List<Integer> getOrderProductIndexList(String inputProductName) {
-        Set<Integer> notDuplicationResult = new HashSet<>();
-
-        try {
-            for (String input : inputProductName.trim().split(",")) {
-                notDuplicationResult.add(Integer.parseInt(input.trim()) - 1);
-            }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("장바구니 번호를 입력해주세요.");
-        }
-        return notDuplicationResult.stream()
-                .sorted()
-                .collect(Collectors.toList());
     }
 
 
@@ -69,6 +46,7 @@ public class LocalCartOrderManager {
         deleteOrderCartFromLocalCartList(localUserCartList, store, orderProductIndex);
     }
 
+
     private void deleteOrderCartFromLocalCartList(Map<StoreDto, List<OrderProductDto>> localUserCartList,
                                                   StoreDto storeDto,
                                                   List<Integer> orderProductIndex) {
@@ -87,6 +65,32 @@ public class LocalCartOrderManager {
     }
 
 
+    public StoreDto getStoreByStoreName(String inputStoreName) {
+        return localUserCartList.keySet().stream()
+                .filter(store -> store.getStoreName().equals(inputStoreName))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 존재하지 않는 가맹점입니다."));
+
+    }
+
+
+    public List<Integer> getOrderProductIndexList(String inputProductName) {
+        Set<Integer> notDuplicationResult = new HashSet<>();
+
+        try {
+            for (String input : inputProductName.trim().split(",")) {
+                notDuplicationResult.add(Integer.parseInt(input.trim()) - 1);
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("장바구니 번호를 입력해주세요.");
+        }
+        return notDuplicationResult.stream()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+
+
     public Map<StoreDto, List<OrderProductDto>> getOrderListByStore() {
         return orderWrapper.getOrderListByStore();
     }
@@ -95,6 +99,7 @@ public class LocalCartOrderManager {
     public List<OrderDto> getOrderListWhenAllFromCart(Login user) {
         return orderDtoAssembler.getOrderList(user, localUserCartList);
     }
+
 
     public List<OrderDto> getOrderListWhenChoice(Login user) {
         return orderDtoAssembler.getOrderList(user, orderWrapper.getOrderListByStore());

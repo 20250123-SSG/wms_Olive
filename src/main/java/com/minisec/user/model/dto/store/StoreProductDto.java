@@ -1,4 +1,4 @@
-package com.minisec.user.model.dto;
+package com.minisec.user.model.dto.store;
 
 import lombok.*;
 

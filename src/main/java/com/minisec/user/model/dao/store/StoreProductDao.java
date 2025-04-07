@@ -1,7 +1,7 @@
-package com.minisec.user.model.dao.order;
+package com.minisec.user.model.dao.store;
 
-import com.minisec.user.model.dto.StoreProductDto;
-import com.minisec.user.model.dto.order.StoreInventoryDeductionDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
+import com.minisec.user.model.dto.store.StoreInventoryDeductionDto;
 
 import java.util.List;
 

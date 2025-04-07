@@ -1,13 +1,9 @@
 package com.minisec.user.view.details;
 
-import com.minisec.common.login.Login;
 import com.minisec.user.model.dto.order.OrderDto;
-import com.minisec.user.model.dto.order.OrderProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class InputOrderMemoView {

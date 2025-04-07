@@ -2,7 +2,7 @@ package com.minisec.user.controller;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.common.UserInformationEditOption;
-import com.minisec.user.model.dto.order.UserBalanceUpdateDto;
+import com.minisec.user.model.dto.user.UserBalanceUpdateDto;
 import com.minisec.user.model.dto.user.UserInformationEditFilterDto;
 import com.minisec.user.service.UserInformationService;
 import com.minisec.user.view.printer.ExceptionPrinter;
@@ -18,13 +18,16 @@ public class UserManagementController {
     }
 
 
+
     public Login selectUserByUserId(Login user){
         return userInfoService.selectUserByUserId(user.getUserId());
     }
 
+
     public void updateUserInformationByFilter(Login user,
                                               UserInformationEditOption editOption,
                                               String before, String after){
+
         UserInformationEditFilterDto filterDto = new UserInformationEditFilterDto();
         filterDto.setUserId(user.getUserId());
 
@@ -46,6 +49,7 @@ public class UserManagementController {
         UpdateStatusPrinter.printUpdateUserInfo(true);
         UserUpdateInformationPrinter.print(before,after);
     }
+
 
     public void chargingBalance(Login user, String inputChargingBalance) {
         int chargingBalanceInt = 0;

@@ -3,7 +3,7 @@ package com.minisec.user.view.details;
 import com.minisec.common.login.Login;
 import com.minisec.user.controller.CartController;
 import com.minisec.user.model.dto.order.OrderDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.store.StoreDto;
 
 import com.minisec.user.model.manager.LocalCartOrderManager;
 import com.minisec.user.view.printer.ExceptionPrinter;

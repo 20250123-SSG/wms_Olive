@@ -13,13 +13,13 @@
         <typeAlias alias="ProductDto" type="com.minisec.common.product.ProductDto"/>
         <!-- User -->
         <typeAlias type="com.minisec.user.model.dto.user.UserInformationEditFilterDto" alias="UserInformationEditFilterDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.StoreDto" alias="StoreDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.OrderProductDto" alias="OrderProductDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreDto" alias="StoreDto"/>
+        <typeAlias type="com.minisec.user.model.dto.OrderProductDto" alias="OrderProductDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.OrderDto" alias="OrderDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.StoreInventoryDeductionDto" alias="StoreInventoryDeductionDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.UserBalanceUpdateDto" alias="UserBalanceUpdateDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreInventoryDeductionDto" alias="StoreInventoryDeductionDto"/>
+        <typeAlias type="com.minisec.user.model.dto.user.UserBalanceUpdateDto" alias="UserBalanceUpdateDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.OrderDetailFilterDto" alias="OrderDetailFilterDto"/>
-        <typeAlias type="com.minisec.user.model.dto.StoreProductDto" alias="StoreProductDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreProductDto" alias="StoreProductDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartDto" alias="CartDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartDetailByStoreDto" alias="CartDetailByStoreDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartProductDeleteDto" alias="CartProductDeleteDto"/>
@@ -29,7 +29,6 @@
         <typeAlias alias="WarehouseProductDetailDto" type="com.minisec.warehouse.model.dto.WarehouseProductDetailDto"/>
         <typeAlias alias="WarehouseReceiveLogDto" type="com.minisec.warehouse.model.dto.WarehouseReceiveLogDto"/>
         <typeAlias alias="WarehouseShipmentLogDto" type="com.minisec.warehouse.model.dto.WarehouseShipmentLogDto"/>
-        <typeAlias alias="ProductDto" type="com.minisec.warehouse.model.dto.ProductDto"/>
         <typeAlias alias="StorageDto" type="com.minisec.warehouse.model.dto.StorageDto"/>
         <typeAlias alias="ShipmentDto" type="com.minisec.warehouse.model.dto.ShipmentDto"/>
         <typeAlias alias="ShipmentDetailDto" type="com.minisec.warehouse.model.dto.ShipmentDetailDto"/>

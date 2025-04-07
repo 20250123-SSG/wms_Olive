@@ -1,6 +1,6 @@
-package com.minisec.user.model.dto.order;
+package com.minisec.user.model.dto;
 
-import com.minisec.user.model.dto.StoreProductDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +20,7 @@ public class OrderProductDto {
 
     private StoreProductDto product;
 
+
     public OrderProductDto(StoreProductDto product, int quantity, int totalPrice) {
         this.product = product;
         this.quantity = quantity;
@@ -27,9 +28,6 @@ public class OrderProductDto {
     }
 
     public void updateQuantity(int quantity) {
-        if ((this.quantity + quantity) > product.getStoreProductQuantity()) { //todo 예외
-
-        }
         this.quantity += quantity;
         calculateTotalPrice(product);
     }

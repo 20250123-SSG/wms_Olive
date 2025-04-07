@@ -1,7 +1,7 @@
 package com.minisec.user.view.printer.order;
 
 import com.minisec.user.model.dto.order.OrderDto;
-import com.minisec.user.model.dto.order.OrderProductDto;
+import com.minisec.user.model.dto.OrderProductDto;
 
 import java.util.List;
 

@@ -1,9 +1,8 @@
 package com.minisec.user.service;
 
-import com.minisec.common.Template;
 import com.minisec.common.login.Login;
-import com.minisec.user.model.dao.UserDao;
-import com.minisec.user.model.dto.order.UserBalanceUpdateDto;
+import com.minisec.user.model.dao.user.UserDao;
+import com.minisec.user.model.dto.user.UserBalanceUpdateDto;
 import com.minisec.user.model.dto.user.UserInformationEditFilterDto;
 import org.apache.ibatis.session.SqlSession;
 
@@ -13,6 +12,7 @@ public class UserInformationService {
 
     private UserDao userDao;
 
+
     public Login selectUserByUserId(int userId) {
         try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
@@ -20,6 +20,7 @@ public class UserInformationService {
             return userDao.selectUserByUserId(userId);
         }
     }
+
 
     public void updateUserInformationByFilter(UserInformationEditFilterDto filter) {
         try (SqlSession sqlSession = getSqlSession()) {
@@ -34,6 +35,7 @@ public class UserInformationService {
             sqlSession.commit();
         }
     }
+
 
     public void updateUserBalance(UserBalanceUpdateDto balanceUpdate) {
         try (SqlSession sqlSession = getSqlSession()) {
