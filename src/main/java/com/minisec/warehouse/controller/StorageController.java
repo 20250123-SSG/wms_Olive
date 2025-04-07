@@ -86,7 +86,7 @@ public class StorageController {
             int index = 1;
             for (StorageDto storage : finalReceivedList) {
                 String productName = storageService.getProductNameById(storage.getProductId());
-                System.out.printf("%-5d %-35s (%d) %-15s %-10d\n", index++, productName, storage.getProductId(), storage.getSupplierName(), storage.getStorageQuantity());
+                System.out.printf("%-5d %-25s(%d) %-20s %-10d\n", index++, productName, storage.getProductId(), storage.getSupplierName(), storage.getStorageQuantity());
             }
         }
 

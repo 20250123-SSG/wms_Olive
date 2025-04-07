@@ -41,6 +41,7 @@ public class StorageService {
             } else {
                 // 기존 제품이 없으면 새로 추가
                 storageMapper.insertWarehouseDetail(warehouseId, productId, finalQuantity);
+                insertWarehouseProduct(warehouseId, productId, finalQuantity);
             }
 
             sqlSession.commit();
@@ -77,4 +78,5 @@ public class StorageService {
             sqlSession.close();
         }
     }
+
 }
