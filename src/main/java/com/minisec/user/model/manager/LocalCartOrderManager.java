@@ -62,19 +62,22 @@ public class LocalCartOrderManager {
 
             orderWrapper.addOrderFromCart(store, orderProductDto, quantity);
         }
-        deleteOrderCartFromLocalList(localUserCartList, store, orderProductIndex);
+        deleteOrderCartFromLocalCartList(localUserCartList, store, orderProductIndex);
     }
 
-    private void deleteOrderCartFromLocalList(Map<StoreDto, List<OrderProductDto>> localUserCartList,
-                                              StoreDto storeDto,
-                                              List<Integer> orderProductIndex) {
-        orderProductIndex.sort(Comparator.reverseOrder());
+    private void deleteOrderCartFromLocalCartList(Map<StoreDto, List<OrderProductDto>> localUserCartList,
+                                                  StoreDto storeDto,
+                                                  List<Integer> orderProductIndex) {
+        List<OrderProductDto> orderProductListByStore = localUserCartList.get(storeDto);
+        List<OrderProductDto> toRemove = new ArrayList<>();
 
-        List<OrderProductDto> localUserCartListByStore = localUserCartList.get(storeDto);
         for (int index : orderProductIndex) {
-            localUserCartListByStore.remove(index);
+            toRemove.add(orderProductListByStore.get(index));
         }
-        if (localUserCartListByStore.isEmpty()) {
+
+        orderProductListByStore.removeAll(toRemove);
+
+        if (orderProductListByStore.isEmpty()) {
             localUserCartList.remove(storeDto);
         }
     }
