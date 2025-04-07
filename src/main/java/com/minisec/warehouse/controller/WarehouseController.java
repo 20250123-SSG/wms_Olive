@@ -18,7 +18,9 @@ public class WarehouseController {
 
     // 창고 내 전체 상품 조회
     public Map<Integer, Integer> selectAllProducts(int warehouseId) {
-        System.out.println("\n📦 창고 내 전체 상품 조회 📦");
+        System.out.println("\n창고 내 전체 상품 조회");
+        System.out.println("────────────────────────────────────────────────────────────────────────────────");
+
         List<WarehouseProductDetailDto> list = warehouseService.selectAllProducts(warehouseId);
         WarehouseResultView.displayProductList(list);
         // <출력번호:상품번호> map을 생성후 return
