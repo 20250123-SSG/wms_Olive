@@ -11,8 +11,8 @@ import com.minisec.user.model.manager.helper.OrderWrapper;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 바로 구매 기능을 돕는 매니저
@@ -24,10 +24,15 @@ public class LocalOrderManager {
     private final OrderWrapper orderWrapper = new OrderWrapper();
 
     @Getter
-    private List<StoreProductDto> storeProductList;
+    private List<StoreProductDto> storeProductList = new ArrayList<>();
+    private TreeMap<String, List<StoreProductDto>> storeProductByCategory;
 
     public LocalOrderManager(List<StoreProductDto> storeProductList) {
-        this.storeProductList = storeProductList;
+        groupingByCategoryForPrint(storeProductList);
+
+        for (String category : storeProductByCategory.keySet()) {
+            this.storeProductList.addAll(storeProductByCategory.get(category));
+        }
     }
 
 
@@ -61,5 +66,25 @@ public class LocalOrderManager {
     public List<OrderDto> getOrderList(Login user) {
         return orderDtoAssembler.getOrderList(user, orderWrapper.getOrderListByStore());
     }
+
+    public Map<String, List<StoreProductDto>> getStoreProductByCategoryForPrint() {
+        return storeProductByCategory;
+    }
+
+    private void groupingByCategoryForPrint(List<StoreProductDto> storeProductList) {
+        Comparator<StoreProductDto> productComparator = Comparator.comparing(StoreProductDto::getProductName);
+        storeProductByCategory = storeProductList.stream()
+                .collect(Collectors.groupingBy(
+                        StoreProductDto::getCategory,
+                        TreeMap::new,
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                list -> list.stream()
+                                        .sorted(productComparator)
+                                        .collect(Collectors.toList())
+                        )
+                ));
+    }
+
 
 }

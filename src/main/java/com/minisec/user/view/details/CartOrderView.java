@@ -47,6 +47,7 @@ public class CartOrderView {
         while (true) {
             StoreDto storeDto = inputStore();
             List<Integer> orderProductIndex = inputOrderProductNum();
+            if(orderProductIndex.isEmpty()) return;
 
             localCartOrderManager.addOrder(storeDto, orderProductIndex);
 
@@ -83,9 +84,13 @@ public class CartOrderView {
     }
 
     private List<Integer> inputOrderProductNum() {
-        System.out.println("[ 구매할 상품의 장바구니 코드를 모두 입력하세요. ex)1,2,3,4 ]");
+        System.out.println("[ 구매할 상품의 장바구니 코드를 모두 입력하세요. ex)1,2,3,4  (0.뒤로가기) ] ");
+        String productNum = sc.nextLine().trim();
 
-        return localCartOrderManager.getOrderProductIndexList(sc.nextLine());
+        if ("0".equals(productNum)) {
+            return new ArrayList<>();
+        }
+        return localCartOrderManager.getOrderProductIndexList(productNum);
     }
 
     private StoreDto inputStore() {

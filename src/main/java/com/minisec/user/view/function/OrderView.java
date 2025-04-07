@@ -26,6 +26,7 @@ public class OrderView {
 
         while (true) {
             StoreProductDto product = inputOrderProduct(store);
+            if (product == null) return;
             int quantity = inputOrderQuantity(product);
 
             localOrderManager.addOrder(store, product, quantity);
@@ -72,11 +73,15 @@ public class OrderView {
 
     private StoreProductDto inputOrderProduct(StoreDto store) {
         orderController.selectStoreAllProductByStoreId(store);
-        ShopProductPrinter.printProductList(store, localOrderManager.getStoreProductList());
-        System.out.println("[ 구매할 상품의 번호를 선택해주세요. ]");
+        ShopProductPrinter.printProductListByCategory(store, localOrderManager.getStoreProductByCategoryForPrint());
+        System.out.println("[ 구매할 상품의 번호를 선택해주세요. (0.뒤로가기) ]");
         System.out.print(">> 입력:");
+        String productNum = sc.nextLine();
 
-        return localOrderManager.getOrderProduct(sc.nextLine());
+        if("0".equals(productNum)) {
+            return null;
+        }
+        return localOrderManager.getOrderProduct(productNum);
     }
 
     private int inputOrderQuantity(StoreProductDto product) {
