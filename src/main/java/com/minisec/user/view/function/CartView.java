@@ -19,13 +19,15 @@ public class CartView {
     public void run(Login user) {
 
         while (true) {
+            System.out.println("\n\n=========================================================");
+            System.out.println("--------------------- 장바구니 관리 ---------------------\n");
             System.out.println("""
-                    1. 장바구니 조회
-                    2. 장바구니 물품 구매
-                    3. 장바구니 상품 수량 수정
-                    4. 장바구니 삭제
-                    5. 장바구니 비우기
-                    0. 뒤로가기
+                     1. 장바구니 조회
+                     2. 장바구니 물품 구매
+                     3. 장바구니 상품 수량 수정
+                     4. 장바구니 삭제
+                     5. 장바구니 비우기
+                     0. 뒤로가기
                     """);
 
             switch (InputFunctionNumberView.input()) {
@@ -43,18 +45,21 @@ public class CartView {
     }
 
 
+
     private void selectCartListByUserId(Login user) {
         CartDetailsPrinter.printUniqueNumber(cartController.selectAllCartDetailListByUserId(user));
     }
+
 
     private void orderFormCart(Login user) {
         new CartOrderView().run(user);
     }
 
+
     private void updateCartProductQuantity(Login user) {
         Map<StoreDto, List<OrderProductDto>> allCartList = cartController.selectAllCartDetailListByUserId(user);
         if (allCartList.isEmpty()) {
-            System.out.println("장바구니가 비어있습니다.");
+            System.out.println("\n\n장바구니가 비어있습니다.");
             return;
         }
         CartDetailsPrinter.printUniqueNumber(allCartList);
@@ -79,14 +84,11 @@ public class CartView {
         }
     }
 
-    private void deleteAllCartListByUserId(Login user) {
-        cartController.deleteAllCartListByUserId(user);
-    }
 
     private void deleteCartListByChoice(Login user) {
         Map<StoreDto, List<OrderProductDto>> allCartList = cartController.selectAllCartDetailListByUserId(user);
         if (allCartList.isEmpty()) {
-            System.out.println("장바구니가 비어있습니다.");
+            System.out.println("\n\n장바구니가 비어있습니다.");
             return;
         }
         CartDetailsPrinter.printUniqueNumber(allCartList);
@@ -102,6 +104,11 @@ public class CartView {
                 ExceptionPrinter.print(e.getMessage());
             }
         }
+    }
+
+
+    private void deleteAllCartListByUserId(Login user) {
+        cartController.deleteAllCartListByUserId(user);
     }
 
 }

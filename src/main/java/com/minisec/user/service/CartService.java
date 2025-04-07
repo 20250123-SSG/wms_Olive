@@ -29,16 +29,16 @@ public class CartService {
             for (CartDto cart : cartList) {
                 Integer existCartId = cartDao.selectCartId(cart);
 
-                if(existCartId == null){
+                if (existCartId == null) {
                     int insertNewCartResult = cartDao.insertCart(cart);
-                    if(insertNewCartResult != 1){
+                    if (insertNewCartResult != 1) {
                         sqlSession.rollback();
                         throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
                     }
-                }else {
+                } else {
                     cart.setCartId(existCartId);
                     int updateExistedCartResult = cartDao.updateCartByCartId(cart);
-                    if(updateExistedCartResult != 1){
+                    if (updateExistedCartResult != 1) {
                         sqlSession.rollback();
                         throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
                     }
@@ -79,7 +79,7 @@ public class CartService {
         }
     }
 
-    public void updateCartProductQuantity(CartDto cart){
+    public void updateCartProductQuantity(CartDto cart) {
         try (SqlSession sqlSession = getSqlSession()) {
             cartDao = sqlSession.getMapper(CartDao.class);
 

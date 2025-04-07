@@ -13,8 +13,10 @@ public class UserInformationEditView {
     private final UserManagementController userManagementController = new UserManagementController();
 
     public void run(Login user) {
+
         while (true) {
-            System.out.println("========== 개인 정보 수정 ==========");
+            System.out.println("\n\n======================================================");
+            System.out.println("------------------- 개인정보 수정 --------------------\n");
             System.out.println("""
                     1. 아이디
                     2. 비번
@@ -39,6 +41,7 @@ public class UserInformationEditView {
     }
 
 
+
     private void update(Login user, UserInformationEditOption editOption) {
         String before = null;
 
@@ -50,7 +53,7 @@ public class UserInformationEditView {
             case ADDRESS :  before = user.getUserAddress(); break;
             default: return;
         }
-        System.out.printf("변경할 %s를 입력하세요.\n", editOption.getValue());
+        System.out.printf("\n\n변경할 %s를 입력하세요.\n", editOption.getValue());
         System.out.println(">> 입력:");
 
         userManagementController.updateUserInformationByFilter(

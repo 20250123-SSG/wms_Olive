@@ -21,6 +21,8 @@ public class OrderView {
     private LocalOrderManager localOrderManager = new LocalOrderManager();
 
     public void run(Login user) {
+        System.out.println("\n\n====================================================");
+        System.out.println("--------------------- 구매하기 ---------------------\n");
 
         StoreDto store = inputStore();
         if (!readStoreAllProduct(store)) return;
@@ -39,6 +41,7 @@ public class OrderView {
 
             while (true) {
                 System.out.print("""
+                        \n\n
                         1. 담은 상품 구매하기
                         2. 구매 목록 상품 담기
                         0. 장바구니에 담고 구매 종료하기
@@ -60,6 +63,7 @@ public class OrderView {
     }
 
 
+
     private void purchase(Login user) {
         List<OrderDto> orderList = localOrderManager.getOrderList(user);
         orderList = new InputOrderMemoView().run(orderList);
@@ -71,9 +75,11 @@ public class OrderView {
         }
     }
 
+
     private void addToCart(Login user) {
         orderController.insertCartList(user, localOrderManager.getOrderListByStore());
     }
+
 
     private StoreDto inputStore() {
         List<StoreDto> storeList = orderController.selectStoreList();
@@ -90,6 +96,7 @@ public class OrderView {
             }
         }
     }
+
 
     private StoreProductDto inputOrderProduct(StoreDto store) {
         orderController.selectStoreAllProductByStoreId(store);
@@ -108,6 +115,7 @@ public class OrderView {
         }
     }
 
+
     private int inputOrderQuantity(StoreProductDto product) {
         ShopProductPrinter.printProductDetail(product);
         while (true) {
@@ -123,12 +131,13 @@ public class OrderView {
         }
     }
 
+
     private boolean readStoreAllProduct(StoreDto store) {
         localOrderManager = new LocalOrderManager(
                 orderController.selectStoreAllProductByStoreId(store)
         );
         if (localOrderManager.isEmptyStoreProduct()) {
-            System.out.println("해당 가맹점에 판매하는 상품이 존재하지 않습니다.");
+            System.out.println("\n\n해당 가맹점에 판매하는 상품이 존재하지 않습니다.");
             return false;
         }
         return true;

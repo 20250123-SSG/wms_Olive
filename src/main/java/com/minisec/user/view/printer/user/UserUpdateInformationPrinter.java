@@ -6,4 +6,5 @@ public class UserUpdateInformationPrinter {
         System.out.printf("수정 전 : %s\n", before);
         System.out.printf("수정 후 : %s\n", after);
     }
+
 }

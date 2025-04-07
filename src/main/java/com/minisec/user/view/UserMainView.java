@@ -12,9 +12,11 @@ public class UserMainView {
     private Scanner sc = new Scanner(System.in);
 
     public void run(Login loginInfo) {
+
+        System.out.printf("\n\n%s님 안녕하세요.\n\n",loginInfo.getUserName());
         while(true){
             System.out.println("""
-                1. 개인 정보 관리
+                1. 개인정보 관리
                 2. 장바구니 관리
                 3. 구매
                 4. 구매 내역 조회

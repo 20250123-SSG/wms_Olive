@@ -48,6 +48,15 @@ public class CartOrderView {
     }
 
 
+
+    private void orderAllFromCart(Login user) {
+        List<OrderDto> orderList = localCartOrderManager.getOrderListWhenAllFromCart(user);
+        orderList = new InputOrderMemoView().run(orderList);
+
+        cartController.orderFromCart(user, orderList);
+    }
+
+
     private void choiceOrderProduct(Login user) {
         while (true) {
             StoreDto storeDto = inputStore();
@@ -91,12 +100,20 @@ public class CartOrderView {
         cartController.orderFromCart(user, orderList);
     }
 
-    private void orderAllFromCart(Login user) {
-        List<OrderDto> orderList = localCartOrderManager.getOrderListWhenAllFromCart(user);
-        orderList = new InputOrderMemoView().run(orderList);
 
-        cartController.orderFromCart(user, orderList);
+    private StoreDto inputStore() {
+        while (true) {
+            System.out.println("[ 구매할 가맹점을 입력해주세요. ]");
+            System.out.print(">>입력:");
+
+            try {
+                return localCartOrderManager.getStoreByStoreName(sc.nextLine());
+            } catch (IllegalArgumentException e) {
+                ExceptionPrinter.print(e.getMessage());
+            }
+        }
     }
+
 
     private List<Integer> inputOrderProductNum() {
         while (true) {
@@ -114,25 +131,13 @@ public class CartOrderView {
         }
     }
 
-    private StoreDto inputStore() {
-        while (true) {
-            System.out.println("[ 구매할 가맹점을 입력해주세요. ]");
-            System.out.print(">>입력:");
-
-            try {
-                return localCartOrderManager.getStoreByStoreName(sc.nextLine());
-            } catch (IllegalArgumentException e) {
-                ExceptionPrinter.print(e.getMessage());
-            }
-        }
-    }
 
     private boolean readUserCartList(Login user) {
         localCartOrderManager = new LocalCartOrderManager(
                 cartController.selectAllCartDetailListByUserId(user)
         );
         if (localCartOrderManager.isCartEmpty()) {
-            System.out.println("[ 장바구니가 비어있습니다. ]");
+            System.out.println("\n\n장바구니가 비어있습니다.");
             return false;
         }
         return true;

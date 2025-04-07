@@ -21,6 +21,8 @@ public class OrderHistoryView {
     public void run(Login user) {
 
         while (true) {
+            System.out.println("\n\n===========================================================");
+            System.out.println("--------------------- 주문 내역 관리 ----------------------\n");
             System.out.println("""
                     1. 누적 구매 내역 조회
                     2. 취소 구매 내역 조회
@@ -38,6 +40,8 @@ public class OrderHistoryView {
        }
     }
 
+
+
     private void selectOrderList(Login user) {
         List<OrderDto> simpleOrderList = orderController.selectAllOrderListByUserId(user);
         if (simpleOrderList == null || simpleOrderList.isEmpty()) {
@@ -52,6 +56,7 @@ public class OrderHistoryView {
             if ("0".equals(inputOrderId)) {
                 return;
             }
+
             try {
                 orderController.selectOneOrderDetailByOrderId(inputOrderId, simpleOrderList);
             } catch (IllegalArgumentException e) {
@@ -59,6 +64,7 @@ public class OrderHistoryView {
             }
         }
     }
+
 
     private void selectCanceledStatusOrder(Login user) {
         orderController.selectCanceledStatusOrder(user);

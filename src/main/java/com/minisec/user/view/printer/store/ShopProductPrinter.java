@@ -8,12 +8,14 @@ import java.util.Map;
 
 public class ShopProductPrinter {
 
+    private final static String PRODUCT_DETAILS = "\t(%d) %s : %,d원 - %,d개\n";
+
     public static void printProductListByCategory(StoreDto store,
                                                   Map<String, List<StoreProductDto>> storeProductByCategory) {
-        System.out.printf("========== %s 가맹점 상품 ==========\n", store.getStoreName());
+        System.out.printf("\n\n\n================== %s 가맹점 상품 ==================\n\n", store.getStoreName());
 
         if (storeProductByCategory == null || storeProductByCategory.isEmpty()) {
-            System.out.println("판매하는 상품이존재하지 않습니다.");
+            System.out.println("판매하는 상품이존재하지 않습니다.\n\n");
             return;
         }
 
@@ -25,7 +27,7 @@ public class ShopProductPrinter {
             System.out.printf("< %s >\n", categoryName);
             for (StoreProductDto productDto : productList) {
 
-                System.out.printf("\t(%d) %s : %,d원 - %,d개\n"
+                System.out.printf(PRODUCT_DETAILS
                         , uniqueNumber
                         , productDto.getProductName()
                         , productDto.getStoreProductPriceAfterDiscount()
@@ -33,13 +35,14 @@ public class ShopProductPrinter {
                 );
                 uniqueNumber++;
             }
-            System.out.println();
-            System.out.println("----------------------");
+            System.out.println("............................");
         }
+        System.out.println();
     }
 
+
     public static void printProductDetail(StoreProductDto product) {
-        System.out.println("========== 상품 디테일 ==========");
+        System.out.println("\n\n========== 상품 디테일 ==========");
         System.out.printf("이름 : %s\n", product.getProductName());
         System.out.printf("가격 : %,d\n", product.getStoreProductPriceAfterDiscount());
         System.out.printf("수량 : %,d\n", product.getStoreProductQuantity());
@@ -47,7 +50,7 @@ public class ShopProductPrinter {
         System.out.printf("브랜드 : %s\n", product.getBrandName());
         System.out.printf("상품 설명 : %s\n", product.getProductDescription());
         System.out.printf("할인여부 : %s\n", product.getDiscount() > 0 ? "O" : "X");
-        System.out.println("==========");
+        System.out.println("=================================\n");
     }
 
 }
