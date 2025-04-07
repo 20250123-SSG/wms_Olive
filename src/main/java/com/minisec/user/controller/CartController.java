@@ -123,11 +123,17 @@ public class CartController {
         for(StoreDto store : allCartList.keySet()) {
             allCartProduct.addAll(allCartList.get(store));
         }
-        for(String input : inputDeleteCartNumber.split(",")) {
-            int index = Integer.parseInt(input.trim())-1;
-            OrderProductDto cartProduct = allCartProduct.get(index);
+        try {
+            for(String input : inputDeleteCartNumber.split(",")) {
+                int index = Integer.parseInt(input.trim())-1;
+                OrderProductDto cartProduct = allCartProduct.get(index);
 
-            storeProductIdList.add(cartProduct.getProduct().getStoreProductId());
+                storeProductIdList.add(cartProduct.getProduct().getStoreProductId());
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("장바구니 번호를 입력해주세요.");
+        }catch (IndexOutOfBoundsException e){
+            throw new IllegalArgumentException("존재하지 않는 장바구니 상품입니다.");
         }
 
         try {

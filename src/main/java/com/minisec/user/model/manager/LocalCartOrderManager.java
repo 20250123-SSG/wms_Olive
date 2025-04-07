@@ -11,9 +11,6 @@ import lombok.Getter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * 장바구니 구매를 돕는 매니저
- */
 public class LocalCartOrderManager {
 
     private final OrderDtoAssembler orderDtoAssembler = new OrderDtoAssembler();
@@ -33,19 +30,22 @@ public class LocalCartOrderManager {
 
 
     public StoreDto getStoreByStoreName(String inputStoreName) {
-        for (StoreDto storeDto : localUserCartList.keySet()) {
-            if (storeDto.getStoreName().equals(inputStoreName)) {
-                return storeDto;
-            }
-        }
-        return null;
+        return localUserCartList.keySet().stream()
+                .filter(store -> store.getStoreName().equals(inputStoreName))
+                .findAny()
+                .orElseThrow(() -> new IllegalArgumentException("장바구니에 존재하지 않는 가맹점입니다."));
+
     }
 
     public List<Integer> getOrderProductIndexList(String inputProductName) {
         Set<Integer> notDuplicationResult = new HashSet<>();
 
-        for (String input : inputProductName.trim().split(",")) {
-            notDuplicationResult.add(Integer.parseInt(input.trim()) - 1);
+        try {
+            for (String input : inputProductName.trim().split(",")) {
+                notDuplicationResult.add(Integer.parseInt(input.trim()) - 1);
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("장바구니 번호를 입력해주세요.");
         }
         return notDuplicationResult.stream()
                 .sorted()
@@ -56,11 +56,15 @@ public class LocalCartOrderManager {
     public void addOrder(StoreDto store, List<Integer> orderProductIndex) {
         List<OrderProductDto> orderProductListByStore = localUserCartList.get(store);
 
-        for (int index : orderProductIndex) {
-            OrderProductDto orderProductDto = orderProductListByStore.get(index);
-            int quantity = orderProductDto.getQuantity();
+        try {
+            for (int index : orderProductIndex) {
+                OrderProductDto orderProductDto = orderProductListByStore.get(index);
+                int quantity = orderProductDto.getQuantity();
 
-            orderWrapper.addOrderFromCart(store, orderProductDto, quantity);
+                orderWrapper.addOrderFromCart(store, orderProductDto, quantity);
+            }
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("존재하지 않는 장바구니 상품입니다.");
         }
         deleteOrderCartFromLocalCartList(localUserCartList, store, orderProductIndex);
     }
