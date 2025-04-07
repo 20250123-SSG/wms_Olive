@@ -1,11 +1,20 @@
 package com.minisec.store.view;
 
 import com.minisec.common.login.Login;
+import com.minisec.store.controller.order.StoreOrderController;
+import com.minisec.store.controller.user.StoreUserController;
+
+import java.util.Scanner;
+
+
+import java.util.Scanner;
+
 
 import java.util.Scanner;
 
 public class StoreView {
     private Scanner sc = new Scanner(System.in);
+
     private StoreSelectView storeSelectView = new StoreSelectView();
     private StoreProductView storeProductView = new StoreProductView();
 
@@ -23,17 +32,20 @@ public class StoreView {
 
             String storeMenu = sc.nextLine();
             switch (storeMenu) {
-//                case "1": storeProductOrder(); break;
-                case "2":
+                case "1":
+                    soc.orderView(manageId);
+                    break;
+                case "2": 
                     storeProductView.storeProductDetail(manageId);
                     break;
-//                case "3": storeCheckUserOrder(); break;
+                case "3":
+                    suc.userView(manageId);
+                    break;
                 case "0":
                     return;
                 default:
                     System.out.println("번호를 잘못 입력하셨습니다.");
             }
-
         }
     }
 

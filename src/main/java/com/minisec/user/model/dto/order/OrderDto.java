@@ -11,30 +11,36 @@ import java.util.List;
 @Getter
 @Setter
 public class OrderDto {
-    private int orderId;
-    //private int storeId;
-    private StoreDto store;
-    private int userId;
 
+    private int orderId;
+    private int userId;
     private String orderStatus;
     private String orderDate;
 
     private int totalQuantity;
     private int totalPrice;
 
-    @Setter
     private String orderMemo;
 
+    private StoreDto store;
     private List<OrderProductDto> orderProducts;
 
 
-    public OrderDto(StoreDto store, int userId, String orderStatus, int totalQuantity, int totalPrice, List<OrderProductDto> orderProducts) {
+    public OrderDto(StoreDto store, int userId, String orderStatus, List<OrderProductDto> orderProducts) {
         this.store = store;
         this.userId = userId;
         this.orderStatus = orderStatus;
-        this.totalQuantity = totalQuantity;
-        this.totalPrice = totalPrice;
         this.orderProducts = orderProducts;
+        calculateTotalPriceAndQuantity();
+    }
+
+    public void calculateTotalPriceAndQuantity() {
+        totalPrice = 0;
+        totalQuantity = 0;
+        for (OrderProductDto orderProductDto : orderProducts) {
+            totalPrice += orderProductDto.getTotalPrice();
+            totalQuantity += orderProductDto.getQuantity();
+        }
     }
 
 }

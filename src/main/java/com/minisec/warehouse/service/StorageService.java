@@ -26,4 +26,36 @@ public class StorageService {
         int max = storage.getStorageQuantity(); // 최대 100% 입고
         return rand.nextInt((max - min) + 1) + min;
     }
+
+    // 최종 입고 수량 db 업데이트
+    public void updateStorageQuantity(int storageId, int newQuantity) {
+        SqlSession sqlSession = getSqlSession();
+        StorageMapper storageMapper = sqlSession.getMapper(StorageMapper.class);
+
+        try {
+            storageMapper.updateStorageQuantity(storageId, newQuantity);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+            e.printStackTrace();
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    public void insertWarehouseProduct(StorageDto storage) {
+
+        SqlSession sqlSession = getSqlSession();
+        StorageMapper mapper = sqlSession.getMapper(StorageMapper.class);
+
+        try {
+            mapper.insertWarehouseReceiveLog(storage);
+            sqlSession.commit();
+        } catch (Exception e) {
+            sqlSession.rollback();
+            e.printStackTrace();
+        } finally {
+            sqlSession.close();
+        }
+    }
 }

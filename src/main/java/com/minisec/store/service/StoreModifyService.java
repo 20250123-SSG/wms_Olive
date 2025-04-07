@@ -11,6 +11,7 @@ import java.util.Map;
 import static com.minisec.common.Template.getSqlSession;
 
 public class StoreModifyService {
+
     private StoreModifyMapper storeModifyMapper;
 
     public List<StoreProductDto> ProductList(int storeId) {
@@ -38,7 +39,6 @@ public class StoreModifyService {
         }
         return result;
     }
-
 
     public List<StoreProductDto> selectStoreProductById(Map<String, String> param) {
         SqlSession sqlSession = getSqlSession();

@@ -5,7 +5,7 @@
 
 <mapper namespace="com.minisec.warehouse.model.dao.StorageMapper">
 
-    <resultMap id="StorageResultMap" type="com.minisec.warehouse.model.dto.StorageDto">
+    <resultMap id="StorageResultMap" type="StorageDto">
         <result property="storageId" column="storage_id"/>
         <result property="warehouseId" column="warehouse_id"/>
         <result property="productId" column="product_id"/>
@@ -14,16 +14,42 @@
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
-    <select id="selectAllStorage" resultMap="StorageResultMap">
-        SELECT
-            storage_id,
-            warehouse_id,
-            product_id,
-            supplier_name,
-            storage_quantity,
-            created_at
-        FROM
+
+    <!--db 업데이트 -->
+    <update id="updateStorageQuantity">
+        UPDATE
             storage
+        SET storage_quantity = #{newQuantity}
+        WHERE storage_id = #{storageId}
+    </update>
+
+
+    <select id="selectAllStorage" resultMap="StorageResultMap">
+        SELECT storage_id,
+               warehouse_id,
+               product_id,
+               supplier_name,
+               storage_quantity,
+               created_at
+        FROM storage
     </select>
 
+
+    <insert id="insertWarehouseReceiveLog" parameterType="StorageDto">
+        INSERT INTO
+            warehouse_receive_log (
+                    warehouse_id,
+                    product_id,
+                    supplier_name,
+                    warehouse_receive_quantity,
+                    created_at
+                )
+        VALUES (
+                #{warehouseId},
+                #{productId},
+                #{supplierName},
+                #{storageQuantity},
+                NOW()
+               )
+    </insert>
 </mapper>

@@ -98,5 +98,4 @@
             AND su.user_id = #{manageId}
 
     </delete>
-
 </mapper>

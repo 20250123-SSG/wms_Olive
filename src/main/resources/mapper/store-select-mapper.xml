@@ -36,11 +36,14 @@
                 JOIN store_user su ON sd.store_id = su.store_id
         WHERE
             su.user_id = #{manageId}
+
     </select>
     
     
     <!-- 상품명 검색 -->
+
     <select id="selectNameSearch" parameterType="map" resultMap="storeProductMap">
+
         SELECT
             p.product_id
           , p.product_name
@@ -81,6 +84,7 @@
     </select>
 
     <!-- 5개 이하 재고 검색 -->
+
     <select id="selectProductLowStock" parameterType="map" resultMap="storeProductMap">
         SELECT
             p.product_id

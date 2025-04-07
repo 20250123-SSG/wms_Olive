@@ -30,6 +30,7 @@ public class StoreSelectService {
         return list;
     }
 
+
     public List<StoreProductDto> selectSearchCategoryList(Map<String, Object> param) {
         SqlSession sqlSession = getSqlSession();
         storeProductMapper = sqlSession.getMapper(StoreProductMapper.class);

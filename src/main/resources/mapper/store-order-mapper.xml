@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.minisec.store.model.dao.order.StoreOrderMapper">
+
+
+    <insert id="insertOrderStock" parameterType="com.minisec.store.model.dto.order.StoreOrderCommonDto">
+        INSERT INTO
+        store_order
+        (
+          warehouse_id
+        , store_id
+        , store_order_subject
+        , store_order_status
+        , store_order_memo
+        , shipment_date
+        )
+        VALUES
+            (
+             #{warehouseId}
+            ,#{storeId}
+            ,#{storeOrderSubject}
+            ,#{storeOrderStatus}
+            ,#{storeOrderMemo}
+            ,#{shipmentDate}
+            )
+
+    </insert>
+
+    <select id="getLastInsertId" resultType="_int">
+        SELECT LAST_INSERT_ID() AS storeOrderId;
+    </select>
+
+    <insert id="insertOrderDetailStock" parameterType="com.minisec.store.model.dto.order.StoreOrderCommonDetailDto">
+        INSERT INTO store_order_detail
+        (
+          store_order_id
+        , product_id
+        , store_order_detail_quantity
+        )
+        VALUES
+            (
+             #{storeOrderId}
+            ,#{productId}
+            ,#{storeOrderDetailQuantity}
+            )
+    </insert>
+
+    <resultMap id="selectOrderResultMap" type="com.minisec.store.model.dto.order.StoreOrderSelectDto">
+        <result column="store_name"  property="storeName"/>
+        <result column="product_name" property="productName"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="product_brand_name" property="productBrandName"/>
+        <result column="store_order_subject" property="storeOrderSubject"/>
+        <result column="store_order_status" property="storeOrderStatus"/>
+        <result column="store_order_detail_quantity" property="storeOrderDetailQuantity"/>
+    </resultMap>
+
+    <select id="selectOrderStock"  resultMap="selectOrderResultMap">
+        select
+              A.store_name    as store_name
+             ,D.product_name  as product_name
+             ,E.category_name as category_name
+             ,D.product_brand_name as product_brand_name
+             ,B.store_order_subject as store_order_subject
+             ,B.store_order_status as store_order_status
+             ,C.store_order_detail_quantity as store_order_detail_quantity
+        from store A
+                 join store_order B on (b.store_id = A.store_id )
+                 join store_order_detail C on(C.store_order_id = B.store_order_id )
+                 join product D on(D.product_id = C.product_id )
+                 join category E on(E.category_id = D.category_id)
+
+    </select>
+
+    <update id="updateOrderStock" parameterType="com.minisec.store.model.dto.order.StoreOrderCommonDto">
+        UPDATE store_order
+        SET
+            store_order_subject = #{storeOrderSubject},
+            store_order_memo = #{storeOrderMemo},
+            modified_at = #{modifiedAt}
+        WHERE store_order_id = #{storeOrderId}
+    </update>
+
+    <update id="updateOrderDetailStock" parameterType="com.minisec.store.model.dto.order.StoreOrderCommonDetailDto">
+        UPDATE store_order_detail
+        SET
+            product_id = #{productId},
+            store_order_detail_quantity = #{storeOrderDetailQuantity},
+            modified_at = #{modifiedAt}
+        WHERE store_order_detail_id = #{storeOrderDetailId}
+    </update>
+
+    <resultMap id="selectStockByOrderResultMap" type="com.minisec.store.model.dto.order.StoreOrderSelectProductByInsertDto">
+        <id  column="product_id"  property="productId"/>
+        <result column="product_name"  property="productName"/>
+        <result column="product_brand_name" property="productBrandName"/>
+        <result column="product_description" property="productDescription"/>
+    </resultMap>
+
+    <select id="selectStockByOrder"  resultMap="selectStockByOrderResultMap">
+        select
+               product_id
+             , product_name
+             , product_brand_name
+             , product_description
+        from product
+    </select>
+
+    <resultMap id="selectStockByUpdateResultMap" type="com.minisec.store.model.dto.order.StoreOrderSelectByUpdateDto">
+        <id  column="store_order_detail_id"  property="storeOrderDetailId"/>
+        <result column="store_order_subject"  property="storeOrderSubject"/>
+        <result column="store_order_memo" property="storeOrderMemo"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_id" property="productId"/>
+        <result column="store_order_detail_quantity" property="storeOrderDetailQuantity"/>
+    </resultMap>
+    <select id="selectStockByUpdate"  resultMap="selectStockByUpdateResultMap">
+        select
+              B.store_order_detail_id 	    as store_order_detail_id
+             ,A.store_order_subject  	    as store_order_subject
+             ,A.store_order_memo  		    as store_order_memo
+             ,C.product_name                as product_name
+             ,B.product_id 				    as product_id
+             ,B.store_order_detail_quantity as store_order_detail_quantity
+        from store_order A
+                join store_order_detail B on(B.store_order_id = A.store_order_id )
+                join product C on(c.product_id = B.product_id )
+        where a.store_id = #{storeId};
+
+    </select>
+
+    <select id="getStoreOrderIdByDetailId" parameterType="int" resultType="int">
+        SELECT store_order_id
+        FROM store_order_detail
+        WHERE store_order_detail_id = #{storeOrderDetailId}
+    </select>
+
+</mapper>

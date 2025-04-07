@@ -10,6 +10,7 @@
         <result  column="store_name"  property="storeName"/>
     </resultMap>
 
+
     <select id="selectStoreList" resultMap="storeResultMap">
         SELECT
               store_id

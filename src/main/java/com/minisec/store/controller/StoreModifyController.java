@@ -1,12 +1,12 @@
 package com.minisec.store.controller;
 
-import com.minisec.store.dto.StoreProductDto;
-import com.minisec.store.service.StoreModifyService;
-import com.minisec.store.view.StoreDetailView;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.minisec.store.dto.StoreProductDto;
+import com.minisec.store.service.StoreModifyService;
+import com.minisec.store.view.StoreDetailView;
 
 public class StoreModifyController {
     private StoreModifyService storeModifyService = new StoreModifyService();
@@ -14,6 +14,7 @@ public class StoreModifyController {
 
     public void productList(int storeId) {
         List<StoreProductDto> list = storeModifyService.ProductList(storeId);
+
         StoreDetailView.displayProductList(list);
     }
 
@@ -56,4 +57,5 @@ public class StoreModifyController {
         storeDetailView.displayModifyResult("\n상품 삭제", result);
 
     }
+
 }

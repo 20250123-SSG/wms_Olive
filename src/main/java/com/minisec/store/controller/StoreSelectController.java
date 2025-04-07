@@ -1,16 +1,17 @@
 package com.minisec.store.controller;
 
-import com.minisec.store.dto.StoreProductDto;
-import com.minisec.store.service.StoreSelectService;
-import com.minisec.store.view.StoreDetailView;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.minisec.store.dto.StoreProductDto;
+import com.minisec.store.service.StoreSelectService;
+import com.minisec.store.view.StoreDetailView;
+
 public class StoreSelectController {
 
     private StoreSelectService storeSelectService = new StoreSelectService();
+
     private StoreDetailView storeDetailView = new StoreDetailView();
 
     public void selectProductListAll(int manageId) {
@@ -26,6 +27,7 @@ public class StoreSelectController {
         param.put("searchName", searchName);
         List<StoreProductDto> list = storeSelectService.selectSearchNameList(param);
         storeDetailView.displayDetailList(list);
+
     }
 
 

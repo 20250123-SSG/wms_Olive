@@ -30,6 +30,8 @@ public class StoreModifyView {
                     "storeDetailPrice", storeDetailPrice
             );
 
+
+            // 상품 등록
             storeModifyController.insertStoreProduct(requestParam, manageId);
             storeModifyController.selectStoreProductById(productId, manageId);
             System.out.print("\n계속 등록하시겠습니까? (Y/N): ");
@@ -73,6 +75,15 @@ public class StoreModifyView {
                 "productId", productId
         );
         storeModifyController.deleteStoreProduct(requestParam, manageId);
+    }
+
+
+}
+
+    public static void updateStoreProductDetail(int manageId) {
+        System.out.println("\n수정할 정보를 입력해주세요.");
+        System.out.println("");
+
     }
 
 
