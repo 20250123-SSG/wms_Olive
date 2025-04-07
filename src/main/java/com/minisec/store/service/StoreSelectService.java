@@ -14,7 +14,7 @@ public class StoreSelectService {
 
     private StoreProductMapper storeProductMapper;
 
-    public List<StoreProductDto> selectProductListAll(Map<String, Object> param) {
+    public List<StoreProductDto> selectAllProduct(Map<String, Object> param) {
         SqlSession sqlSession = getSqlSession();
         storeProductMapper = sqlSession.getMapper(StoreProductMapper.class);
         List<StoreProductDto> list = storeProductMapper.selectAllProduct(param);
