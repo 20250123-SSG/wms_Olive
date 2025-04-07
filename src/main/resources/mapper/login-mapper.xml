@@ -37,7 +37,7 @@
     </select>
 
     <select id="getStoreManageId" parameterType="int" resultType="int" >
-        SELECT store_id FROM store_user  WHERE user_id = #{userId}
+        SELECT store_id FROM store_user WHERE user_id = #{userId}
     </select>
 
 </mapper>

@@ -7,13 +7,16 @@ import com.minisec.store.controller.user.StoreUserController;
 import java.util.Scanner;
 
 
-public class StoreView {
+import java.util.Scanner;
 
+
+public class StoreView {
     private Scanner sc = new Scanner(System.in);
     StoreOrderController soc = new StoreOrderController();
     StoreUserController  suc = new StoreUserController();
 
     public void viewStore(Login loginInfo,int manageId) {
+
         while (true) {
             System.out.print("""
                     \n======================================
@@ -27,10 +30,12 @@ public class StoreView {
 
             String storeMenu = sc.nextLine();
             switch (storeMenu) {
+
                 case "1":
                     soc.orderView(manageId);
                     break;
-//                case "2": storeController.storeProductDetail(); break;
+                case "2": storeController.storeProductDetail(); 
+                    break;
                 case "3":
                     suc.userView(manageId);
                     break;

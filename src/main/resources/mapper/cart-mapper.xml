@@ -5,20 +5,85 @@
 
 <mapper namespace="com.minisec.user.model.dao.cart.CartDao">
 
-    <resultMap id="cartResultMap" type="CartDto">
-        <id column="store_id" property="storeId"/>
-        <result column="user_id" property="userId"/>
-
-        <association property="orderProduct" javaType="OrderProductDto">
-            <result column="cart_quantity" property="quantity"/>
-
-            <association property="product" javaType="StoreProductDto">
-                <id     column="product_id"     property="productId"/>
-            </association>
+    <resultMap id="cartDetailsResultMap" type="CartDetailByStoreDto">
+        <id column="user_id"  property="userId"/>
+        <id column="store_id" property="store.storeId"/>
+        <association property="store" javaType="StoreDto">
+            <id     column="store_id"   property="storeId"/>
+            <result column="store_name" property="storeName"/>
         </association>
+        <collection property="orderProductList" javaType="list" ofType="OrderProductDto">
+            <result column="cart_quantity"    property="quantity"/>
+            <result column="cart_total_price" property="totalPrice"/>
+            <result column="cart_id"          property="detailId"/>
+            <association property="product" javaType="StoreProductDto">
+                <id     column="store_detail_id"       property="storeProductId"/>
+                <result column="product_id"            property="productId"/>
+                <result column="product_name"          property="productName"/>
+                <result column="store_detail_price"    property="storeProductPrice"/>
+                <result column="store_detail_price_after_discount" property="storeProductPriceAfterDiscount"/>
+                <result column="store_detail_quantity" property="storeProductQuantity"/>
+                <result column="category_name"         property="category"/>
+                <result column="product_brand_name"    property="brandName"/>
+                <result column="product_description"   property="productDescription"/>
+            </association>
+        </collection>
     </resultMap>
-    
-    <insert id="insertCartList">
+
+
+    <select id="selectCartId" parameterType="CartDto" resultType="integer">
+        SELECT
+            cart_id
+        FROM
+            cart
+        WHERE
+            store_id = #{storeId}
+        AND user_id = #{userId}
+        AND product_id = #{orderProduct.product.productId}
+    </select>
+
+
+    <select id="selectAllCartDetailListByUserId" parameterType="_int" resultMap="cartDetailsResultMap">
+        SELECT
+            c.cart_id
+          , c.user_id
+          , c.store_id
+          , c.cart_quantity
+          , c.product_id
+          , ((sd.store_detail_price * (1-(sd.store_detail_discount/100.0))) * c.cart_quantity) AS cart_total_price
+          , p.product_name
+          , p.product_brand_name
+          , p.product_description
+          , sd.store_detail_id
+          , sd.store_detail_price
+          , (sd.store_detail_price * (1-(sd.store_detail_discount/100.0))) AS store_detail_price_after_discount
+          , sd.store_detail_quantity
+          , s.store_name
+          , ct.category_name
+        FROM
+            cart c
+                JOIN product p ON p.product_id = c.product_id
+                JOIN store_detail sd ON sd.product_id = c.product_id
+                    AND sd.store_id = c.store_id
+                JOIN store s ON s.store_id = c.store_id
+                LEFT JOIN category ct ON ct.category_id = p.category_id
+        WHERE
+            c.user_id = #{userId}
+        AND sd.store_detail_status = 1
+    </select>
+
+
+    <select id="selectAllCartCountByUserId" parameterType="_int" resultType="_int">
+        SELECT
+            count(*)
+        FROM
+            cart
+        WHERE
+            user_id = #{userId}
+    </select>
+
+
+    <insert id="insertCart" parameterType="CartDto">
         INSERT INTO
             cart
             (
@@ -30,18 +95,62 @@
             , modified_at
             )
         VALUES
-        <foreach collection="list" item="cart" separator=",">
             (
-              #{cart.storeId}
-            , #{cart.userId}
-            , #{cart.orderProduct.product.productId}
-            , #{cart.orderProduct.quantity}
+              #{storeId}
+            , #{userId}
+            , #{orderProduct.product.productId}
+            , #{orderProduct.quantity}
             , NOW()
             , NOW()
             )
-        </foreach>
     </insert>
 
 
+    <update id="updateCartByCartId" parameterType="CartDto">
+        UPDATE
+            cart
+        SET
+            cart_quantity = (cart_quantity + #{orderProduct.quantity})
+          , modified_at = NOW()
+        WHERE
+            cart_id = #{cartId}
+    </update>
+
+
+    <update id="updateCartProductQuantity" parameterType="CartDto">
+        UPDATE
+            cart
+        SET
+            cart_quantity = #{orderProduct.quantity}
+          , modified_at = NOW()
+        WHERE
+            cart_id = #{cartId}
+    </update>
+
+
+    <delete id="deleteCartList" parameterType="CartProductDeleteDto">
+        DELETE
+            c
+        FROM
+            cart c
+                JOIN store s ON s.store_id = c.store_id
+                JOIN store_detail sd ON sd.product_id = c.product_id
+                    AND sd.store_id = c.store_id
+        WHERE
+            c.user_id = #{userId}
+        AND sd.store_detail_id IN
+        <foreach collection="storeProductIdList" item="detailId" open="(" separator="," close=")">
+            #{detailId}
+        </foreach>
+    </delete>
+
+
+    <delete id="deleteAllCartListByUserId" parameterType="_int">
+        DELETE
+        FROM
+            cart
+        WHERE
+            user_id = #{userid}
+    </delete>
 
 </mapper>
