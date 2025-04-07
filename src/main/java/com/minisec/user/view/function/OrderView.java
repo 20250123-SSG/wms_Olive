@@ -6,6 +6,7 @@ import com.minisec.user.model.dto.StoreProductDto;
 import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.model.manager.LocalOrderManager;
+import com.minisec.user.view.details.InputFunctionNumberView;
 import com.minisec.user.view.details.InputOrderMemoView;
 import com.minisec.user.view.printer.ExceptionPrinter;
 import com.minisec.user.view.printer.store.ShopProductPrinter;
@@ -19,36 +20,41 @@ public class OrderView {
     private final OrderController orderController = new OrderController();
     private LocalOrderManager localOrderManager = new LocalOrderManager();
 
-
     public void run(Login user) {
+
+        StoreDto store = inputStore();
+        if (!readStoreAllProduct(store)) return;
+
         while (true) {
-            StoreDto store = inputStore();
-            if (store == null) return;
-            if (!readStoreAllProduct(store)) return;
+            StoreProductDto product = inputOrderProduct(store);
+            if (product == null) break;
+            int quantity = inputOrderQuantity(product);
+
+            try {
+                localOrderManager.addOrder(store, product, quantity);
+            } catch (IllegalArgumentException e) {
+                ExceptionPrinter.print(e.getMessage());
+                continue;
+            }
 
             while (true) {
-                StoreProductDto product = inputOrderProduct(store);
-                if (product == null) break;
-                int quantity = inputOrderQuantity(product);
-
-                try {
-                    localOrderManager.addOrder(store, product, quantity);
-                } catch (IllegalArgumentException e) {
-                    ExceptionPrinter.print(e.getMessage());
-                    continue;
-                }
-
                 System.out.print("""
-                    1. 담은 상품 구매하기
-                    2. 구매 목록 상품 담기
-                    0. 장바구니에 담고 구매 종료하기
-                    >> 입력:""");
+                        1. 담은 상품 구매하기
+                        2. 구매 목록 상품 담기
+                        0. 장바구니에 담고 구매 종료하기
+                        """);
 
-                switch (Integer.parseInt(sc.nextLine())) {
-                    case 0: addToCart(user); return;
-                    case 1: purchase(user);  return;
-                    case 2: continue;
+                int functionNum = InputFunctionNumberView.input();
+                if (functionNum == 2) break;
+                if (functionNum == 1) {
+                    purchase(user);
+                    return;
                 }
+                if (functionNum == 0) {
+                    addToCart(user);
+                    return;
+                }
+                ExceptionPrinter.print("존재하지 않는 기능입니다.");
             }
         }
     }
@@ -69,16 +75,14 @@ public class OrderView {
         orderController.insertCartList(user, localOrderManager.getOrderListByStore());
     }
 
-
     private StoreDto inputStore() {
         List<StoreDto> storeList = orderController.selectStoreList();
         StoreListPrinter.print(storeList);
         while (true) {
-            System.out.println("[ 상품을 구입할 가맹점을 선택해주세요. (0. 뒤로가기) ]");
+            System.out.println("[ 상품을 구입할 가맹점을 선택해주세요 ]");
             System.out.print(">> 입력:");
             String storeNum = sc.nextLine();
 
-            if ("0".equals(storeNum)) return null;
             try {
                 return localOrderManager.getStoreByStoreId(storeList, storeNum);
             } catch (IllegalArgumentException e) {

@@ -44,12 +44,17 @@ public class OrderController {
 
     public void selectOneOrderDetailByOrderId(String inputOrderId,
                                                List<OrderDto> simpleOrderList){
-        int orderId = Integer.parseInt(inputOrderId);
+       final int orderId;
+        try {
+            orderId = Integer.parseInt(inputOrderId);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("주문 번호를 입력해주세요.");
+        }
 
-        simpleOrderList.stream() ///있나왁인해야도미
+        simpleOrderList.stream()
                 .filter(orderDto -> orderDto.getOrderId() == orderId)
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문번호입니다."));
 
         OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
         orderDetailFilter.setOrderId(orderId);
