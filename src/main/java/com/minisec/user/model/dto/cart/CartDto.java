@@ -12,17 +12,17 @@ import lombok.ToString;
 @ToString
 public class CartDto {
 
-    private int cartId;
+    private Integer cartId; ///존재하는지 확인하는 용도
     private int storeId;
+    private String storeName;
     private int userId;
-    private OrderProductDto orderProduct; /// 수량 가격
+
+    private OrderProductDto orderProduct;
 
     public CartDto(int storeId, int userId, OrderProductDto orderProduct) {
         this.storeId = storeId;
         this.userId = userId;
         this.orderProduct = orderProduct;
     }
-
-
 
 }

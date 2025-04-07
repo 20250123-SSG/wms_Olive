@@ -14,9 +14,10 @@ public class StoreProductDto {
 
     private int storeProductId;
     private int productId;
-
     private String productName;
+
     private int storeProductPrice;
+    private int storeProductPriceAfterDiscount;
     private int storeProductQuantity;
 
     private String category;
@@ -25,17 +26,10 @@ public class StoreProductDto {
     private String productDescription;
 
 
-
-    public int getProductPriceAfterDiscount(){
-        if(discount != 0){
-            return (int) (storeProductPrice * (1 - (discount / 100.0)));
-        }
-        return storeProductPrice;
-    }
-
-    public void deleteStoreProductQuantity(int quantity){
+    public void deleteLocalStoreProductQuantity(int quantity) {
         storeProductQuantity -= quantity;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -48,4 +42,5 @@ public class StoreProductDto {
     public int hashCode() {
         return Objects.hashCode(storeProductId);
     }
+
 }

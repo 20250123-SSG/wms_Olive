@@ -2,6 +2,8 @@ package com.minisec.user.model.dto.order;
 
 import lombok.*;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -14,5 +16,17 @@ public class StoreDto {
     private String storeName;
     private String phone;
     private String address;
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        StoreDto storeDto = (StoreDto) o;
+        return storeId == storeDto.storeId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(storeId);
+    }
 
 }

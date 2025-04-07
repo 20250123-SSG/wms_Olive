@@ -22,16 +22,15 @@ public class UserMainView {
                 >> 입력 :""");
             int functionNum = Integer.parseInt(sc.nextLine());
 
-
             if(functionNum == 0){
                 System.out.println("프로그램을 종료합니다.");
                 return;
             }
             switch(functionNum){
                 case 1: new UserManagementView().run(loginInfo); break;
-                case 2: new CartView().run(loginInfo); break;
-                case 3: new OrderView().run(loginInfo); break;
-                case 4: new OrderHistoryView().run(loginInfo); break;
+                case 2: new CartView().run(loginInfo);           break;
+                case 3: new OrderView().run(loginInfo);          break;
+                case 4: new OrderHistoryView().run(loginInfo);   break;
                 default:
                     System.out.println("존재하지 않는 기능입니다.");
                     continue;

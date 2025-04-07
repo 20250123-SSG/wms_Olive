@@ -14,22 +14,28 @@ import java.util.Objects;
 @ToString
 public class OrderProductDto {
 
-    private int orderId;
-    private StoreProductDto product;
+    private int detailId;
     private int quantity;
     private int totalPrice;
 
-    public OrderProductDto(StoreProductDto product, int quantity) {
+    private StoreProductDto product;
+
+    public OrderProductDto(StoreProductDto product, int quantity, int totalPrice) {
         this.product = product;
         this.quantity = quantity;
-        this.totalPrice = product.getProductPriceAfterDiscount() * quantity;
+        this.totalPrice = totalPrice;
     }
 
     public void updateQuantity(int quantity) {
-        if((this.quantity + quantity) > product.getStoreProductQuantity()){ //todo 예외
+        if ((this.quantity + quantity) > product.getStoreProductQuantity()) { //todo 예외
 
         }
         this.quantity += quantity;
+        calculateTotalPrice(product);
+    }
+
+    private void calculateTotalPrice(StoreProductDto product) {
+        this.totalPrice = product.getStoreProductPriceAfterDiscount() * quantity;
     }
 
 

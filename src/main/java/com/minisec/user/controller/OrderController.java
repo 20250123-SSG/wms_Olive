@@ -1,14 +1,16 @@
 package com.minisec.user.controller;
 
 import com.minisec.common.login.Login;
+import com.minisec.user.common.OrderStatus;
 import com.minisec.user.model.dto.StoreProductDto;
 import com.minisec.user.model.dto.cart.CartDto;
 import com.minisec.user.model.dto.order.*;
 import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
 import com.minisec.user.service.StoreService;
+import com.minisec.user.view.printer.ExceptionPrinter;
 import com.minisec.user.view.printer.InsertStatusPrinter;
-import com.minisec.user.view.printer.OrderDetailsPrinter;
+import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,10 @@ public class OrderController {
     private final OrderService orderService = new OrderService();
     private final CartService cartService = new CartService();
 
+    public OrderController() {
+    }
+
+
     public List<StoreDto> selectStoreList() {
         return storeService.selectStoreList();
     }
@@ -27,32 +33,56 @@ public class OrderController {
     public List<StoreProductDto> selectStoreAllProductByStoreId(StoreDto storeDto) {
         return storeService.selectStoreAllProductByStoreId(storeDto.getStoreId());
     }
+    
 
-    /**
-     * 1. store_detail UPDATE - 재고차감
-     * 2. user - 금액차감
-     * 3. user_order - 주문 추가
-     * 4. user_order_detail - 주문 상세 추가
-     * @param orderDtoList
-     */
+    public List<OrderDto> selectAllOrderListByUserId(Login user) {
+        OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
+        orderDetailFilter.setUserId(user.getUserId());
+
+        return orderService.selectAllOrderListByFilter(orderDetailFilter);
+    }
+
+    public void selectOneOrderDetailByOrderId(String inputOrderId,
+                                               List<OrderDto> simpleOrderList){
+        int orderId = Integer.parseInt(inputOrderId);
+
+        simpleOrderList.stream() ///있나왁인해야도미
+                .filter(orderDto -> orderDto.getOrderId() == orderId)
+                .findFirst()
+                .orElseThrow();
+
+        OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
+        orderDetailFilter.setOrderId(orderId);
+
+        List<OrderDto> resultOrder = orderService.selectAllOrderDetailListByFilter(orderDetailFilter);
+        OrderDetailsPrinter.printOne(resultOrder.get(0));
+    }
+
+    public void selectCanceledStatusOrder(Login user) {
+        OrderDetailFilterDto orderDetailFilter = new OrderDetailFilterDto();
+        orderDetailFilter.setUserId(user.getUserId());
+        orderDetailFilter.setOrderStatus(OrderStatus.OBSERVATION_IMPOSSIBLE.getValue());
+
+        List<OrderDto> canceledOrderList = orderService.selectAllOrderDetailListByFilter(orderDetailFilter);
+        OrderDetailsPrinter.printList(canceledOrderList);
+    }
 
 
-    /// 이 DTO 생성 로직을 따로 뺴고 좋을거같은데 어차피 CartController에서 사용해야됨
-    public void insertOrder(List<OrderDto> orderDtoList) {
-        List<StoreInventoryDeductionDto> storeInventoryDeductionList = new ArrayList<>(); ///1
-        List<UserBalanceUpdateDto> userAmountDeductionList = new ArrayList<>(); ///2
+    public void insertOrder(List<OrderDto> orderList) {
+        List<StoreInventoryDeductionDto> storeInventoryDeductionList = new ArrayList<>();
+        List<UserBalanceUpdateDto> userAmountDeductionList = new ArrayList<>();
 
-        for (OrderDto orderDto : orderDtoList) {
-            for(OrderProductDto orderProduct : orderDto.getOrderProducts()){
-                /// 1. store_detail UPDATE - 재고차감
-                int storeDetailId = orderProduct.getProduct().getStoreProductId(); //고유pk라 스토어아이디는 별도로 필요 없을듯
+        for (OrderDto orderDto : orderList) {
+            for (OrderProductDto orderProduct : orderDto.getOrderProducts()) {
+                /// 재고차감
+                int storeDetailId = orderProduct.getProduct().getStoreProductId();
                 int userOrderQuantity = orderProduct.getQuantity();
                 storeInventoryDeductionList.add(new StoreInventoryDeductionDto(
                         storeDetailId,
                         userOrderQuantity
                 ));
             }
-            /// 2. user - 금액차감
+            ///금액차감
             int userId = orderDto.getUserId();
             int totalPrice = orderDto.getTotalPrice();
             userAmountDeductionList.add(new UserBalanceUpdateDto(
@@ -60,18 +90,31 @@ public class OrderController {
                     Math.negateExact(totalPrice)
             ));
         }
-        int insertResult = orderService.insertOrderList(new InsertOrderDto(
-                storeInventoryDeductionList,
-                userAmountDeductionList,
-                orderDtoList
-        ));
-
-        if( insertResult == 0){
-            InsertStatusPrinter.printInsertOrderList(false);
+        try {
+            orderService.order(new OrderProcessDto(
+                    storeInventoryDeductionList,
+                    userAmountDeductionList,
+                    orderList
+            ));
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
             return;
         }
         InsertStatusPrinter.printInsertOrderList(true);
-        OrderDetailsPrinter.printList(orderDtoList);
+        selectAllOrderDetailListByOrderId(orderList);
+    }
+
+    private void selectAllOrderDetailListByOrderId(List<OrderDto> orderList) {
+        List<OrderDetailFilterDto> orderDetailFilterList = new ArrayList<>();
+        for (OrderDto orderDto : orderList) {
+            orderDetailFilterList.add(OrderDetailFilterDto.builder()
+                    .orderId(orderDto.getOrderId())
+                    .build());
+        }
+        for (OrderDetailFilterDto orderDetailFilterDto : orderDetailFilterList) {
+            orderList = orderService.selectAllOrderDetailListByFilter(orderDetailFilterDto);
+            OrderDetailsPrinter.printList(orderList);
+        }
     }
 
     public void insertCartList(Login user, Map<StoreDto, List<OrderProductDto>> orderListByStore) {
@@ -89,13 +132,13 @@ public class OrderController {
                 ));
             }
         }
-
-        int insertResult = cartService.insertCartList(cartList);
-        InsertStatusPrinter.printInsertCartList(insertResult == cartList.size());
-    }
-
-    public void selectOrderDetailListByUser(){
-
+        try {
+            cartService.insertCartList(cartList);
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
+            return;
+        }
+        InsertStatusPrinter.printInsertCartList(true);
     }
 
 }
