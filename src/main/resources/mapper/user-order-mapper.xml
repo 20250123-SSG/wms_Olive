@@ -86,6 +86,8 @@
                 AND o.user_order_status = #{orderStatus}
             </if>
         </where>
+        ORDER BY
+            user_order_id
     </select>
 
 
@@ -114,6 +116,8 @@
                 AND o.user_order_status = #{orderStatus}
             </if>
         </where>
+        ORDER BY
+            user_order_id
     </select>
 
 
