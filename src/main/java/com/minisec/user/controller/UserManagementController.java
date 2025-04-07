@@ -48,10 +48,21 @@ public class UserManagementController {
     }
 
     public void chargingBalance(Login user, String inputChargingBalance) {
+        int chargingBalanceInt = 0;
+
+        try {
+            chargingBalanceInt = Integer.parseInt(inputChargingBalance);
+            if(chargingBalanceInt < 0){
+                throw new IllegalArgumentException("충전 금액은 양수만 입력 가능합니다.");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("충전 금액은 숫자로 입력해주세요.");
+        }
+
         try {
             userInfoService.updateUserBalance(new UserBalanceUpdateDto(
                     user.getUserId(),
-                    Integer.parseInt(inputChargingBalance)
+                    chargingBalanceInt
             ));
         } catch (IllegalArgumentException e) {
             ExceptionPrinter.print(e.getMessage());

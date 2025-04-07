@@ -5,6 +5,7 @@ import com.minisec.user.controller.CartController;
 import com.minisec.user.model.dto.order.OrderProductDto;
 import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.view.details.CartOrderView;
+import com.minisec.user.view.details.InputFunctionNumberView;
 import com.minisec.user.view.printer.ExceptionPrinter;
 import com.minisec.user.view.printer.cart.CartDetailsPrinter;
 
@@ -16,6 +17,7 @@ public class CartView {
     private final CartController cartController = new CartController();
 
     public void run(Login user) {
+
         while (true) {
             System.out.println("""
                     1. 장바구니 조회
@@ -24,9 +26,9 @@ public class CartView {
                     4. 장바구니 삭제
                     5. 장바구니 비우기
                     0. 뒤로가기
-                    >> 입력:""");
+                    """);
 
-            switch (Integer.parseInt(sc.nextLine())) {
+            switch (InputFunctionNumberView.input()) {
                 case 0:                                  return;
                 case 1: selectCartListByUserId(user);    break;
                 case 2: orderFormCart(user);             break;
@@ -51,26 +53,30 @@ public class CartView {
 
     private void updateCartProductQuantity(Login user) {
         Map<StoreDto, List<OrderProductDto>> allCartList = cartController.selectAllCartDetailListByUserId(user);
+        if (allCartList.isEmpty()) {
+            System.out.println("장바구니가 비어있습니다.");
+            return;
+        }
         CartDetailsPrinter.printUniqueNumber(allCartList);
 
-       while (true){
-           System.out.println("[ 수량을 수정하고 싶은 장바구니 번호를 입력해주세요. (0.뒤로가기) ]");
-           String inputUpdateCartProductQuantity = sc.nextLine();
-           if(("0".equals(inputUpdateCartProductQuantity))) return;
-           System.out.println("[ 수정할 수량을 입력해주세요. ]");
-           String inputEditQuantity = sc.nextLine();
+        while (true) {
+            System.out.println("[ 수량을 수정하고 싶은 장바구니 번호를 입력해주세요. (0.뒤로가기) ]");
+            String inputUpdateCartProductQuantity = sc.nextLine();
+            if (("0".equals(inputUpdateCartProductQuantity))) return;
+            System.out.println("[ 수정할 수량을 입력해주세요. ]");
+            String inputEditQuantity = sc.nextLine();
 
-          try{
-              cartController.updateCartProductQuantity(
-                      allCartList,
-                      inputUpdateCartProductQuantity,
-                      inputEditQuantity
-              );
-              return;
-          }catch (IllegalArgumentException e){
-              ExceptionPrinter.print(e.getMessage());
-          }
-       }
+            try {
+                cartController.updateCartProductQuantity(
+                        allCartList,
+                        inputUpdateCartProductQuantity,
+                        inputEditQuantity
+                );
+                return;
+            } catch (IllegalArgumentException e) {
+                ExceptionPrinter.print(e.getMessage());
+            }
+        }
     }
 
     private void deleteAllCartListByUserId(Login user) {
@@ -79,12 +85,23 @@ public class CartView {
 
     private void deleteCartListByChoice(Login user) {
         Map<StoreDto, List<OrderProductDto>> allCartList = cartController.selectAllCartDetailListByUserId(user);
+        if (allCartList.isEmpty()) {
+            System.out.println("장바구니가 비어있습니다.");
+            return;
+        }
         CartDetailsPrinter.printUniqueNumber(allCartList);
 
-        System.out.println("[ 삭제하고 싶은 장바구니 번호를 모두 입력해주세요. ex)1,2,3,4 ]");
-        String inputDeleteCartNumber = sc.nextLine();
+        while (true) {
+            try {
+                System.out.println("[ 삭제하고 싶은 장바구니 번호를 모두 입력해주세요. ex)1,2,3,4 ]");
+                String inputDeleteCartNumber = sc.nextLine();
 
-        cartController.deleteCartListByChoice(user, allCartList, inputDeleteCartNumber);
+                cartController.deleteCartListByChoice(user, allCartList, inputDeleteCartNumber);
+                return;
+            } catch (IllegalArgumentException e) {
+                ExceptionPrinter.print(e.getMessage());
+            }
+        }
     }
 
 }

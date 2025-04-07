@@ -2,7 +2,9 @@ package com.minisec.user.view.function;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.controller.UserManagementController;
+import com.minisec.user.view.details.InputFunctionNumberView;
 import com.minisec.user.view.details.UserInformationEditView;
+import com.minisec.user.view.printer.ExceptionPrinter;
 import com.minisec.user.view.printer.user.UserInformationPrinter;
 
 import java.util.Scanner;
@@ -21,7 +23,7 @@ public class UserManagementView {
                     0. 뒤로가기
                     >> 입력:""");
 
-            switch (Integer.parseInt(sc.nextLine())) {
+            switch (InputFunctionNumberView.input()) {
                 case 0:                              return;
                 case 1: selectUserInformation(user); break;
                 case 2: updateUserInformation(user); break;
@@ -45,10 +47,17 @@ public class UserManagementView {
     private void updateUserBalance(Login user) {
         user = userManagementController.selectUserByUserId(user);
 
-        System.out.printf("현재 잔액 : %,d원\n", user.getUserBalance());
-        System.out.println("충전하고 싶은 금액을 입력하세요.");
+        while (true) {
+            System.out.printf("현재 잔액 : %,d원\n", user.getUserBalance());
+            System.out.println("충전하고 싶은 금액을 입력하세요.");
 
-        userManagementController.chargingBalance(user, sc.nextLine().trim());
+            try {
+                userManagementController.chargingBalance(user, sc.nextLine().trim());
+                return;
+            } catch (IllegalArgumentException e) {
+                ExceptionPrinter.print(e.getMessage());
+            }
+        }
     }
 
 }

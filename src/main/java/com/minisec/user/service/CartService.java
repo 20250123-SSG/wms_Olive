@@ -56,7 +56,7 @@ public class CartService {
             int result = cartDao.deleteCartList(deleteList);
             if (result == 0) {
                 sqlSession.rollback();
-                throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
+                throw new IllegalArgumentException("장바구니 삭제에 실패하였습니다.");
             }
 
             sqlSession.commit();
@@ -72,7 +72,7 @@ public class CartService {
 
             if (result != executeResult) {
                 sqlSession.rollback();
-                throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
+                throw new IllegalArgumentException("장바구니 삭제에 실패하였습니다.");
             }
 
             sqlSession.commit();

@@ -28,7 +28,7 @@ public class UserInformationService {
             int result = userDao.updateUserInformationByFilter(filter);
             if (result != 1) {
                 sqlSession.rollback();
-                throw new RuntimeException("개인정보 수정에 실패하였습니다.");
+                throw new IllegalArgumentException("개인정보 수정에 실패하였습니다.");
             }
 
             sqlSession.commit();
