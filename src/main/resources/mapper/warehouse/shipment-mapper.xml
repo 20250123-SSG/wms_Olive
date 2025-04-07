@@ -20,27 +20,34 @@
 
     <!--db 업데이트 -->
     <update id="updateOrderStatus">
+
         UPDATE store_order
         SET store_order_status = #{status}
+        WHERE store_order_id = #{orderId}
+
+        <!-- 상품 수량 감소 -->
+        UPDATE store_order_detail
+        SET store_order_detail_quantity = store_order_detail_quantity - 1
         WHERE store_order_id = #{orderId}
     </update>
 
     <select id="selectOrderList" resultMap="StoreOrderMap">
         SELECT
-    so.store_order_id, so.store_order_subject, so.store_order_status, so.store_order_memo, so.created_at,
-    sod.product_id, p.product_name, sod.store_order_detail_quantity, sod.created_at
-    FROM
-    store_order so
-    JOIN store_order_detail sod ON so.store_order_id = sod.store_order_id
-    JOIN product p ON sod.product_id = p.product_id
-    WHERE so.warehouse_id = #{warehouseId}
-    <if test="choice == 1">
-        AND so.store_order_status IN ('1')
-    </if>
-    <if test="choice == 2">
-        AND so.store_order_status IN ('2', '3')
-    </if>
-    ORDER BY so.created_at DESC
+            so.store_order_id,
+            so.store_order_subject,
+            so.store_order_memo,
+            so.created_at
+        FROM
+            store_order so
+        WHERE
+            so.warehouse_id = #{warehouseId}
+        <if test="choice == 1">
+            AND so.store_order_status IN ('1')
+        </if>
+        <if test="choice == 2">
+            AND so.store_order_status IN ('2', '3')
+        </if>
+        ORDER BY so.created_at DESC
 </select>
 
 </mapper>

@@ -20,7 +20,7 @@ public class ShipmentService {
     public void updateOrderStatus(int orderId, char status) {
         try (SqlSession sqlSession = Template.getSqlSession()) {
             shipmentDao = sqlSession.getMapper(ShipmentDao.class);
-            shipmentDao.updateOrderStatus(orderId, status);
+            shipmentDao.updateOrderStatusAndQuantity(orderId, status);
             sqlSession.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,7 +30,8 @@ public class ShipmentService {
 
     public List<ShipmentDto> getOrderList(int manageId, int choice) {
         SqlSession sqlSession = Template.getSqlSession();
-        this.shipmentDao = (ShipmentDao)sqlSession.getMapper(ShipmentDao.class);
+        this.shipmentDao = sqlSession.getMapper(ShipmentDao.class);
         return this.shipmentDao.selectOrderList(manageId, choice);
     }
+
 }
