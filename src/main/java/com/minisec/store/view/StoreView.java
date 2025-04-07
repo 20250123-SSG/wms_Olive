@@ -7,18 +7,13 @@ import com.minisec.store.controller.user.StoreUserController;
 import java.util.Scanner;
 
 
-import java.util.Scanner;
-
-
-import java.util.Scanner;
-
 public class StoreView {
+
     private Scanner sc = new Scanner(System.in);
+    StoreOrderController soc = new StoreOrderController();
+    StoreUserController  suc = new StoreUserController();
 
-    private StoreSelectView storeSelectView = new StoreSelectView();
-    private StoreProductView storeProductView = new StoreProductView();
-
-    public void viewStore(Login loginInfo, int manageId) {
+    public void viewStore(Login loginInfo,int manageId) {
         while (true) {
             System.out.print("""
                     \n======================================
@@ -26,7 +21,7 @@ public class StoreView {
                     1. 가맹점 재고 발주
                     2. 가맹점 상품 관리
                     3. 고객 주문 확인
-                    0. 로그아웃
+                    0. 돌아가기
                     ========================================
                     >> 입력: """);
 
@@ -35,9 +30,7 @@ public class StoreView {
                 case "1":
                     soc.orderView(manageId);
                     break;
-                case "2": 
-                    storeProductView.storeProductDetail(manageId);
-                    break;
+//                case "2": storeController.storeProductDetail(); break;
                 case "3":
                     suc.userView(manageId);
                     break;
@@ -48,40 +41,4 @@ public class StoreView {
             }
         }
     }
-
-    // 상품 수정 제공 화면
-
-    // 상품 삭제?
-
-
-    /* 가맹점 상품 조회 viewStoreProduct
-       -> 전체조회 ProductAllList
-       -> 상품명으로 조회 ProductNameList
-       -> 카테고리명으로 조회 ProductCategoryList
-       -> 재고 5개 이하 상품만 조회 ProductLimitList
-       -> 돌아가기
-     */
-
-    /* 가맹점 상품 등록 addStoreProduct
-       -> 전체 상품 목록
-       -> 상품 선택(상품id로) -> 등록
-       -> 이어서 작성하시겠습니까?
-       -> N->돌아가기
-     */
-
-    /* 가맹점 상품 수정 updateStoreProduct
-       -> 가맹점 상품 전체 목록
-       -> 상품 수정 -> (storeDto에 적힌 순서)
-       -> 이어서 수정하시겠습니까?
-       -> N->돌아가기
-     */
-
-    /* 가맹점 상품 삭제 deleteStoreProduct
-       -> 가맹점 상품 전체 목록
-       -> 상품 삭제 -> 삭제할 상품명, 브랜드
-       -> 이어서 삭제하시겠습니까?
-       -> N->돌아가기
-     */
-
-
 }

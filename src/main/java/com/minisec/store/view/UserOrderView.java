@@ -26,7 +26,7 @@ public class UserOrderView {
         int userOrderDetailId = sc.nextInt();
         sc.nextLine();
 
-        System.out.print("승인확인(Y:승인확인,N:승인취소");
+        System.out.print("승인확인(Y:승인확인,N:승인취소)");
         String newStatus = sc.nextLine();
 
         boolean isUpdated = new StoreUserService().updateUserOrderStatusByDetailId(userOrderDetailId, newStatus);

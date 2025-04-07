@@ -35,7 +35,7 @@ public class StoreModifyView {
             storeModifyController.insertStoreProduct(requestParam, manageId);
             storeModifyController.selectStoreProductById(productId, manageId);
             System.out.print("\n계속 등록하시겠습니까? (Y/N): ");
-            if(sc.nextLine().toUpperCase().equals("N")){
+            if (sc.nextLine().toUpperCase().equals("N")) {
                 break;
             }
         }
@@ -76,15 +76,13 @@ public class StoreModifyView {
         );
         storeModifyController.deleteStoreProduct(requestParam, manageId);
     }
+//    같은 화면    
+//    public static void updateStoreProductDetail(int manageId) {
+//        System.out.println("\n수정할 정보를 입력해주세요.");
+//        System.out.println("");
+//
+//    }
 
-
-}
-
-    public static void updateStoreProductDetail(int manageId) {
-        System.out.println("\n수정할 정보를 입력해주세요.");
-        System.out.println("");
-
-    }
 
 
 }
