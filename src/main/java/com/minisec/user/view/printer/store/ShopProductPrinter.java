@@ -25,7 +25,7 @@ public class ShopProductPrinter {
             System.out.printf("< %s >\n", categoryName);
             for (StoreProductDto productDto : productList) {
 
-                System.out.printf("\t%d. %s %,d원 - %,d개\n"
+                System.out.printf("\t(%d) %s : %,d원 - %,d개\n"
                         , uniqueNumber
                         , productDto.getProductName()
                         , productDto.getStoreProductPriceAfterDiscount()

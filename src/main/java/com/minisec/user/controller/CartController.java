@@ -152,10 +152,24 @@ public class CartController {
             allCartProduct.addAll(allCartList.get(store));
         }
 
-        int index = Integer.parseInt(inputUpdateCartProductQuantity.trim()) - 1;
-        int editQuantity = Integer.parseInt(inputEditQuantity.trim());
+        int index = 0;
+        int editQuantity = 0;
+        OrderProductDto editQuantityProduct = null;
+        try {
+            index = Integer.parseInt(inputUpdateCartProductQuantity.trim()) - 1;
+            editQuantity = Integer.parseInt(inputEditQuantity.trim());
+            if(editQuantity <= 0){
+                throw new IllegalArgumentException("수량은 1개 이상 입력해주세요.");
+            }
 
-        OrderProductDto editQuantityProduct = allCartProduct.get(index);
+            editQuantityProduct = allCartProduct.get(index);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("수정 번호와 수량은 숫자로 입력해주세요.");
+        }catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("존재하지 않는 상품 번호입니다");
+        }
+
         editQuantityProduct.setQuantity(editQuantity);
 
         CartDto editCart = new CartDto();

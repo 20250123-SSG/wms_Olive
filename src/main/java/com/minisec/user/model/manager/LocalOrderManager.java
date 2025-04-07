@@ -50,7 +50,17 @@ public class LocalOrderManager {
     }
 
     public int getOrderQuantity(String inputQuantity) {
-        return Integer.parseInt(inputQuantity.trim());
+        int quantity = 0;
+
+        try {
+            quantity = Integer.parseInt(inputQuantity.trim());
+            if(quantity <= 0){
+                throw new IllegalArgumentException("수량은 1개 이상 입력해주세요.");
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("수량은 숫자로 입력해주세요.");
+        }
+        return quantity;
     }
 
 

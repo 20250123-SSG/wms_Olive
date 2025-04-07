@@ -7,6 +7,7 @@ import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.order.StoreDto;
 import com.minisec.user.model.manager.LocalOrderManager;
 import com.minisec.user.view.details.InputOrderMemoView;
+import com.minisec.user.view.printer.ExceptionPrinter;
 import com.minisec.user.view.printer.store.ShopProductPrinter;
 import com.minisec.user.view.printer.store.StoreListPrinter;
 
@@ -86,10 +87,17 @@ public class OrderView {
 
     private int inputOrderQuantity(StoreProductDto product) {
         ShopProductPrinter.printProductDetail(product);
-        System.out.println("[ 구매할 상품의 수량을 입력해주세요. ]");
-        System.out.print(">> 입력:");
+        while (true) {
+            System.out.println("[ 구매할 상품의 수량을 입력해주세요. ]");
+            System.out.print(">> 입력:");
 
-        return localOrderManager.getOrderQuantity(sc.nextLine());
+            try{
+                return localOrderManager.getOrderQuantity(sc.nextLine());
+            }catch (IllegalArgumentException e) {
+                ExceptionPrinter.print(e.getMessage());
+            }
+
+        }
     }
 
     private boolean readStoreAllProduct(StoreDto store) {

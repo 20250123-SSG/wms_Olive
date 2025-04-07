@@ -1,8 +1,8 @@
 package com.minisec.user.common;
 
 public enum OrderStatus {
-    ORDERABLE("Y", "주문가능"),
-    OBSERVATION_IMPOSSIBLE("N", "주문불가능");
+    ORDERABLE("1", "주문가능"),
+    OBSERVATION_IMPOSSIBLE("2", "주문불가능");
 
     private String value;
     private String desc;
