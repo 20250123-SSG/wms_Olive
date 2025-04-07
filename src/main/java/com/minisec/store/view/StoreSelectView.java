@@ -24,6 +24,7 @@ public class StoreSelectView {
             String productDetailView = sc.nextLine();
             switch (productDetailView) {
                 case "1":
+                    System.out.println("전체 조회");
                     storeSelectController.selectProductListAll(manageId);
                     break;
                 case "2":
@@ -33,6 +34,7 @@ public class StoreSelectView {
                     storeSelectController.selectProductListCategory(manageId, inputName("카테고리명"));
                     break;
                 case "4":
+                    System.out.println("재고 10개 이하 상품 조회");
                     storeSelectController.selectProductListLow(manageId);
                     break;
                 case "0":

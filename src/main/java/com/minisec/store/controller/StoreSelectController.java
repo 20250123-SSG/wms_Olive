@@ -1,33 +1,48 @@
 package com.minisec.store.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.minisec.store.dto.StoreProductDto;
 import com.minisec.store.service.StoreSelectService;
 import com.minisec.store.view.StoreDetailView;
-
-import java.util.List;
 
 public class StoreSelectController {
 
     private StoreSelectService storeSelectService = new StoreSelectService();
 
+    private StoreDetailView storeDetailView = new StoreDetailView();
+
     public void selectProductListAll(int manageId) {
-        List<StoreProductDto> list = storeSelectService.selectProductListAll(manageId);
-        StoreDetailView.displayDetailList(list);
+        Map<String, Object> param = new HashMap<>();
+        param.put("manageId", manageId);
+        List<StoreProductDto> list = storeSelectService.selectProductListAll(param);
+        storeDetailView.displayDetailList(list);
     }
 
     public void selectProductListName(int manageId, String searchName) {
-        List<StoreProductDto> list = storeSelectService.selectSearchNameList(manageId, searchName);
-        com.minisec.store.view.StoreDetailView.displayDetailList(list);
+        Map<String, Object> param = new HashMap<>();
+        param.put("manageId", manageId);
+        param.put("searchName", searchName);
+        List<StoreProductDto> list = storeSelectService.selectSearchNameList(param);
+        storeDetailView.displayDetailList(list);
+
     }
 
 
     public void selectProductListCategory(int manageId, String searchCategory) {
-        List<StoreProductDto> list = storeSelectService.selectSearchCategoryList(manageId, searchCategory);
-        com.minisec.store.view.StoreDetailView.displayDetailList(list);
+        Map<String, Object> param = new HashMap<>();
+        param.put("manageId", manageId);
+        param.put("searchCategory", searchCategory);
+        List<StoreProductDto> list = storeSelectService.selectSearchCategoryList(param);
+        storeDetailView.displayDetailList(list);
     }
 
     public void selectProductListLow(int manageId) {
-        List<StoreProductDto> list = storeSelectService.selectSearchLowList(manageId);
-        com.minisec.store.view.StoreDetailView.displayDetailList(list);
+        Map<String, Object> param = new HashMap<>();
+        param.put("manageId", manageId);
+        List<StoreProductDto> list = storeSelectService.selectSearchLowList(param);
+        storeDetailView.displayDetailList(list);
     }
 }

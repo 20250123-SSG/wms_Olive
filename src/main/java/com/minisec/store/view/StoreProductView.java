@@ -24,8 +24,8 @@ public class StoreProductView {
             switch (productDetailMenu) {
                 case "1": storeSelectView.listStoreProductDetail(manageId);break;
                 case "2": storeModifyView.insertStoreProductDetail(manageId); break;
-                case "3": StoreModifyView.updateStoreProductDetail(manageId); break;
-//                case "4": StoreModifyView.deleteStoreProductDetail(manageId); break;
+                case "3": storeModifyView.updateStoreProductDetail(manageId); break;
+                case "4": storeModifyView.deleteStoreProductDetail(manageId); break;
                 case "0": return;
                 default: System.out.println("번호를 잘못 입력하셨습니다.");
             }

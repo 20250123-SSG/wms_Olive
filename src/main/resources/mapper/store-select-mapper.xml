@@ -15,10 +15,11 @@
         <result column="store_detail_price" property="storeDetailPrice"/>
         <result column="store_detail_quantity" property="storeDetailQuantity"/>
         <result column="is_discount" property="isDiscount"/>
+        <result column="store_detail_status" property="storeDetailStatus"/>
     </resultMap>
 
-    <!-- 상품 목록 전체 조회 -->
-    <select id="selectAllProduct" resultMap="storeProductMap">
+    <!-- 가맹점 상품 목록 전체 조회 -->
+    <select id="selectAllProduct" parameterType="map" resultMap="storeProductMap">
         SELECT
             p.product_id
           , p.product_name
@@ -27,18 +28,22 @@
           , sd.store_detail_price
           , sd.store_detail_quantity
           , sd.is_discount
+          , sd.store_detail_status
         FROM
             store_detail sd
                 JOIN product p ON p.product_id = sd.product_id
                 JOIN category c ON p.category_id = c.category_id
-                JOIN store s ON s.store_id = sd.store_id
+                JOIN store_user su ON sd.store_id = su.store_id
         WHERE
-            s.user_id = #{manageId}
+            su.user_id = #{manageId}
+
     </select>
     
     
     <!-- 상품명 검색 -->
-    <select id="selectNameSearch" parameterType="String" resultMap="storeProductMap">
+
+    <select id="selectNameSearch" parameterType="map" resultMap="storeProductMap">
+
         SELECT
             p.product_id
           , p.product_name
@@ -59,7 +64,7 @@
     
     
     <!-- 카테고리명 검색-->
-    <select id="selectCategorySearch" parameterType="String" resultMap="storeProductMap">
+    <select id="selectCategorySearch" parameterType="map" resultMap="storeProductMap">
         SELECT
             p.product_id
           , p.product_name
@@ -79,7 +84,8 @@
     </select>
 
     <!-- 5개 이하 재고 검색 -->
-    <select id="selectProductLowStock" resultMap="storeProductMap">
+
+    <select id="selectProductLowStock" parameterType="map" resultMap="storeProductMap">
         SELECT
             p.product_id
           , p.product_name
