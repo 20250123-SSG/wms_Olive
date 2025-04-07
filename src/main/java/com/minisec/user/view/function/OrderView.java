@@ -21,27 +21,34 @@ public class OrderView {
 
 
     public void run(Login user) {
-
-        StoreDto store = inputStore();
-        if (!readStoreAllProduct(store)) return;
-
         while (true) {
-            StoreProductDto product = inputOrderProduct(store);
-            if (product == null) return;
-            int quantity = inputOrderQuantity(product);
+            StoreDto store = inputStore();
+            if (store == null) return;
+            if (!readStoreAllProduct(store)) return;
 
-            localOrderManager.addOrder(store, product, quantity);
+            while (true) {
+                StoreProductDto product = inputOrderProduct(store);
+                if (product == null) break;
+                int quantity = inputOrderQuantity(product);
 
-            System.out.print("""
+                try {
+                    localOrderManager.addOrder(store, product, quantity);
+                } catch (IllegalArgumentException e) {
+                    ExceptionPrinter.print(e.getMessage());
+                    continue;
+                }
+
+                System.out.print("""
                     1. 담은 상품 구매하기
                     2. 구매 목록 상품 담기
                     0. 장바구니에 담고 구매 종료하기
                     >> 입력:""");
 
-            switch (Integer.parseInt(sc.nextLine())) {
-                case 0: addToCart(user); return;
-                case 1: purchase(user);  return;
-                case 2: continue;
+                switch (Integer.parseInt(sc.nextLine())) {
+                    case 0: addToCart(user); return;
+                    case 1: purchase(user);  return;
+                    case 2: continue;
+                }
             }
         }
     }
@@ -54,7 +61,7 @@ public class OrderView {
         try {
             orderController.insertOrder(orderList);
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            ExceptionPrinter.print(e.getMessage());
         }
     }
 
@@ -66,23 +73,35 @@ public class OrderView {
     private StoreDto inputStore() {
         List<StoreDto> storeList = orderController.selectStoreList();
         StoreListPrinter.print(storeList);
-        System.out.println("[ 상품을 구입할 가맹점을 선택해주세요. ]");
-        System.out.print(">> 입력:");
+        while (true) {
+            System.out.println("[ 상품을 구입할 가맹점을 선택해주세요. (0. 뒤로가기) ]");
+            System.out.print(">> 입력:");
+            String storeNum = sc.nextLine();
 
-        return localOrderManager.getStoreByStoreId(storeList, sc.nextLine());
+            if ("0".equals(storeNum)) return null;
+            try {
+                return localOrderManager.getStoreByStoreId(storeList, storeNum);
+            } catch (IllegalArgumentException e) {
+                ExceptionPrinter.print(e.getMessage());
+            }
+        }
     }
 
     private StoreProductDto inputOrderProduct(StoreDto store) {
         orderController.selectStoreAllProductByStoreId(store);
         ShopProductPrinter.printProductListByCategory(store, localOrderManager.getStoreProductByCategoryForPrint());
-        System.out.println("[ 구매할 상품의 번호를 선택해주세요. (0.뒤로가기) ]");
-        System.out.print(">> 입력:");
-        String productNum = sc.nextLine();
+        while (true) {
+            System.out.println("[ 구매할 상품의 번호를 선택해주세요. (0. 뒤로가기) ]");
+            System.out.print(">> 입력:");
+            String productNum = sc.nextLine();
 
-        if("0".equals(productNum)) {
-            return null;
+            if ("0".equals(productNum)) return null;
+            try {
+                return localOrderManager.getOrderProduct(productNum);
+            } catch (IllegalArgumentException e) {
+                ExceptionPrinter.print(e.getMessage());
+            }
         }
-        return localOrderManager.getOrderProduct(productNum);
     }
 
     private int inputOrderQuantity(StoreProductDto product) {
@@ -91,9 +110,9 @@ public class OrderView {
             System.out.println("[ 구매할 상품의 수량을 입력해주세요. ]");
             System.out.print(">> 입력:");
 
-            try{
+            try {
                 return localOrderManager.getOrderQuantity(sc.nextLine());
-            }catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 ExceptionPrinter.print(e.getMessage());
             }
 
