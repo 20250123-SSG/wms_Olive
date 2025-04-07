@@ -61,6 +61,10 @@ public class StorageController {
 
             System.out.println("입고 완료되었습니다.\n");
 
+            // 로그 기록
+            storage.setStorageQuantity(finalQuantity);
+            storageService.insertWarehouseProductLog(storage);
+
             // 최종 입고된 리스트에 추가
             StorageDto receivedStorage = new StorageDto(
                     storage.getStorageId(),
@@ -89,9 +93,6 @@ public class StorageController {
                 System.out.printf("%-5d %-25s(%d) %-20s %-10d\n", index++, productName, storage.getProductId(), storage.getSupplierName(), storage.getStorageQuantity());
             }
         }
-
-            // 로그 기록
-            //storageService.insertWarehouseProduct(storage);
         System.out.println("──────────────────────────────────────────────────────────────────────────");
     }
 }
