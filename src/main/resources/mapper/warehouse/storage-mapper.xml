@@ -15,12 +15,18 @@
     </resultMap>
 
 
-    <!--db 업데이트 -->
-    <update id="updateStorageQuantity">
-        UPDATE
-            storage
-        SET storage_quantity = #{newQuantity}
-        WHERE storage_id = #{storageId}
+    <!-- warehouse_detail에서 product_id가 존재하는지 확인 -->
+    <select id="selectWarehouseProductQuantity" resultType="Integer">
+        SELECT SUM(warehouse_detail_quantity)
+        FROM warehouse_detail
+        WHERE warehouse_id = #{warehouseId} AND product_id = #{productId}
+    </select>
+
+    <!-- warehouse_detail에서 기존 수량 업데이트 -->
+    <update id="updateWarehouseProductQuantity">
+        UPDATE warehouse_detail
+        SET warehouse_detail_quantity = warehouse_detail_quantity + #{additionalQuantity}
+        WHERE warehouse_id = #{warehouseId} AND product_id = #{productId}
     </update>
 
 
@@ -52,4 +58,14 @@
                 NOW()
                )
     </insert>
+
+    <select id="selectProductNameById" resultType="String">
+        SELECT product_name FROM product WHERE product_id = #{productId}
+    </select>
+
+    <insert id="insertWarehouseDetail">
+        INSERT INTO warehouse_detail (warehouse_id, product_id, warehouse_detail_quantity, created_at, modified_at)
+        VALUES (#{warehouseId}, #{productId}, #{warehouseDetailQuantity}, NOW(), NOW())
+    </insert>
+
 </mapper>

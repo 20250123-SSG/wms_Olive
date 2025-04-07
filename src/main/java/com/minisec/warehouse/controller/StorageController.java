@@ -3,7 +3,9 @@ package com.minisec.warehouse.controller;
 import com.minisec.warehouse.model.dto.StorageDto;
 import com.minisec.warehouse.service.StorageService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class StorageController {
 
@@ -12,15 +14,39 @@ public class StorageController {
     // 입고 내역 조회
     public void selectFilteredStorageList() {
         List<StorageDto> list = storageService.selectAllStorage();
-        System.out.println("\n📦 입고 내역 조회 📦");
-        System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
-        for (StorageDto storage : list) {
+        List<StorageDto> finalReceivedList = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
 
-            // 0%~100% 검사 진행
+        System.out.println("\n입고 대기 상품 목록");
+        System.out.println("─────────────────────────────────────────────────────────");
+        for (StorageDto storage : list) {
+            String productName = storageService.getProductNameById(storage.getProductId());
+            System.out.println("▶ " + productName + " / " + storage.getSupplierName() + " "  + " / " + storage.getStorageQuantity() + "개");
+        }
+        System.out.println("─────────────────────────────────────────────────────────\n");
+
+        System.out.println("\n입고 진행");
+        System.out.println("────────────────────────────────────────────────────────────────────────────────");
+        for (StorageDto storage : list) {
+            // 제품명 가져오기
+            String productName = storageService.getProductNameById(storage.getProductId());
+
+            System.out.println("\n입고 내역: " + productName + " / " + storage.getSupplierName() + " 공급 / " + storage.getStorageQuantity() + "개");
+
+            // 사용자 확인 요청
+            System.out.print("이 제품을 입고하시겠습니까? (Y/N): ");
+            String input = scanner.nextLine().trim().toUpperCase();
+
+            if (!input.equals("Y")) {
+                System.out.println("입고가 취소되었습니다.");
+                continue;
+            }
+
+            // 불량품 검사
             for (int i = 0; i <= 100; i += 10) {
-                System.out.print("\r🔎 불량품 검사중: " + i + "%");
+                System.out.print("\r불량품 검사중: " + i + "%");
                 try {
-                    Thread.sleep(200); // 0.2초 대기
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -28,16 +54,44 @@ public class StorageController {
 
             int finalQuantity = storageService.calculateFinalStorageQuantity(storage);
 
-            // db 업데이트
-            storageService.updateStorageQuantity(storage.getStorageId(), finalQuantity);
+            System.out.println("\n불량품 검사 완료! 최종 입고 수량: " + finalQuantity + "개\n");
 
-            String supplierName = (storage.getSupplierName() != null) ? storage.getSupplierName() : "알 수 없음";
+            // db 업데이트(warehouse_detail)
+            storageService.insertOrUpdateWarehouseProduct(storage.getWarehouseId(), storage.getProductId(), finalQuantity);
 
-            System.out.println("\n📝 " + supplierName + " - 최종 입고 수량: " + finalQuantity + "개\n");
+            System.out.println("입고 완료되었습니다.\n");
+
+            // 최종 입고된 리스트에 추가
+            StorageDto receivedStorage = new StorageDto(
+                    storage.getStorageId(),
+                    storage.getWarehouseId(),
+                    storage.getProductId(),
+                    storage.getSupplierName(),
+                    finalQuantity,
+                    storage.getCreatedAt()
+            );
+
+            finalReceivedList.add(receivedStorage);
+        }
+
+        // 최종 입고된 상품 목록 출력
+        System.out.println("\n최종 입고된 상품 목록");
+        System.out.println("──────────────────────────────────────────────────────────────────────────");
+        System.out.printf("%-5s %-35s %-15s %-10s\n", "번호", "상품명(product_id)", "제조사", "입고 수량(불량품 제외)");
+        System.out.println("──────────────────────────────────────────────────────────────────────────");
+
+        if (finalReceivedList.isEmpty()) {
+            System.out.println("최종 입고된 상품이 없습니다.");
+        } else {
+            int index = 1;
+            for (StorageDto storage : finalReceivedList) {
+                String productName = storageService.getProductNameById(storage.getProductId());
+                System.out.printf("%-5d %-35s (%d) %-15s %-10d\n", index++, productName, storage.getProductId(), storage.getSupplierName(), storage.getStorageQuantity());
+            }
+        }
 
             // 로그 기록
-            storageService.insertWarehouseProduct(storage);
-        }
-        System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
+            //storageService.insertWarehouseProduct(storage);
+        System.out.println("──────────────────────────────────────────────────────────────────────────");
     }
 }
