@@ -24,12 +24,17 @@
           , p.product_id
           , p.product_name
           , sd.store_detail_price
-          , (sd.store_detail_price * (1-(sd.store_detail_discount/100.0))) AS store_detail_price_after_discount
           , sd.store_detail_quantity
           , c.category_name
           , p.product_brand_name
           , sd.store_detail_discount
           , p.product_description
+          , CASE
+                WHEN sd.is_discount = 1 THEN
+                    (sd.store_detail_price * (1 - (sd.store_detail_discount / 100.0)))
+                ELSE
+                    sd.store_detail_price
+            END AS store_detail_price_after_discount
         FROM
             store_detail sd
                 JOIN product p ON p.product_id = sd.product_id

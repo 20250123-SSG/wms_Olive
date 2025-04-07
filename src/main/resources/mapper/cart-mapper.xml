@@ -50,16 +50,26 @@
           , c.store_id
           , c.cart_quantity
           , c.product_id
-          , ((sd.store_detail_price * (1-(sd.store_detail_discount/100.0))) * c.cart_quantity) AS cart_total_price
           , p.product_name
           , p.product_brand_name
           , p.product_description
           , sd.store_detail_id
           , sd.store_detail_price
-          , (sd.store_detail_price * (1-(sd.store_detail_discount/100.0))) AS store_detail_price_after_discount
           , sd.store_detail_quantity
           , s.store_name
           , ct.category_name
+          , CASE
+                WHEN sd.is_discount = 1 THEN
+                    (sd.store_detail_price * (1-(sd.store_detail_discount/100.0)))
+                ELSE
+                    sd.store_detail_price
+            END AS store_detail_price_after_discount
+          , CASE
+                WHEN sd.is_discount = 1 THEN
+                    ((sd.store_detail_price * (1-(sd.store_detail_discount/100.0))) * c.cart_quantity)
+                ELSE
+                    (sd.store_detail_price * c.cart_quantity)
+            END AS cart_total_price
         FROM
             cart c
                 JOIN product p ON p.product_id = c.product_id
