@@ -51,10 +51,12 @@ public class WarehouseView {
 
     // 발주 내역 조회
     public void selectOrderList(int manageId) {
+    while (true) {
         System.out.println("\n1. 현재 대기중인 발주 목록 확인");
         System.out.println("2. 완료한 발주 목록 확인");
         System.out.println("0. 돌아가기");
         System.out.print("\n확인하고 싶은 내역을 선택하세요: ");
+
         int choice = this.sc.nextInt();
         this.sc.nextLine();
 
@@ -79,14 +81,14 @@ public class WarehouseView {
         int orderDetail = this.sc.nextInt();
         this.sc.nextLine();
 
-        if (orderDetail == 0 || !map.containsKey(orderDetail - 1)) {
+        if (orderDetail == 0) {
             System.out.println("상위 메뉴로 돌아갑니다.");
-            return;
+            continue;
         }
 
         if (!map.containsKey(orderDetail - 1)) {
             System.out.println("잘못된 번호입니다. 다시 시도하세요.");
-            return;
+            continue;
         }
 
         ShipmentDto order = orders.get(orderDetail - 1);
@@ -105,7 +107,7 @@ public class WarehouseView {
 
         if (choice == 1) { // 현재 대기중인 주문이라면
             System.out.print("수주하시겠습니까? (Y/N): ");
-            String answer = this.sc.nextLine().trim().toUpperCase();
+            String answer = sc.nextLine().trim().toUpperCase();
 
             boolean success = false;
             if (answer.equals("Y")) {
@@ -113,9 +115,8 @@ public class WarehouseView {
             } else if (answer.equals("N")) {
                 success = this.wareHouseController.rejectOrder(order.getStoreOrderId());
             }
-            System.out.println(success ? "거절" : "거절실패");
         }
-
+    }
     }
 
     public String getOrderStatus(char status) {
