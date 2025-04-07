@@ -14,4 +14,7 @@ public interface ShipmentDao {
 
     // 주문 상태 업데이트
     void updateOrderStatus(@Param("orderId") int orderId, @Param("status") char status);
+
+    // 발주 시, 상품 수량 차감
+    void updateOrderStatusAndQuantity(@Param("orderId") int orderId, @Param("status") char status);
 }

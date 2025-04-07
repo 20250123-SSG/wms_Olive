@@ -12,7 +12,7 @@ import java.util.*;
 public class WarehouseView {
     private WarehouseController warehouseController = new WarehouseController();
     private StorageController storageController = new StorageController();
-    private ShipmentController wareHouseController = new ShipmentController();
+    private ShipmentController shipmentController = new ShipmentController();
     private Scanner sc = new Scanner(System.in);
 
     // Main view
@@ -51,19 +51,21 @@ public class WarehouseView {
 
     // 발주 내역 조회
     public void selectOrderList(int manageId) {
+    while (true) {
         System.out.println("\n1. 현재 대기중인 발주 목록 확인");
         System.out.println("2. 완료한 발주 목록 확인");
         System.out.println("0. 돌아가기");
         System.out.print("\n확인하고 싶은 내역을 선택하세요: ");
-        int choice = this.sc.nextInt();
-        this.sc.nextLine();
+
+        int choice = sc.nextInt();
+        sc.nextLine();
 
         if (choice == 0) {
             System.out.println("상위 메뉴로 돌아갑니다.");
             return;
         }
 
-        List<ShipmentDto> orders = this.wareHouseController.selectOrderList(manageId, choice);
+        List<ShipmentDto> orders = shipmentController.selectOrderList(manageId, choice);
         Map<Integer, Integer> map = new HashMap<>();
         System.out.println("\n────────────────────────────────────────────────────────────────────────────────");
         System.out.println("주문번호\t 주문명\t\t\t 주문메모\t 주문상태\t 주문발생일");
@@ -76,17 +78,17 @@ public class WarehouseView {
         System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
 
         System.out.print("주문의 상세조회를 원하신다면 번호를, 상위메뉴로 돌아갈 경우 0번을 입력하세요: ");
-        int orderDetail = this.sc.nextInt();
-        this.sc.nextLine();
+        int orderDetail = sc.nextInt();
+        sc.nextLine();
 
-        if (orderDetail == 0 || !map.containsKey(orderDetail - 1)) {
+        if (orderDetail == 0) {
             System.out.println("상위 메뉴로 돌아갑니다.");
-            return;
+            continue;
         }
 
         if (!map.containsKey(orderDetail - 1)) {
             System.out.println("잘못된 번호입니다. 다시 시도하세요.");
-            return;
+            continue;
         }
 
         ShipmentDto order = orders.get(orderDetail - 1);
@@ -94,28 +96,33 @@ public class WarehouseView {
         System.out.println("[주문 상세 정보]");
         System.out.println("주문명: " + order.getStoreOrderSubject());
         System.out.println("주문메모: " + order.getStoreOrderMemo());
-        System.out.println("주문상태: " + this.getOrderStatus(order.getStoreOrderStatus()));
+        System.out.println("주문상태: " + getOrderStatus(order.getStoreOrderStatus()));
         System.out.println("주문발생일: " + order.getCreatedAt());
 
         System.out.println("\n[주문 상세 항목]");
         for (ShipmentDetailDto detail : order.getOrderDetails()) {
-            System.out.printf("상품명: %s, 수량: %d, 생성일: %s\n", detail.getProductName(), detail.getStoreOrderDetailQuantity(), detail.getCreatedAt());
-        }
-        System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
+            System.out.printf("상품명: %s, 수량: %d, 생성일: %s\n",
+                    detail.getProductName(),
+                    detail.getStoreOrderDetailQuantity(),
+                    detail.getCreatedAt());
 
-        if (choice == 1) { // 현재 대기중인 주문이라면
-            System.out.print("수주하시겠습니까? (Y/N): ");
-            String answer = this.sc.nextLine().trim().toUpperCase();
+            System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
 
-            boolean success = false;
-            if (answer.equals("Y")) {
-                success = this.wareHouseController.acceptOrder(order.getStoreOrderId());
-            } else if (answer.equals("N")) {
-                success = this.wareHouseController.rejectOrder(order.getStoreOrderId());
+            if (choice == 1) { // 현재 대기중인 주문이라면
+                System.out.print("수주하시겠습니까? (Y/N): ");
+                String answer = sc.nextLine().trim().toUpperCase();
+
+                if (answer.equals("Y")) {
+                    boolean result = shipmentController.acceptOrder(order.getStoreOrderId());
+                    if (result) {
+                        System.out.println("주문이 수주 처리되었습니다.");
+                    } else {
+                        System.out.println("수주 처리에 실패했습니다.");
+                    }
+                }
             }
-            System.out.println(success ? "거절" : "거절실패");
         }
-
+    }
     }
 
     public String getOrderStatus(char status) {
