@@ -1,17 +1,21 @@
 package com.minisec.store.view;
 
 import com.minisec.common.login.Login;
+import com.minisec.store.controller.order.StoreOrderController;
+import com.minisec.store.controller.user.StoreUserController;
+
+import java.util.Scanner;
+
 
 import java.util.Scanner;
 
 
 public class StoreView {
     private Scanner sc = new Scanner(System.in);
-    private StoreSelectView storeSelectView = new StoreSelectView();
-    private StoreProductView storeProductView = new StoreProductView();
-    StoreOrderView sov = new StoreOrderView();
+    StoreOrderController soc = new StoreOrderController();
+    StoreUserController  suc = new StoreUserController();
 
-    public void viewStore(Login loginInfo, int manageId) {
+    public void viewStore(Login loginInfo,int manageId) {
 
         while (true) {
             System.out.print("""
@@ -28,12 +32,13 @@ public class StoreView {
             switch (storeMenu) {
 
                 case "1":
-                    sov.orderView();
+                    soc.orderView(manageId);
                     break;
-                case "2":
-                    storeProductView.storeProductDetail(manageId);
+                case "2": storeController.storeProductDetail(); 
                     break;
-//                case "3": storeCheckUserOrder(); break;
+                case "3":
+                    suc.userView(manageId);
+                    break;
                 case "0":
                     return;
                 default:

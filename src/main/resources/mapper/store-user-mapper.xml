@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.minisec.store.model.dao.user.StoreUserMapper">
+
+    <resultMap id="storeUserResultMap" type="com.minisec.store.model.dto.user.StoreUserSelectDto">
+        <id  column="store_id"  property="storeId"/>
+        <result column="user_order_id"  property="userOrderId"/>
+        <result column="user_id"  property="userId"/>
+        <result column="store_name"  property="storeName"/>
+        <result column="product_name" property="productName"/>
+        <result column="product_brand_name" property="productBrandName"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="user_order_detail_quantity" property="userOrderDetailQuantity"/>
+        <result column="user_order_status" property="userOrderStatus"/>
+        <result column="user_order_memo" property="userOrderMemo"/>
+    </resultMap>
+
+    <select id="selectStoreUserStock"  resultMap="storeUserResultMap">
+             select
+                    C.user_order_id                                           as user_order_id
+                   ,B.user_id                                                 as user_id
+                   ,F.store_name                      						  as store_name
+                   ,E.product_name                    						  as product_name
+                   ,E.product_brand_name              						  as product_brand_name
+                   ,G.category_name                   					 	  as category_name
+                   ,D.user_order_detail_quantity      						  as user_order_detail_quantity
+                   ,D.user_order_detail_price         						  as user_order_detail_price
+                   ,C.user_order_status                                       as user_order_status
+                   ,C.user_order_memo                                         as user_order_memo
+              from user A
+                       join store_user B on (A.user_id =B.user_id )
+                       join user_order C on (C.user_id  = A.user_id)
+                       join user_order_detail D on (C.user_order_id = d.user_order_id )
+                       join product E on (E.product_id = D.product_id )
+                       join store F on(F.store_id = B.store_id)
+                       join category G on (E.category_id  = G.category_id )
+              where B.store_id = #{store_id};
+
+    </select>
+
+    <select id="getUserOrderIdByDetailId" parameterType="int" resultType="int">
+        SELECT user_order_id
+        FROM user_order_detail
+        WHERE user_order_detail_id = #{userOrderDetailId};
+    </select>
+
+    <update id="updateUserOrderStatus" parameterType="map">
+        UPDATE user_order
+        SET user_order_status = #{newStatus}
+        WHERE user_order_id = #{userOrderId};
+    </update>
+
+    <update id="updateStoreDetailQuantity" parameterType="int">
+        UPDATE store_detail A
+            JOIN user_order_detail B ON B.product_id = A.product_id
+        SET A.store_detail_quantity = A.store_detail_quantity + B.user_order_detail_quantity
+        WHERE B.user_order_id = #{userOrderId}
+    </update>
+</mapper>

@@ -1,4 +1,14 @@
 package com.minisec.store.view;
+
+import java.util.List;
+import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.ArrayList;
+
+import com.minisec.store.model.dto.order.*;
 import com.minisec.common.login.Login;
 import com.minisec.store.dao.StoreOrderMapper;
 import com.minisec.store.dto.StoreOrderDetailDto;
@@ -6,16 +16,13 @@ import com.minisec.store.dto.StoreOrderDto;
 import com.minisec.store.dto.StoreOrderProduct;
 import com.minisec.store.dto.StoreOrderSelectDto;
 import com.minisec.store.service.StoreOrderService;
+import com.minisec.store.service.order.StoreOrderService;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
 
 public class StoreOrderView {
-    private Scanner sc = new Scanner(System.in);
+
+    private final Scanner sc = new Scanner(System.in);
+
     LocalDateTime currTime = LocalDateTime.now();
 
     public void orderView(){
@@ -36,8 +43,6 @@ public class StoreOrderView {
                 updateOrderView();
         }
     }
-
-
 
     public void insertOrderView(){
         System.out.println("발주정보를 입력하세요");
@@ -95,13 +100,14 @@ public class StoreOrderView {
             }
         }
     }
+
     public void selectOrderView(){
         System.out.println("발주조회화면");
         List<StoreOrderSelectDto> list = new StoreOrderService().selectOrderStock();
 
-       for(StoreOrderSelectDto a : list) {
-           System.out.println(a);
-       }
+        for(StoreOrderSelectDto a : list) {
+            System.out.println(a);
+        }
     }
 
     public void updateOrderView() {
@@ -165,4 +171,90 @@ public class StoreOrderView {
             System.out.println(a);
         }
     }
+
+    public void insertOrderView(int storeId, StoreOrderService storeOrderService) {
+        System.out.println("발주 정보를 입력하세요");
+
+        System.out.print("주문 제목: ");
+        String storeOrderSubject = sc.nextLine();
+
+        System.out.print("주문 메모를 입력하시겠습니까?(Y/N): ");
+        String storeOrderMemo = null;
+        if ("Y".equalsIgnoreCase(sc.nextLine())) {
+            System.out.print("주문 메모: ");
+            storeOrderMemo = sc.nextLine();
+        }
+
+        List<StoreOrderCommonDetailDto> orderDetails = new ArrayList<>();
+        while (true) {
+            ProductView(storeOrderService);
+
+            System.out.print("상품 번호를 입력하세요: ");
+            int productId = sc.nextInt();
+            sc.nextLine();
+
+            System.out.print("주문 수량: ");
+            int storeOrderDetailQuantity = sc.nextInt();
+            sc.nextLine();
+
+            StoreOrderCommonDetailDto detailDto = new StoreOrderCommonDetailDto();
+            detailDto.setProductId(productId);
+            detailDto.setStoreOrderDetailQuantity(storeOrderDetailQuantity);
+            orderDetails.add(detailDto);
+
+            System.out.print("추가로 등록하시겠습니까? (Y/N): ");
+            if ("N".equalsIgnoreCase(sc.nextLine())) {
+                break;
+            }
+        }
+
+        boolean isInserted = storeOrderService.insertOrderWithDetails(storeId, storeOrderSubject, storeOrderMemo, orderDetails);
+
+        if (isInserted) {
+            System.out.println("발주 등록이 성공했습니다.");
+        } else {
+            System.out.println("발주 등록이 실패했습니다.");
+        }
+    }
+
+    public void updateOrderView(int storeId, StoreOrderService storeOrderService) {
+        System.out.println("발주 수정 화면");
+        storeOrderService.selectStockByUpdate(storeId).forEach(System.out::println);
+
+        System.out.print("수정할 발주 번호를 입력하세요: ");
+        int storeOrderDetailId = sc.nextInt();
+        sc.nextLine();
+
+        storeOrderService.selectStockByOrder().forEach(System.out::println);
+
+        System.out.print("수정할 상품 번호를 입력하세요: ");
+        int productId = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("수정할 수량을 입력하세요: ");
+        int storeOrderDetailQuantity = sc.nextInt();
+        sc.nextLine();
+
+        System.out.print("수정할 주문 제목을 입력하세요: ");
+        String storeOrderSubject = sc.nextLine();
+
+        System.out.print("수정할 주문 메모를 입력하세요: ");
+        String storeOrderMemo = sc.nextLine();
+
+        boolean isUpdated = storeOrderService.updateOrderWithDetails(
+                storeOrderDetailId, productId, storeOrderDetailQuantity, storeOrderSubject, storeOrderMemo
+        );
+
+        if (isUpdated) {
+            System.out.println("발주 업데이트 성공");
+        } else {
+            System.out.println("발주 업데이트 실패");
+        }
+    }
+
+    public void ProductView(StoreOrderService storeOrderService) {
+        List<StoreOrderSelectProductByInsertDto> products = storeOrderService.selectStockByOrder();
+        products.forEach(System.out::println);
+    }
+
 }
