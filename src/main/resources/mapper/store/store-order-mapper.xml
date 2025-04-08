@@ -7,7 +7,7 @@
 
     <insert id="insertOrderStock" parameterType="com.minisec.store.model.dto.order.StoreOrderCommonDto">
         INSERT INTO
-        store_order
+            store_order
         (
           warehouse_id
         , store_id
@@ -15,6 +15,8 @@
         , store_order_status
         , store_order_memo
         , shipment_date
+        , created_at
+        , modified_at
         )
         VALUES
             (
@@ -23,7 +25,9 @@
             ,#{storeOrderSubject}
             ,#{storeOrderStatus}
             ,#{storeOrderMemo}
-            ,#{shipmentDate}
+            ,now()
+            ,now()
+            ,now()
             )
 
     </insert>
@@ -38,12 +42,16 @@
           store_order_id
         , product_id
         , store_order_detail_quantity
+        , created_at
+        , modified_at
         )
         VALUES
             (
              #{storeOrderId}
             ,#{productId}
             ,#{storeOrderDetailQuantity}
+            ,now()
+            ,now()
             )
     </insert>
 
@@ -71,6 +79,7 @@
                  join store_order_detail C on(C.store_order_id = B.store_order_id )
                  join product D on(D.product_id = C.product_id )
                  join category E on(E.category_id = D.category_id)
+       where A.store_Id = #{storeId}
 
     </select>
 
@@ -79,7 +88,7 @@
         SET
             store_order_subject = #{storeOrderSubject},
             store_order_memo = #{storeOrderMemo},
-            modified_at = #{modifiedAt}
+            modified_at = now()
         WHERE store_order_id = #{storeOrderId}
     </update>
 
@@ -88,7 +97,7 @@
         SET
             product_id = #{productId},
             store_order_detail_quantity = #{storeOrderDetailQuantity},
-            modified_at = #{modifiedAt}
+            modified_at = now()
         WHERE store_order_detail_id = #{storeOrderDetailId}
     </update>
 
@@ -125,8 +134,8 @@
              ,B.product_id 				    as product_id
              ,B.store_order_detail_quantity as store_order_detail_quantity
         from store_order A
-                join store_order_detail B on(B.store_order_id = A.store_order_id )
-                join product C on(c.product_id = B.product_id )
+                 join store_order_detail B on(B.store_order_id = A.store_order_id )
+                 join product C on(c.product_id = B.product_id )
         where a.store_id = #{storeId};
 
     </select>

@@ -26,9 +26,7 @@ public class StoreOrderController {
                     sov.insertOrderView(manageId, sos);
                     break;
                 case 2:
-                    //로직변경
-                    //sov.selectOrderView(manageId, sos);
-                    sov.selectOrderView(sos);
+                    sov.selectOrderView(manageId,sos);
                     break;
                 case 3:
                     sov.updateOrderView(manageId, sos);

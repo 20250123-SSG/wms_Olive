@@ -16,7 +16,7 @@ public interface StoreOrderMapper {
    int insertOrderDetailStock(StoreOrderCommonDetailDto storeOrderDetailDto);
    
    //발주조회
-   List<StoreOrderSelectDto> selectOrderStock();
+   List<StoreOrderSelectDto> selectOrderStock(int storeId);
 
    //발주업데이트
    int updateOrderStock(StoreOrderCommonDto storeOrderDto);

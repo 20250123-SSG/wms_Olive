@@ -6,38 +6,60 @@
 
     <resultMap id="storeUserResultMap" type="com.minisec.store.model.dto.user.StoreUserSelectDto">
         <id  column="store_id"  property="storeId"/>
+        <result column="user_name"  property="userName"/>
+        <result column="user_order_detail_id"  property="userOrderDetailId"/>
         <result column="user_order_id"  property="userOrderId"/>
-        <result column="user_id"  property="userId"/>
         <result column="store_name"  property="storeName"/>
         <result column="product_name" property="productName"/>
         <result column="product_brand_name" property="productBrandName"/>
         <result column="category_name" property="categoryName"/>
         <result column="user_order_detail_quantity" property="userOrderDetailQuantity"/>
-        <result column="user_order_status" property="userOrderStatus"/>
         <result column="user_order_memo" property="userOrderMemo"/>
+        <result column="user_order_status" property="userOrderStatus"/>
     </resultMap>
 
     <select id="selectStoreUserStock"  resultMap="storeUserResultMap">
-             select
-                    C.user_order_id                                           as user_order_id
-                   ,B.user_id                                                 as user_id
-                   ,F.store_name                      						  as store_name
-                   ,E.product_name                    						  as product_name
-                   ,E.product_brand_name              						  as product_brand_name
-                   ,G.category_name                   					 	  as category_name
-                   ,D.user_order_detail_quantity      						  as user_order_detail_quantity
-                   ,D.user_order_detail_price         						  as user_order_detail_price
-                   ,C.user_order_status                                       as user_order_status
-                   ,C.user_order_memo                                         as user_order_memo
-              from user A
-                       join store_user B on (A.user_id =B.user_id )
-                       join user_order C on (C.user_id  = A.user_id)
-                       join user_order_detail D on (C.user_order_id = d.user_order_id )
-                       join product E on (E.product_id = D.product_id )
-                       join store F on(F.store_id = B.store_id)
-                       join category G on (E.category_id  = G.category_id )
-              where B.store_id = #{store_id};
+        select
+              U.user_name				                                  as user_name
+             ,B.user_order_detail_id	                                  as user_order_detail_id
+             ,A.user_order_id			                                  as user_order_id
+             ,F.store_name				                                  as store_name
+             ,P.product_name		                                      as product_name
+             ,P.product_brand_name	                                      as product_brand_name
+             ,H.category_name			                                  as category_name
+             ,B.user_order_detail_quantity	                              as user_order_detail_quantity
+             ,A.user_order_memo			                                  as user_order_memo
+             ,A.user_order_status                                         as user_order_status
+        from user_order A
+                 join user_order_detail B on(B.user_order_id = A.user_order_id)
+                 join product P on(p.product_id = B.product_id )
+                 join category H on (H.category_id  = P.category_id )
+                 join store   F on(F.store_id = A.store_id )
+                 join user U on (u.user_id  = A.user_id )
+        where A.store_id = #{storeId}
+    </select>
 
+
+    <select id="selectStoreUserStockWithStatus" resultMap="storeUserResultMap">
+        SELECT
+            U.user_name                                                 AS user_name,
+            B.user_order_detail_id                                      AS user_order_detail_id,
+            A.user_order_id                                             AS user_order_id,
+            F.store_name                                                AS store_name,
+            P.product_name                                              AS product_name,
+            P.product_brand_name                                        AS product_brand_name,
+            H.category_name                                             AS category_name,
+            B.user_order_detail_quantity                                AS user_order_detail_quantity,
+            A.user_order_memo                                           AS user_order_memo,
+            A.user_order_status                                         AS user_order_status
+        FROM user_order A
+                 JOIN user_order_detail B ON B.user_order_id = A.user_order_id
+                 JOIN product P ON P.product_id = B.product_id
+                 JOIN category H ON H.category_id = P.category_id
+                 JOIN store F ON F.store_id = A.store_id
+                 JOIN user U ON U.user_id = A.user_id
+        WHERE A.store_id = #{storeId}
+          AND A.user_order_status IN ('1', 'Y');
     </select>
 
     <select id="getUserOrderIdByDetailId" parameterType="int" resultType="int">
@@ -55,7 +77,8 @@
     <update id="updateStoreDetailQuantity" parameterType="int">
         UPDATE store_detail A
             JOIN user_order_detail B ON B.product_id = A.product_id
-        SET A.store_detail_quantity = A.store_detail_quantity + B.user_order_detail_quantity
-        WHERE B.user_order_id = #{userOrderId}
+            SET A.store_detail_quantity = A.store_detail_quantity + B.user_order_detail_quantity,
+                A.store_detail_status = 2
+        WHERE B.user_order_detail_id = #{userOrderDetailId}
     </update>
 </mapper>
