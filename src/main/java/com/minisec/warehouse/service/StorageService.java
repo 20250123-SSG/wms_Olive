@@ -11,10 +11,10 @@ import static com.minisec.common.Template.getSqlSession;
 public class StorageService {
 
     // 입고된 모든 상품
-    public List<StorageDto> selectAllStorage() {
+    public List<StorageDto> selectAllStorage(int manageId) {
         try (SqlSession sqlSession = getSqlSession()) {
             StorageMapper storageMapper = sqlSession.getMapper(StorageMapper.class);
-            return storageMapper.selectAllStorage();
+            return storageMapper.selectAllStorage(manageId);
         }
     }
 

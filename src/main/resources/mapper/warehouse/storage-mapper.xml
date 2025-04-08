@@ -38,6 +38,7 @@
                storage_quantity,
                created_at
         FROM storage
+        WHERE warehouse_id = #{warehouseId}
     </select>
 
 

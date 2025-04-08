@@ -12,9 +12,6 @@ public class ShipmentController {
 
     public List<ShipmentDto> selectOrderList(int manageId, int choice) {
         List<ShipmentDto> orders = shipmentService.getOrderList(manageId, choice);
-        for (ShipmentDto order : orders) {
-            System.out.println(order);
-        }
         if (orders.isEmpty()) {
             System.out.println("조회된 발주 내역이 없습니다.");
             return new ArrayList<>();

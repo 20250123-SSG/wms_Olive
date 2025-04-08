@@ -12,8 +12,8 @@ public class StorageController {
     private StorageService storageService = new StorageService();
 
     // 입고 내역 조회
-    public void selectFilteredStorageList() {
-        List<StorageDto> list = storageService.selectAllStorage();
+    public void selectFilteredStorageList(int manageId) {
+        List<StorageDto> list = storageService.selectAllStorage(manageId);
         List<StorageDto> finalReceivedList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
 
@@ -46,7 +46,7 @@ public class StorageController {
             for (int i = 0; i <= 100; i += 10) {
                 System.out.print("\r불량품 검사중: " + i + "%");
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }

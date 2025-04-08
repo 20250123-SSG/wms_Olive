@@ -31,7 +31,7 @@ public class WarehouseView {
                     warehouseController.selectAllProducts(manageId);
                     break;
                 case "2":
-                    storageController.selectFilteredStorageList();
+                    storageController.selectFilteredStorageList(manageId);
                     break;
                 case "3":
                     selectOrderList(manageId);
