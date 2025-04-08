@@ -1,25 +1,31 @@
 package com.minisec.warehouse.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.minisec.warehouse.model.dto.ShipmentDto;
 import com.minisec.warehouse.service.ShipmentService;
+import com.minisec.warehouse.view.WarehouseResultView;
 
-import java.util.Collections;
-import java.util.List;
 
 public class ShipmentController {
-    private ShipmentService shipmentService = new ShipmentService();
+    private final ShipmentService shipmentService = new ShipmentService();
 
-    public ShipmentController() {
-
-    }
-
-    public List<ShipmentDto> selectOrderList(int manageId, int choice) {
+    public Map<Integer, Integer> selectOrderList(int manageId, int choice) {
         List<ShipmentDto> orders = shipmentService.getOrderList(manageId, choice);
         if (orders.isEmpty()) {
-            System.out.println("대기중인 발주 신청이 없습니다.");
-            return Collections.emptyList();
+            System.out.println("조회된 발주 내역이 없습니다.");
+            return new HashMap<>();
+        } else {
+            WarehouseResultView.displayShipmentList(orders);
+            Map<Integer, Integer> map = new HashMap<>();
+            for (int i = 0; i < orders.size(); i++) {
+                ShipmentDto order = orders.get(i);
+                map.put(i, order.getStoreOrderId());
+            }
+            return map;
         }
-        return orders;
     }
 
     public boolean acceptOrder(int orderId) {

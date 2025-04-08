@@ -1,7 +1,6 @@
 package com.minisec.warehouse.model.dto;
 
 import lombok.*;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -10,8 +9,7 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 public class ShipmentDetailDto {
+    private int storeOrderId;
     private int productId;
-    private String productName;
     private int storeOrderDetailQuantity;
-    private LocalDateTime createdAt;
 }

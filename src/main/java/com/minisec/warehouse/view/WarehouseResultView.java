@@ -1,5 +1,6 @@
 package com.minisec.warehouse.view;
 
+import com.minisec.warehouse.model.dto.ShipmentDto;
 import com.minisec.warehouse.model.dto.WarehouseReceiveLogDto;
 import com.minisec.warehouse.model.dto.WarehouseShipmentLogDto;
 import com.minisec.warehouse.model.dto.WarehouseProductDetailDto;
@@ -56,4 +57,28 @@ public class WarehouseResultView {
 
     }
 
+    public static void displayShipmentList(List<ShipmentDto> orders) {
+        System.out.println("\n────────────────────────────────────────────────────────────────────────────────");
+        System.out.println("주문번호\t 주문명\t\t\t 주문메모\t\t 주문상태\t 주문발생일");
+        for (int i = 0; i < orders.size(); ++i) {
+            ShipmentDto order = orders.get(i);
+            System.out.printf("%d\t %s\t\t\t %s\t\t %s\t\t %s \n",
+                    i + 1, order.getStoreOrderSubject(), order.getStoreOrderMemo(), getOrderStatus(order.getStoreOrderStatus()), order.getCreatedAt());
+        }
+    }
+
+    public static String getOrderStatus(char status) {
+        String orderStatus = "";
+        if (status == '1') {
+            orderStatus = "대기";
+        } else if (status == '2') {
+            orderStatus = "수주";
+        } else if (status == '3') {
+            orderStatus = "거절";
+        } else {
+            orderStatus = "완료";
+        }
+
+        return orderStatus;
+    }
 }

@@ -2,7 +2,8 @@ package com.minisec.warehouse.model.dto;
 
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.List;
+
+import com.minisec.common.product.ProductDto;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -12,9 +13,14 @@ import java.util.List;
 @Builder
 public class ShipmentDto {
     private int storeOrderId;
+    private int warehouseId;
+    private int storeId;
     private String storeOrderSubject;
     private char storeOrderStatus;
     private String storeOrderMemo;
     private LocalDateTime createdAt;
-    private List<ShipmentDetailDto> orderDetails;
+    private LocalDateTime shipmentDate;
+
+    private ShipmentDetailDto shipmentDetail;
+    private ProductDto product;
 }

@@ -35,10 +35,10 @@ public class WarehouseView {
                     storageController.selectFilteredStorageList();
                     break;
                 case "3":
-                    this.selectOrderList(manageId);
+                    selectOrderList(manageId);
                     break;
                 case "4":
-                    selectProductLog(manageId);
+//                    selectProductLog(manageId);
                     break;
                 case "0":
                     System.out.println("프로그램을 종료합니다.");
@@ -51,22 +51,31 @@ public class WarehouseView {
 
     // 발주 내역 조회
     public void selectOrderList(int manageId) {
-    while (true) {
-        System.out.println("\n1. 현재 대기중인 발주 목록 확인");
-        System.out.println("2. 완료한 발주 목록 확인");
-        System.out.println("0. 돌아가기");
-        System.out.print("\n확인하고 싶은 내역을 선택하세요: ");
+        while (true) {
+            System.out.println("\n1. 현재 대기중인 발주 목록 확인");
+            System.out.println("2. 완료한 발주 목록 확인");
+            System.out.println("0. 돌아가기");
+            System.out.print("\n확인하고 싶은 내역을 선택하세요: ");
 
-        int choice = sc.nextInt();
-        sc.nextLine();
+            int choice = sc.nextInt();
+            sc.nextLine();
 
-        if (choice == 0) {
-            System.out.println("상위 메뉴로 돌아갑니다.");
-            return;
+            if (choice == 0) {
+                System.out.println("상위 메뉴로 돌아갑니다.");
+                return;
+            }
+
+            Map<Integer, Integer> map = shipmentController.selectOrderList(manageId, choice);
+            // 선택값이 1인 경우 수주 여부 확인
+            if (choice == 1){
+                System.out.print("주문의 상세조회를 원하신다면 번호를, 상위메뉴로 돌아갈 경우 0번을 입력하세요: ");
+                int orderDetail = sc.nextInt();
+            }
         }
-
-        List<ShipmentDto> orders = shipmentController.selectOrderList(manageId, choice);
-        Map<Integer, Integer> map = new HashMap<>();
+    }
+/*
+//        List<ShipmentDto> orders = shipmentController.selectOrderList(manageId, choice);
+//        Map<Integer, Integer> map = new HashMap<>();
         System.out.println("\n────────────────────────────────────────────────────────────────────────────────");
         System.out.println("주문번호\t 주문명\t\t\t 주문메모\t 주문상태\t 주문발생일");
 
@@ -155,4 +164,6 @@ public class WarehouseView {
         warehouseController.selectSearchProductLog(searchProductId);
     }
 
-}
+ */
+
+    }
