@@ -50,7 +50,7 @@
               #{storeId}
             , #{productId}
             , #{storeDetailPrice}
-            , #{store_detail_quantity}
+            , #{storeDetailQuantity}
             )
     </insert>
 
