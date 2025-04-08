@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class WarehouseShipmentLogDto {
+    private int warehouseId;
     private int productId;
     private int storeOrderId;
     private int warehouseShippingQuantity;

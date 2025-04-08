@@ -7,6 +7,7 @@
 
     <resultMap id="warehouseProductDetailResultMap" type="WarehouseProductDetailDto">
         <id property="warehouseDetailId" column="warehouse_detail_id"/>
+        <result property="productId" column="product_id"/>
         <result property="warehouseId" column="warehouse_id"/>
         <result property="warehouseDetailQuantity" column="warehouse_detail_quantity"/>
 
@@ -39,5 +40,27 @@
                  JOIN product p ON wd.product_id = p.product_id
         WHERE wd.warehouse_id = #{warehouseId}
         ORDER BY wd.warehouse_detail_id
+    </select>
+    
+    <update id="updateWarehouseDetail" parameterType="int">
+        UPDATE
+            warehouse_detail
+        SET
+            warehouse_detail_quantity = warehouse_detail_quantity - #{quantity}
+        WHERE
+            warehouse_id = #{warehouseId}
+        AND
+            product_id = #{productId}
+    </update>
+    
+    <select id="getProductQuantity" resultType="int">
+        SELECT
+            warehouse_detail_quantity
+        FROM
+            warehouse_detail
+        WHERE
+            warehouse_id = #{warehouseId}
+          AND
+            product_id = #{productId}
     </select>
 </mapper>

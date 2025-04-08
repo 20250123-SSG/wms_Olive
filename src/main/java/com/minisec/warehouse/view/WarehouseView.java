@@ -4,7 +4,6 @@ import com.minisec.common.login.Login;
 import com.minisec.warehouse.controller.WarehouseController;
 import com.minisec.warehouse.controller.ShipmentController;
 import com.minisec.warehouse.controller.StorageController;
-import com.minisec.warehouse.model.dto.ShipmentDetailDto;
 import com.minisec.warehouse.model.dto.ShipmentDto;
 
 import java.util.*;
@@ -38,7 +37,7 @@ public class WarehouseView {
                     selectOrderList(manageId);
                     break;
                 case "4":
-//                    selectProductLog(manageId);
+                    selectProductLog(manageId);
                     break;
                 case "0":
                     System.out.println("프로그램을 종료합니다.");
@@ -66,23 +65,45 @@ public class WarehouseView {
             }
 
             List<ShipmentDto> orderList = shipmentController.selectOrderList(manageId, choice);
+            if(orderList.isEmpty()){
+                return;
+            }
             System.out.print("주문의 상세조회를 원하신다면 번호를, 상위메뉴로 돌아갈 경우 0번을 입력하세요: ");
+
             // 선택값이 1인 경우 수주 여부 확인
-            int orderDetail = sc.nextInt();
+            int selectOrderDetail = sc.nextInt();
             sc.nextLine();
 
-            if (orderDetail == 0) {
+            if (selectOrderDetail == 0) {
                 System.out.println("상위 메뉴로 돌아갑니다.");
                 return;
             }
-            WarehouseResultView.displayShipmentDetailList(orderList.get(orderDetail - 1));
 
-        }
-        /*
-            if (choice == 1) { // 현재 대기중인 주문이라면
+            ShipmentDto shipmentDto = orderList.get(selectOrderDetail - 1);
+
+            // 상세정보
+            WarehouseResultView.displayShipmentDetailList(shipmentDto);
+
+            // 대기 주문인 경우 수주여부 추가
+            if (choice == 1) {
                 System.out.print("수주하시겠습니까? (Y/N): ");
                 String answer = sc.nextLine().trim().toUpperCase();
 
+                // 수주 시, 상태값 업데이트 + warehouse_detail 업데이트 + 로그 추가
+                if (answer.equals("Y")) {
+                    boolean isShip = shipmentController.acceptOrder(shipmentDto);
+                    if (isShip) {
+                        System.out.println("수주가 정상적으로 완료되었습니다.");
+                    }
+                } else {
+                    System.out.print("거절 사유를 작성해주세요: ");
+                    String memo = sc.nextLine();
+//                    boolean result = shipmentController.rejectOrder(orderId, memo);
+                    return;
+                }
+            }
+        }
+        /*
                 if (answer.equals("Y")) {
                     boolean result = shipmentController.acceptOrder(order.getStoreOrderId());
                     if (result) {
@@ -96,7 +117,6 @@ public class WarehouseView {
 
          */
     }
-
 
     // 상품별 입출고 로그 조회
     public void selectProductLog(int manageId) {

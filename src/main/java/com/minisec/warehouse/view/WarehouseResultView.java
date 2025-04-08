@@ -57,11 +57,11 @@ public class WarehouseResultView {
 
     public static void displayShipmentList(List<ShipmentDto> orders) {
         System.out.println("\n────────────────────────────────────────────────────────────────────────────────");
-        System.out.println("주문번호\t 주문명\t\t\t 주문메모\t\t 주문상태\t 주문발생일");
+        System.out.println("주문번호\t 주문명\t\t\t 주문메모\t\t 주문상태\t\t 주문처리일");
         for (int i = 0; i < orders.size(); ++i) {
             ShipmentDto order = orders.get(i);
             System.out.printf("%d\t %s\t\t\t %s\t\t %s\t\t %s \n",
-                    i + 1, order.getStoreOrderSubject(), order.getStoreOrderMemo(), getOrderStatus(order.getStoreOrderStatus()), order.getCreatedAt());
+                    i + 1, order.getStoreOrderSubject(), order.getStoreOrderMemo(), getOrderStatus(order.getStoreOrderStatus()), order.getShipmentDate());
         }
         System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
     }

@@ -10,8 +10,8 @@
         <result property="storeOrderSubject" column="store_order_subject"/>
         <result property="storeOrderStatus" column="store_order_status"/>
         <result property="storeOrderMemo" column="store_order_memo"/>
-        <result property="createdAt" column="created_at"/>
         <result property="shipmentDate" column="shipment_date"/>
+        <result property="createdAt" column="created_at"/>
 
         <collection property="shipmentDetails" ofType="com.minisec.warehouse.model.dto.ShipmentDetailDto">
             <result property="productId" column="product_id"/>
@@ -27,6 +27,8 @@
     <select id="selectOrderList" resultMap="StoreOrderMap">
         SELECT
             so.store_order_id,
+            so.warehouse_id,
+            so.store_id,
             so.store_order_subject,
             so.store_order_status,
             so.store_order_memo,
@@ -53,14 +55,9 @@
 
     <!--db 업데이트 -->
     <update id="updateOrderStatus">
-
         UPDATE store_order
-        SET store_order_status = #{status}
-        WHERE store_order_id = #{orderId}
-
-        <!-- 상품 수량 감소 -->
-        UPDATE store_order_detail
-        SET store_order_detail_quantity = store_order_detail_quantity - 1
+        SET store_order_status = #{status},
+            shipment_date = NOW()
         WHERE store_order_id = #{orderId}
     </update>
 

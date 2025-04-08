@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.minisec.warehouse.model.dao.WarehouseProductMapper">
     <resultMap id="warehouseLogMap" type="WarehouseShipmentLogDto">
+        <result property="warehouseId" column="warehouse_id"/>
         <result property="productId" column="product_id"/>
         <result property="storeOrderId" column="order_id"/>
         <result property="warehouseShippingQuantity" column="warehouse_shipping_quantity"/>
@@ -59,5 +60,21 @@
         WHERE wl.product_id = #{productId}
         ORDER BY wl.created_at DESC
     </select>
-
+    
+    <insert id="insertWarehouseShipmentLog" parameterType="WarehouseShipmentLogDto">
+        INSERT INTO
+            warehouse_shipping_log(
+                warehouse_id,
+                product_id,
+                order_id,
+                warehouse_shipping_quantity,
+                created_at
+        ) VALUES (
+                  #{warehouseId},
+                  #{productId},
+                  #{storeOrderId},
+                  #{warehouseShippingQuantity},
+                  NOW()
+        )
+    </insert>
 </mapper>
