@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class WarehouseProductDetailDto {
     private int warehouseDetailId;
+    private int productId;
     private int warehouseId;
     private int warehouseDetailQuantity;
     private ProductDto product;

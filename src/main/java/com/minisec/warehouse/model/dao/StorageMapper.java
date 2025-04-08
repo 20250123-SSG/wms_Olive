@@ -1,13 +1,14 @@
 package com.minisec.warehouse.model.dao;
 
-import com.minisec.warehouse.model.dto.StorageDto;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
+import com.minisec.warehouse.model.dto.StorageDto;
+
+
 public interface StorageMapper {
-    // 전체 입고 내역 조회
-    List<StorageDto> selectAllStorage();
+    List<StorageDto> selectAllStorage(@Param("warehouseId") int warehouseId);
 
     // warehouse_detail 테이블에서 product_id 존재 여부 확인
     Integer selectWarehouseProductQuantity(@Param("warehouseId") int warehouseId, @Param("productId") int productId);

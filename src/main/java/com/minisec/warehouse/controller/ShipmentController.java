@@ -1,43 +1,31 @@
 package com.minisec.warehouse.controller;
 
-import com.minisec.warehouse.model.dto.ShipmentDto;
-import com.minisec.warehouse.service.ShipmentService;
-
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.minisec.warehouse.model.dto.ShipmentDto;
+import com.minisec.warehouse.service.ShipmentService;
+import com.minisec.warehouse.view.WarehouseResultView;
+
 public class ShipmentController {
-    private ShipmentService shipmentService = new ShipmentService();
-
-    public ShipmentController() {
-
-    }
+    private final ShipmentService shipmentService = new ShipmentService();
 
     public List<ShipmentDto> selectOrderList(int manageId, int choice) {
         List<ShipmentDto> orders = shipmentService.getOrderList(manageId, choice);
         if (orders.isEmpty()) {
-            System.out.println("대기중인 발주 신청이 없습니다.");
-            return Collections.emptyList();
-        }
-        return orders;
-    }
-
-    public boolean acceptOrder(int orderId) {
-        return updateOrderStatus(orderId, '2'); // '2' = 수주
-    }
-
-   /* public boolean rejectOrder(int orderId) {
-        return updateOrderStatus(orderId, '3'); // '3' = 거절
-    }*/
-
-    private boolean updateOrderStatus(int orderId, char status) {
-        try {
-            shipmentService.updateOrderStatus(orderId, status);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            System.out.println("조회된 발주 내역이 없습니다.");
+            return new ArrayList<>();
+        } else {
+            WarehouseResultView.displayShipmentList(orders);
+            return orders;
         }
     }
 
+    public boolean acceptOrder(ShipmentDto shipmentDto) {
+        return shipmentService.acceptOrder(shipmentDto, '2');
+    }
+
+    public boolean rejectOrder(ShipmentDto shipmentDto, String memo) {
+        return shipmentService.rejectOrder(shipmentDto, memo, '3');
+    }
 }

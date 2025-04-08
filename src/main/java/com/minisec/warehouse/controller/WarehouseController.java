@@ -23,7 +23,6 @@ public class WarehouseController {
 
         List<WarehouseProductDetailDto> list = warehouseService.selectAllProducts(warehouseId);
         WarehouseResultView.displayProductList(list);
-        // <출력번호:상품번호> map을 생성후 return
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             WarehouseProductDetailDto item = list.get(i);

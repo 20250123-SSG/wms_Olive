@@ -2,43 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.minisec.warehouse.model.dao.ShipmentDao">
-
+<mapper namespace="com.minisec.warehouse.model.dao.ShipmentMapper">
     <resultMap id="StoreOrderMap" type="ShipmentDto">
         <id property="storeOrderId" column="store_order_id"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="storeId" column="store_id"/>
         <result property="storeOrderSubject" column="store_order_subject"/>
         <result property="storeOrderStatus" column="store_order_status"/>
         <result property="storeOrderMemo" column="store_order_memo"/>
+        <result property="shipmentDate" column="shipment_date"/>
         <result property="createdAt" column="created_at"/>
-        <collection property="orderDetails" ofType="ShipmentDetailDto">
+
+        <collection property="shipmentDetails" ofType="com.minisec.warehouse.model.dto.ShipmentDetailDto">
             <result property="productId" column="product_id"/>
-            <result property="productName" column="product_name"/>
             <result property="storeOrderDetailQuantity" column="store_order_detail_quantity"/>
-            <result property="createdAt" column="created_at"/>
+        </collection>
+
+        <collection property="products" ofType="com.minisec.common.product.ProductDto">
+            <result property="productName" column="product_name"/>
+            <result property="productPrice" column="product_price"/>
         </collection>
     </resultMap>
-
-    <!--db 업데이트 -->
-    <update id="updateOrderStatus">
-
-        UPDATE store_order
-        SET store_order_status = #{status}
-        WHERE store_order_id = #{orderId}
-
-        <!-- 상품 수량 감소 -->
-        UPDATE store_order_detail
-        SET store_order_detail_quantity = store_order_detail_quantity - 1
-        WHERE store_order_id = #{orderId}
-    </update>
 
     <select id="selectOrderList" resultMap="StoreOrderMap">
         SELECT
             so.store_order_id,
+            so.warehouse_id,
+            so.store_id,
             so.store_order_subject,
+            so.store_order_status,
             so.store_order_memo,
-            so.created_at
+            so.shipment_date,
+            so.created_at,
+            sod.product_id,
+            sod.store_order_detail_quantity,
+            p.product_name,
+            p.product_price
         FROM
             store_order so
+        JOIN store_order_detail sod ON sod.store_order_id = so.store_order_id
+        JOIN product p ON p.product_id = sod.product_id
         WHERE
             so.warehouse_id = #{warehouseId}
         <if test="choice == 1">
@@ -48,6 +51,17 @@
             AND so.store_order_status IN ('2', '3')
         </if>
         ORDER BY so.created_at DESC
-</select>
+    </select>
+
+    <!--db 업데이트 -->
+    <update id="updateOrderStatus">
+        UPDATE store_order
+        SET store_order_status = #{status}
+        <if test="status == '3'">
+            , store_order_memo = #{memo}
+        </if>
+        , shipment_date = NOW()
+        WHERE store_order_id = #{orderId}
+    </update>
 
 </mapper>

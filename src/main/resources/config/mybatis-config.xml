@@ -25,7 +25,6 @@
         <typeAlias type="com.minisec.user.model.dto.cart.CartProductDeleteDto" alias="CartProductDeleteDto"/>
 
         <!-- Warehouse -->
-        <typeAlias type="com.minisec.warehouse.model.dto.WarehouseDto" alias="WarehouseDto"/>
         <typeAlias type="com.minisec.warehouse.model.dto.WarehouseProductDetailDto" alias="WarehouseProductDetailDto"/>
         <typeAlias type="com.minisec.warehouse.model.dto.WarehouseReceiveLogDto" alias="WarehouseReceiveLogDto"/>
         <typeAlias type="com.minisec.warehouse.model.dto.WarehouseShipmentLogDto" alias="WarehouseShipmentLogDto"/>

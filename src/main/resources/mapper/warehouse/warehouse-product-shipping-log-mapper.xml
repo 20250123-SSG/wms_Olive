@@ -3,15 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.minisec.warehouse.model.dao.WarehouseProductMapper">
-
-    <!-- WarehouseLogDto와 연관 객체(ProductDto, StoreOrderDto) 매핑 -->
-    <resultMap id="warehouseLogMap" type="com.minisec.warehouse.model.dto.WarehouseShipmentLogDto">
+    <resultMap id="warehouseLogMap" type="WarehouseShipmentLogDto">
+        <result property="warehouseId" column="warehouse_id"/>
         <result property="productId" column="product_id"/>
         <result property="storeOrderId" column="order_id"/>
         <result property="warehouseShippingQuantity" column="warehouse_shipping_quantity"/>
         <result property="warehouseLogTime" column="created_at"/>
 
-        <association property="product" javaType="com.minisec.common.product.ProductDto">
+        <association property="product" javaType="ProductDto">
             <result property="productId" column="product_id"/>
             <result property="categoryId" column="category_id"/>
             <result property="productName" column="product_name"/>
@@ -61,5 +60,21 @@
         WHERE wl.product_id = #{productId}
         ORDER BY wl.created_at DESC
     </select>
-
+    
+    <insert id="insertWarehouseShipmentLog" parameterType="WarehouseShipmentLogDto">
+        INSERT INTO
+            warehouse_shipping_log(
+                warehouse_id,
+                product_id,
+                order_id,
+                warehouse_shipping_quantity,
+                created_at
+        ) VALUES (
+                  #{warehouseId},
+                  #{productId},
+                  #{storeOrderId},
+                  #{warehouseShippingQuantity},
+                  NOW()
+        )
+    </insert>
 </mapper>

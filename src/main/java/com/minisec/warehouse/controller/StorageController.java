@@ -12,8 +12,8 @@ public class StorageController {
     private StorageService storageService = new StorageService();
 
     // 입고 내역 조회
-    public void selectFilteredStorageList() {
-        List<StorageDto> list = storageService.selectAllStorage();
+    public void selectFilteredStorageList(int manageId) {
+        List<StorageDto> list = storageService.selectAllStorage(manageId);
         List<StorageDto> finalReceivedList = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
 
@@ -46,7 +46,7 @@ public class StorageController {
             for (int i = 0; i <= 100; i += 10) {
                 System.out.print("\r불량품 검사중: " + i + "%");
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -60,6 +60,10 @@ public class StorageController {
             storageService.insertOrUpdateWarehouseProduct(storage.getWarehouseId(), storage.getProductId(), finalQuantity);
 
             System.out.println("입고 완료되었습니다.\n");
+
+            // 로그 기록
+            storage.setStorageQuantity(finalQuantity);
+            storageService.insertWarehouseProductLog(storage);
 
             // 최종 입고된 리스트에 추가
             StorageDto receivedStorage = new StorageDto(
@@ -89,9 +93,6 @@ public class StorageController {
                 System.out.printf("%-5d %-25s(%d) %-20s %-10d\n", index++, productName, storage.getProductId(), storage.getSupplierName(), storage.getStorageQuantity());
             }
         }
-
-            // 로그 기록
-            //storageService.insertWarehouseProduct(storage);
         System.out.println("──────────────────────────────────────────────────────────────────────────");
     }
 }
