@@ -2,6 +2,7 @@ package com.minisec.user.view.function;
 
 import com.minisec.common.login.Login;
 import com.minisec.user.controller.OrderController;
+import com.minisec.user.model.dto.order.OrderDetailFilterDto;
 import com.minisec.user.model.dto.store.StoreProductDto;
 import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.store.StoreDto;
@@ -9,6 +10,7 @@ import com.minisec.user.model.manager.LocalOrderManager;
 import com.minisec.user.view.details.InputFunctionNumberView;
 import com.minisec.user.view.details.InputOrderMemoView;
 import com.minisec.user.view.printer.ExceptionPrinter;
+import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 import com.minisec.user.view.printer.store.ShopProductPrinter;
 import com.minisec.user.view.printer.store.StoreListPrinter;
 
@@ -46,9 +48,15 @@ public class OrderView {
                         2. 구매 목록 상품 담기
                         0. 장바구니에 담고 구매 종료하기
                         """);
-
                 int functionNum = InputFunctionNumberView.input();
-                if (functionNum == 2) break;
+
+                if (functionNum == 2) {
+                    if (localOrderManager.isEmptyStoreProduct()) {
+                        System.out.println("\n\n모든 상품을 담았습니다.");
+                        continue;
+                    }
+                    break;
+                }
                 if (functionNum == 1) {
                     purchase(user);
                     return;
@@ -57,11 +65,11 @@ public class OrderView {
                     addToCart(user);
                     return;
                 }
+
                 ExceptionPrinter.print("존재하지 않는 기능입니다.");
             }
         }
     }
-
 
 
     private void purchase(Login user) {
@@ -82,15 +90,16 @@ public class OrderView {
 
 
     private StoreDto inputStore() {
-        List<StoreDto> storeList = orderController.selectStoreList();
-        StoreListPrinter.print(storeList);
+        Map<Integer, StoreDto> storeListByUniqueNumber = orderController.selectStoreListByUniqueNumber();
+        StoreListPrinter.print(storeListByUniqueNumber);
+
         while (true) {
             System.out.println("[ 상품을 구입할 가맹점을 선택해주세요 ]");
             System.out.print(">> 입력:");
             String storeNum = sc.nextLine();
 
             try {
-                return localOrderManager.getStoreByStoreId(storeList, storeNum);
+                return localOrderManager.getStoreByStoreId(storeListByUniqueNumber, storeNum);
             } catch (IllegalArgumentException e) {
                 ExceptionPrinter.print(e.getMessage());
             }
@@ -118,12 +127,15 @@ public class OrderView {
 
     private int inputOrderQuantity(StoreProductDto product) {
         ShopProductPrinter.printProductDetail(product);
+
         while (true) {
             System.out.println("[ 구매할 상품의 수량을 입력해주세요. ]");
             System.out.print(">> 입력:");
 
             try {
-                return localOrderManager.getOrderQuantity(sc.nextLine());
+                int quantity = localOrderManager.getOrderQuantity(sc.nextLine());
+                OrderDetailsPrinter.printTotalPriceByOneProduct(product, quantity);
+                return quantity;
             } catch (IllegalArgumentException e) {
                 ExceptionPrinter.print(e.getMessage());
             }

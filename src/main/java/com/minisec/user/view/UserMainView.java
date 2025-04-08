@@ -1,6 +1,7 @@
 package com.minisec.user.view;
 
 import com.minisec.common.login.Login;
+import com.minisec.user.view.details.InputFunctionNumberView;
 import com.minisec.user.view.function.CartView;
 import com.minisec.user.view.function.OrderHistoryView;
 import com.minisec.user.view.function.OrderView;
@@ -22,7 +23,7 @@ public class UserMainView {
                 4. 구매 내역 조회
                 0. 종료하기
                 >> 입력 :""");
-            int functionNum = Integer.parseInt(sc.nextLine());
+            int functionNum = InputFunctionNumberView.input();
 
             if(functionNum == 0){
                 System.out.println("프로그램을 종료합니다.");

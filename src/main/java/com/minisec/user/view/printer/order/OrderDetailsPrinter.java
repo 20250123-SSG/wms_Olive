@@ -2,6 +2,7 @@ package com.minisec.user.view.printer.order;
 
 import com.minisec.user.model.dto.order.OrderDto;
 import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
 
 import java.util.List;
 
@@ -51,6 +52,11 @@ public class OrderDetailsPrinter {
         }
         result.append("\n");
         return result.toString();
+    }
+
+
+    public static void printTotalPriceByOneProduct(StoreProductDto product, int quantity) {
+        System.out.printf("\n해당 상품 총 가격 : %,d원\n", product.getStoreProductPriceAfterDiscount() * quantity);
     }
 
 }

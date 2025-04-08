@@ -31,19 +31,18 @@ public class CartService {
             for (CartDto cart : cartList) {
                 Integer existCartId = cartDao.selectCartId(cart);
 
+                int insertResult = 0;
+
                 if (existCartId == null) {
-                    int insertNewCartResult = cartDao.insertCart(cart);
-                    if (insertNewCartResult != 1) {
-                        sqlSession.rollback();
-                        throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
-                    }
+                    insertResult = cartDao.insertCart(cart);
                 } else {
                     cart.setCartId(existCartId);
-                    int updateExistedCartResult = cartDao.updateCartByCartId(cart);
-                    if (updateExistedCartResult != 1) {
-                        sqlSession.rollback();
-                        throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
-                    }
+                    insertResult = cartDao.updateCartByCartId(cart);
+                }
+
+                if (insertResult != 1) {
+                    sqlSession.rollback();
+                    throw new IllegalArgumentException("장바구니 추가에 실패하였습니다.");
                 }
             }
 
