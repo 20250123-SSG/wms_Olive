@@ -3,8 +3,8 @@ package com.minisec.user.model.manager.helper;
 import com.minisec.common.login.Login;
 import com.minisec.user.common.OrderStatus;
 import com.minisec.user.model.dto.order.OrderDto;
-import com.minisec.user.model.dto.order.OrderProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,6 @@ public class OrderDtoAssembler {
             StoreDto store = entry.getKey();
             List<OrderProductDto> orderProductList = entry.getValue();
 
-            validateUserAmount();
             OrderDto order = new OrderDto(
                     store,
                     user.getUserId(),
@@ -31,7 +30,4 @@ public class OrderDtoAssembler {
         return result;
     }
 
-    private void validateUserAmount() {
-
-    }
 }

@@ -1,8 +1,8 @@
 package com.minisec.user.view.printer.cart;
 
-import com.minisec.user.model.dto.StoreProductDto;
-import com.minisec.user.model.dto.order.OrderProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.store.StoreProductDto;
+import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +32,7 @@ public class CartDetailsPrinter {
         System.out.println();
     }
 
+
     private static void printDetails(Map<StoreDto, List<OrderProductDto>> details) {
         int totalPrice = 0;
         int totalQuantity = 0;
@@ -59,14 +60,15 @@ public class CartDetailsPrinter {
             }
             System.out.println();
         }
-        System.out.println("===============================");
+        System.out.println("........................");
         System.out.printf("총 가격 : %,d원\n", totalPrice);
         System.out.printf("총 수량 : %,d개\n", totalQuantity);
     }
 
+
     public static void printUniqueNumber(Map<StoreDto, List<OrderProductDto>> cartByStoreList) {
         if (cartByStoreList == null || cartByStoreList.isEmpty()) {
-            System.out.println("장바구니가 비어있습니다.");
+            System.out.println("\n\n장바구니가 비어있습니다.");
             return;
         }
         int uniqueNumber = 1;

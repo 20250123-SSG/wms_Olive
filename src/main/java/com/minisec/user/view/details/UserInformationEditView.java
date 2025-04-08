@@ -13,25 +13,33 @@ public class UserInformationEditView {
     private final UserManagementController userManagementController = new UserManagementController();
 
     public void run(Login user) {
-        System.out.println("========== 개인 정보 수정 ==========");
-        System.out.println("""
-                1. 아이디
-                2. 비번
-                3. 이름
-                4. 전화번호
-                5. 주소
-                0. 뒤로가기
-                >> 입력""");
 
-        switch (Integer.parseInt(sc.nextLine())) {
-            case 0 :                                                   return;
-            case 1 : update(user, UserInformationEditOption.ID);       break;
-            case 2 : update(user, UserInformationEditOption.PASSWORD); break;
-            case 3 : update(user, UserInformationEditOption.NAME);     break;
-            case 4 : update(user, UserInformationEditOption.PHONE);    break;
-            case 5 : update(user, UserInformationEditOption.ADDRESS);  break;
+        while (true) {
+            System.out.println("\n\n======================================================");
+            System.out.println("------------------- 개인정보 수정 --------------------\n");
+            System.out.println("""
+                    1. 아이디
+                    2. 비번
+                    3. 이름
+                    4. 전화번호
+                    5. 주소
+                    0. 뒤로가기
+                    """);
+
+            switch (InputFunctionNumberView.input()) {
+                case 0 :                                                   return;
+                case 1 : update(user, UserInformationEditOption.ID);       break;
+                case 2 : update(user, UserInformationEditOption.PASSWORD); break;
+                case 3 : update(user, UserInformationEditOption.NAME);     break;
+                case 4 : update(user, UserInformationEditOption.PHONE);    break;
+                case 5 : update(user, UserInformationEditOption.ADDRESS);  break;
+                default:
+                    System.out.println("존재하지 않는 기능입니다.");
+                    continue;
+            }
         }
     }
+
 
 
     private void update(Login user, UserInformationEditOption editOption) {
@@ -45,7 +53,7 @@ public class UserInformationEditView {
             case ADDRESS :  before = user.getUserAddress(); break;
             default: return;
         }
-        System.out.printf("변경할 %s를 입력하세요.\n", editOption.getValue());
+        System.out.printf("\n\n변경할 %s를 입력하세요.\n", editOption.getValue());
         System.out.println(">> 입력:");
 
         userManagementController.updateUserInformationByFilter(

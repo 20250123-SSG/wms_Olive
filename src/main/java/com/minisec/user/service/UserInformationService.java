@@ -1,9 +1,8 @@
 package com.minisec.user.service;
 
-import com.minisec.common.Template;
 import com.minisec.common.login.Login;
-import com.minisec.user.model.dao.UserDao;
-import com.minisec.user.model.dto.order.UserBalanceUpdateDto;
+import com.minisec.user.model.dao.user.UserDao;
+import com.minisec.user.model.dto.user.UserBalanceUpdateDto;
 import com.minisec.user.model.dto.user.UserInformationEditFilterDto;
 import org.apache.ibatis.session.SqlSession;
 
@@ -13,6 +12,7 @@ public class UserInformationService {
 
     private UserDao userDao;
 
+
     public Login selectUserByUserId(int userId) {
         try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
@@ -21,6 +21,7 @@ public class UserInformationService {
         }
     }
 
+
     public void updateUserInformationByFilter(UserInformationEditFilterDto filter) {
         try (SqlSession sqlSession = getSqlSession()) {
             userDao = sqlSession.getMapper(UserDao.class);
@@ -28,12 +29,13 @@ public class UserInformationService {
             int result = userDao.updateUserInformationByFilter(filter);
             if (result != 1) {
                 sqlSession.rollback();
-                throw new RuntimeException("개인정보 수정에 실패하였습니다.");
+                throw new IllegalArgumentException("개인정보 수정에 실패하였습니다.");
             }
 
             sqlSession.commit();
         }
     }
+
 
     public void updateUserBalance(UserBalanceUpdateDto balanceUpdate) {
         try (SqlSession sqlSession = getSqlSession()) {

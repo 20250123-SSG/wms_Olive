@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.minisec.user.model.dao.UserDao">
+<mapper namespace="com.minisec.user.model.dao.user.UserDao">
 
     <resultMap id="userResultMap" type="Login">
         <id     column="user_id"       property="userId"/>

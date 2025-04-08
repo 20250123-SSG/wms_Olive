@@ -1,6 +1,7 @@
 package com.minisec.user.view;
 
 import com.minisec.common.login.Login;
+import com.minisec.user.view.details.InputFunctionNumberView;
 import com.minisec.user.view.function.CartView;
 import com.minisec.user.view.function.OrderHistoryView;
 import com.minisec.user.view.function.OrderView;
@@ -12,15 +13,17 @@ public class UserMainView {
     private Scanner sc = new Scanner(System.in);
 
     public void run(Login loginInfo) {
+
+        System.out.printf("\n\n%s님 안녕하세요.\n\n",loginInfo.getUserName());
         while(true){
             System.out.println("""
-                1. 개인 정보 관리
+                1. 개인정보 관리
                 2. 장바구니 관리
                 3. 구매
                 4. 구매 내역 조회
                 0. 종료하기
                 >> 입력 :""");
-            int functionNum = Integer.parseInt(sc.nextLine());
+            int functionNum = InputFunctionNumberView.input();
 
             if(functionNum == 0){
                 System.out.println("프로그램을 종료합니다.");

@@ -1,7 +1,7 @@
 package com.minisec.user.model.dto.cart;
 
-import com.minisec.user.model.dto.order.OrderProductDto;
-import com.minisec.user.model.dto.order.StoreDto;
+import com.minisec.user.model.dto.OrderProductDto;
+import com.minisec.user.model.dto.store.StoreDto;
 import lombok.*;
 
 import java.util.List;
@@ -20,6 +20,7 @@ public class CartDetailByStoreDto {
 
     private StoreDto store;
     private List<OrderProductDto> orderProductList;
+
 
     @Override
     public boolean equals(Object o) {

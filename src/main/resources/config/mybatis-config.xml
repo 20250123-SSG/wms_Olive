@@ -13,13 +13,13 @@
         <typeAlias type="com.minisec.common.product.ProductDto" alias="ProductDto"/>
         <!-- User -->
         <typeAlias type="com.minisec.user.model.dto.user.UserInformationEditFilterDto" alias="UserInformationEditFilterDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.OrderDetailFilterDto" alias="OrderDetailFilterDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.StoreDto" alias="StoreDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.OrderProductDto" alias="OrderProductDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreDto" alias="StoreDto"/>
+        <typeAlias type="com.minisec.user.model.dto.OrderProductDto" alias="OrderProductDto"/>
         <typeAlias type="com.minisec.user.model.dto.order.OrderDto" alias="OrderDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.StoreInventoryDeductionDto" alias="StoreInventoryDeductionDto"/>
-        <typeAlias type="com.minisec.user.model.dto.order.UserBalanceUpdateDto" alias="UserBalanceUpdateDto"/>
-        <typeAlias type="com.minisec.user.model.dto.StoreProductDto" alias="StoreProductDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreInventoryDeductionDto" alias="StoreInventoryDeductionDto"/>
+        <typeAlias type="com.minisec.user.model.dto.user.UserBalanceUpdateDto" alias="UserBalanceUpdateDto"/>
+        <typeAlias type="com.minisec.user.model.dto.order.OrderDetailFilterDto" alias="OrderDetailFilterDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreProductDto" alias="StoreProductDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartDto" alias="CartDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartDetailByStoreDto" alias="CartDetailByStoreDto"/>
         <typeAlias type="com.minisec.user.model.dto.cart.CartProductDeleteDto" alias="CartProductDeleteDto"/>

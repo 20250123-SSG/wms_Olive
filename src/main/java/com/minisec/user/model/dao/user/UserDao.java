@@ -1,7 +1,7 @@
-package com.minisec.user.model.dao;
+package com.minisec.user.model.dao.user;
 
 import com.minisec.common.login.Login;
-import com.minisec.user.model.dto.order.UserBalanceUpdateDto;
+import com.minisec.user.model.dto.user.UserBalanceUpdateDto;
 import com.minisec.user.model.dto.user.UserInformationEditFilterDto;
 
 public interface UserDao {

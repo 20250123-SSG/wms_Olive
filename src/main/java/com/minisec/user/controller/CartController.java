@@ -1,11 +1,15 @@
 package com.minisec.user.controller;
 
 import com.minisec.common.login.Login;
+import com.minisec.user.model.dto.OrderProductDto;
 import com.minisec.user.model.dto.cart.CartDetailByStoreDto;
 import com.minisec.user.model.dto.cart.CartDto;
 import com.minisec.user.model.dto.cart.CartOrderProcessDto;
 import com.minisec.user.model.dto.cart.CartProductDeleteDto;
 import com.minisec.user.model.dto.order.*;
+import com.minisec.user.model.dto.store.StoreDto;
+import com.minisec.user.model.dto.store.StoreInventoryDeductionDto;
+import com.minisec.user.model.dto.user.UserBalanceUpdateDto;
 import com.minisec.user.service.CartService;
 import com.minisec.user.service.OrderService;
 import com.minisec.user.view.printer.DeleteStatusPrinter;
@@ -28,34 +32,25 @@ public class CartController {
     }
 
 
-    public Map<StoreDto,List<OrderProductDto>> selectAllCartDetailListByUserId(Login user) {
+
+    public Map<StoreDto, List<OrderProductDto>> selectAllCartDetailListByUserId(Login user) {
         Map<StoreDto, List<OrderProductDto>> result = new HashMap<>();
 
         List<CartDetailByStoreDto> cartDetailByStoreList = cartService.selectAllCartDetailListByUserId(user.getUserId());
 
-        for(CartDetailByStoreDto cartDetailByStore : cartDetailByStoreList) {
-
+        for (CartDetailByStoreDto cartDetailByStore : cartDetailByStoreList) {
             StoreDto storeDto = cartDetailByStore.getStore();
             List<OrderProductDto> orderProductList = cartDetailByStore.getOrderProductList();
-///db 셈플 데이터 변경하면 지워도될듯
-//            for(OrderProductDto orderProduct : cartDetailByStoreDto.getOrderProductList()) { ///상품을 통합하여 저장하기 때문에 필요 없다, 단 유니크제약이 아니라
-//                if(orderProductList.contains(orderProduct)) {
-//                    int newQuantity = orderProduct.getQuantity();
-//                    orderProduct = orderProductList.get(orderProductList.indexOf(orderProduct));
-//                    orderProduct.updateQuantity(newQuantity);
-//                    continue;
-//                }
-//                orderProductList.add(orderProduct);
-//            }
-            result.put(storeDto,orderProductList);
+
+            result.put(storeDto, orderProductList);
         }
         return result;
     }
 
 
-    public void orderFromCart(Login user, List<OrderDto> orderList){
-        List<StoreInventoryDeductionDto> storeInventoryDeductionList = new ArrayList<>(); ///1
-        List<UserBalanceUpdateDto> userAmountDeductionList = new ArrayList<>(); ///2
+    public void orderFromCart(Login user, List<OrderDto> orderList) {
+        List<StoreInventoryDeductionDto> storeInventoryDeductionList = new ArrayList<>();
+        List<UserBalanceUpdateDto> userAmountDeductionList = new ArrayList<>();
         List<Integer> storeProductIdList = new ArrayList<>();
 
         for (OrderDto orderDto : orderList) {
@@ -94,10 +89,10 @@ public class CartController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         InsertStatusPrinter.printInsertOrderList(true);
         selectAllOrderDetailListByOrderId(orderList);
     }
-
 
     private void selectAllOrderDetailListByOrderId(List<OrderDto> orderList) {
         List<OrderDetailFilterDto> orderDetailFilterList = new ArrayList<>();
@@ -113,46 +108,6 @@ public class CartController {
     }
 
 
-    public void deleteAllCartListByUserId(Login user) {
-        try {
-            cartService.deleteAllCartListByUserId(user.getUserId());
-        } catch (IllegalArgumentException e) {
-            ExceptionPrinter.print(e.getMessage());
-            return;
-        }
-        DeleteStatusPrinter.printDeleteCart(true);
-    }
-
-
-    public void deleteCartListByChoice(Login user,
-                                       Map<StoreDto,List<OrderProductDto>> allCartList,
-                                       String inputDeleteCartNumber){
-        List<Integer> storeProductIdList = new ArrayList<>();
-
-        List<OrderProductDto> allCartProduct = new ArrayList<>();
-        for(StoreDto store : allCartList.keySet()) {
-            allCartProduct.addAll(allCartList.get(store));
-        }
-        for(String input : inputDeleteCartNumber.split(",")) {
-            int index = Integer.parseInt(input.trim())-1;
-            OrderProductDto cartProduct = allCartProduct.get(index);
-
-            storeProductIdList.add(cartProduct.getProduct().getStoreProductId());
-        }
-
-        try {
-            cartService.deleteCartList(new CartProductDeleteDto(
-                    user.getUserId(),
-                    storeProductIdList
-            ));
-        } catch (IllegalArgumentException e) {
-            ExceptionPrinter.print(e.getMessage());
-            return;
-        }
-        DeleteStatusPrinter.printDeleteCart(true);
-    }
-
-
     public void updateCartProductQuantity(Map<StoreDto, List<OrderProductDto>> allCartList,
                                           String inputUpdateCartProductQuantity,
                                           String inputEditQuantity) {
@@ -162,10 +117,24 @@ public class CartController {
             allCartProduct.addAll(allCartList.get(store));
         }
 
-        int index = Integer.parseInt(inputUpdateCartProductQuantity.trim()) - 1;
-        int editQuantity = Integer.parseInt(inputEditQuantity.trim());
+        int index = 0;
+        int editQuantity = 0;
+        OrderProductDto editQuantityProduct = null;
+        try {
+            index = Integer.parseInt(inputUpdateCartProductQuantity.trim()) - 1;
+            editQuantity = Integer.parseInt(inputEditQuantity.trim());
 
-        OrderProductDto editQuantityProduct = allCartProduct.get(index);
+            if (editQuantity <= 0) {
+                throw new IllegalArgumentException("수량은 1개 이상 입력해주세요.");
+            }
+            editQuantityProduct = allCartProduct.get(index);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("수정 번호와 수량은 숫자로 입력해주세요.");
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("존재하지 않는 상품 번호입니다");
+        }
+
         editQuantityProduct.setQuantity(editQuantity);
 
         CartDto editCart = new CartDto();
@@ -178,7 +147,57 @@ public class CartController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         UpdateStatusPrinter.printUpdateCartQuantity(true);
+    }
+
+
+    public void deleteCartListByChoice(Login user,
+                                       Map<StoreDto, List<OrderProductDto>> allCartList,
+                                       String inputDeleteCartNumber) {
+
+        List<Integer> storeProductIdList = new ArrayList<>();
+
+        List<OrderProductDto> allCartProduct = new ArrayList<>();
+        for (StoreDto store : allCartList.keySet()) {
+            allCartProduct.addAll(allCartList.get(store));
+        }
+        try {
+            for (String input : inputDeleteCartNumber.split(",")) {
+                int index = Integer.parseInt(input.trim()) - 1;
+                OrderProductDto cartProduct = allCartProduct.get(index);
+
+                storeProductIdList.add(cartProduct.getProduct().getStoreProductId());
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("장바구니 번호를 입력해주세요.");
+        } catch (IndexOutOfBoundsException e) {
+            throw new IllegalArgumentException("존재하지 않는 장바구니 상품입니다.");
+        }
+
+        try {
+            cartService.deleteCartList(new CartProductDeleteDto(
+                    user.getUserId(),
+                    storeProductIdList
+            ));
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
+            return;
+        }
+
+        DeleteStatusPrinter.printDeleteCart(true);
+    }
+
+
+    public void deleteAllCartListByUserId(Login user) {
+        try {
+            cartService.deleteAllCartListByUserId(user.getUserId());
+        } catch (IllegalArgumentException e) {
+            ExceptionPrinter.print(e.getMessage());
+            return;
+        }
+
+        DeleteStatusPrinter.printDeleteCart(true);
     }
 
 }
