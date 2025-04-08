@@ -11,14 +11,18 @@ public class StoreProductView {
         while (true) {
             System.out.print("""
                     \n======================================
-                    ----- 가맹점 상품 관리 ------
+                               
+                               가맹점 상품 관리 
+                    
                     1. 가맹점 상품 조회
                     2. 가맹점 상품 등록
                     3. 가맹점 상품 수정
                     4. 가맹점 상품 삭제
                     0. 돌아가기
+                    
                     ======================================
-                    >> 입력: """);
+                    
+                    > 입력: """);
 
             String productDetailMenu = sc.nextLine();
             switch (productDetailMenu) {

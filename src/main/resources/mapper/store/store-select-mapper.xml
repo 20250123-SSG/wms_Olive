@@ -36,6 +36,8 @@
                 JOIN store_user su ON sd.store_id = su.store_id
         WHERE
             su.user_id = #{manageId}
+        ORDER BY
+            product_id ASC
 
     </select>
     
@@ -57,8 +59,9 @@
                 JOIN product p ON p.product_id = sd.product_id
                 JOIN category c ON p.category_id = c.category_id
                 JOIN store s ON s.store_id = sd.store_id
+                JOIN store_user su ON sd.store_id = su.store_id
         WHERE
-            s.user_id = #{manageId}
+            su.user_id = #{manageId}
             AND p.product_name LIKE CONCAT('%', #{searchName}, '%')
     </select>
     
@@ -78,8 +81,9 @@
                 JOIN product p ON p.product_id = sd.product_id
                 JOIN category c ON p.category_id = c.category_id
                 JOIN store s ON s.store_id = sd.store_id
+                JOIN store_user su ON sd.store_id = su.store_id
         WHERE
-            s.user_id = #{manageId}
+            su.user_id = #{manageId}
             AND c.category_name LIKE CONCAT('%', #{searchCategory}, '%')
     </select>
 
@@ -99,8 +103,9 @@
                 JOIN product p ON p.product_id = sd.product_id
                 JOIN category c ON p.category_id = c.category_id
                 JOIN store s ON s.store_id = sd.store_id
+                JOIN store_user su ON sd.store_id = su.store_id
         WHERE
-            s.user_id = #{manageId}
+            su.user_id = #{manageId}
             AND sd.store_detail_quantity <![CDATA[<=]]> 10
     </select>
 

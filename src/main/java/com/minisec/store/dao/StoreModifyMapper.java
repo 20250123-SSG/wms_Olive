@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface StoreModifyMapper {
 
-    List<StoreProductDto> productList(int storeId);
+    List<StoreProductDto> unregisteredProductList(int storeId);
     int insertStoreProduct(Map<String, Object> param);
     List<StoreProductDto> selectStoreProductById(Map<String, String> param);
     int updateStoreProduct(Map<String, Object> param);

@@ -8,35 +8,39 @@ public class StoreDetailView {
 
     // 가맹점 재고 조회된 상품 목록을 출력해주는 화면
     public static void displayDetailList(List<StoreProductDto> list) {
-        if(list.isEmpty()){
+        if (list.isEmpty()) {
             System.out.println("조회된 상품이 없습니다.");
-        }else {
+        } else {
+            System.out.println("\n─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n");
+            System.out.println("가맹점 상품 목록\n");
             for (StoreProductDto store : list) {
-                System.out.printf( "%d\t%s\t%s\t%s\t%d원\t%d\t%d\t%d\n",
-
+                System.out.printf("번호-%d   상품명: %s,  브랜드: %s,  카테고리: %s,  가격: %d원,  수량: %d개,  할인: %s,  상태: %s\n",
                         store.getProductId(),
                         store.getProductName(),
                         store.getProductBrandName(),
                         store.getCategoryName(),
                         store.getStoreDetailPrice(),
                         store.getStoreDetailQuantity(),
-
-                        store.getIsDiscount(),
-                        store.getStoreDetailStatus() );
+                        store.getIsDiscount() == 1 ? "Y" : "N",
+                        store.getStoreDetailStatus() == 1 ? "Y" : "N"
+                );
             }
+            System.out.println("\n─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n");
         }
     }
 
-    // 총 상품 목록 조회된 상품 목록을 출력해주는 화면
+    // 가맹점에 없는 상품 목록 출력해주는 화면
     public static void displayProductList(List<StoreProductDto> list) {
-            for (StoreProductDto store : list) {
-                System.out.printf( "%d\t%s\t%s\t%s\t%d원\n",
+        System.out.println("\n────────────────────────────────────────────────────────────────────────────────\n");
+        System.out.println("추가 가능한 상품 목록\n");
+        for (StoreProductDto store : list) {
+                System.out.printf("번호-%d   상품명: %s,  브랜드: %s,  카테고리: %s \n",
                         store.getProductId(),
                         store.getProductName(),
                         store.getProductBrandName(),
-                        store.getCategoryName(),
-                        store.getProductPrice() );
+                        store.getCategoryName());
             }
+        System.out.println("\n────────────────────────────────────────────────────────────────────────────────\n");
     }
 
     // 등록, 수정, 삭제 요청시 결과를 출력해주는 화면

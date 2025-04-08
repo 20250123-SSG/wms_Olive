@@ -14,10 +14,10 @@ public class StoreModifyService {
 
     private StoreModifyMapper storeModifyMapper;
 
-    public List<StoreProductDto> ProductList(int storeId) {
+    public List<StoreProductDto> unregisteredProductList(int storeId) {
         SqlSession sqlSession = getSqlSession();
         storeModifyMapper = sqlSession.getMapper(StoreModifyMapper.class);
-        List<StoreProductDto> list = storeModifyMapper.productList(storeId);
+        List<StoreProductDto> list = storeModifyMapper.unregisteredProductList(storeId);
         sqlSession.close();
         return list;
     }

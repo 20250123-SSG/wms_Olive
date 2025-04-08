@@ -17,7 +17,7 @@ public class StoreSelectController {
     public void selectProductListAll(int manageId) {
         Map<String, Object> param = new HashMap<>();
         param.put("manageId", manageId);
-        List<StoreProductDto> list = storeSelectService.selectProductListAll(param);
+        List<StoreProductDto> list = storeSelectService.selectAllProduct(param);
         storeDetailView.displayDetailList(list);
     }
 

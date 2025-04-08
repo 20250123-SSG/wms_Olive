@@ -13,8 +13,7 @@ public class StoreModifyController {
     private StoreDetailView storeDetailView = new StoreDetailView();
 
     public void productList(int storeId) {
-        List<StoreProductDto> list = storeModifyService.ProductList(storeId);
-
+        List<StoreProductDto> list = storeModifyService.unregisteredProductList(storeId);
         StoreDetailView.displayProductList(list);
     }
 
@@ -23,6 +22,7 @@ public class StoreModifyController {
         param.put("storeId", manageId);
         param.put("productId", Integer.parseInt(requestParam.get("productId")));
         param.put("storeDetailPrice", Integer.parseInt(requestParam.get("storeDetailPrice")));
+        param.put("storeDetailQuantity", Integer.parseInt(requestParam.get("storeDetailQuantity")));
 
         int result = storeModifyService.insertStoreProduct(param);
         storeDetailView.displayModifyResult("\n상품 등록", result);
@@ -36,6 +36,7 @@ public class StoreModifyController {
         List<StoreProductDto> list = storeModifyService.selectStoreProductById(param);
         storeDetailView.displayProductList(list);
     }
+
 
     public void updateStoreProduct(Map<String, String> requestParam, int manageId) {
         Map<String, Object> param = new HashMap<>();

@@ -17,18 +17,21 @@
         <result column="is_discount" property="isDiscount"/>
     </resultMap>
 
-    <!-- 상품 전체 목록 조회 -->
-    <select id="productList" resultMap="storeProductMap">
+    <!-- 가맹점에 없는 상품 조회 -->
+    <select id="unregisteredProductList" resultMap="storeProductMap">
         SELECT DISTINCT
             p.product_id
           , p.product_name
           , p.product_brand_name
           , c.category_name
-          , p.product_price
+          , sd.store_detail_price
         FROM
-            product p
-                LEFT JOIN store_detail s on p.product_id = s.product_id
+             product p
                 LEFT JOIN category c ON p.category_id = c.category_id
+                LEFT JOIN store_detail sd ON p.product_id = sd.product_id
+                AND sd.store_id = #{store_id}
+        WHERE
+            sd.product_id IS NULL
     </select>
 
 
@@ -47,7 +50,7 @@
               #{storeId}
             , #{productId}
             , #{storeDetailPrice}
-            , 0
+            , #{storeDetailQuantity}
             )
     </insert>
 
@@ -69,7 +72,7 @@
                 LEFT JOIN store_user su ON sd.store_id = su.store_id
         WHERE
             p.product_id = #{productId}
-            AND su.user_id = #{manageID}
+            AND su.user_id = #{manageId}
 
     </select>
 
