@@ -1,5 +1,6 @@
 package com.minisec.warehouse.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,21 +13,21 @@ import com.minisec.warehouse.view.WarehouseResultView;
 public class ShipmentController {
     private final ShipmentService shipmentService = new ShipmentService();
 
-    public Map<Integer, Integer> selectOrderList(int manageId, int choice) {
+    public List<ShipmentDto> selectOrderList(int manageId, int choice) {
         List<ShipmentDto> orders = shipmentService.getOrderList(manageId, choice);
+        for (ShipmentDto order : orders) {
+            System.out.println(order);
+        }
         if (orders.isEmpty()) {
             System.out.println("조회된 발주 내역이 없습니다.");
-            return new HashMap<>();
+            return new ArrayList<>();
         } else {
             WarehouseResultView.displayShipmentList(orders);
-            Map<Integer, Integer> map = new HashMap<>();
-            for (int i = 0; i < orders.size(); i++) {
-                ShipmentDto order = orders.get(i);
-                map.put(i, order.getStoreOrderId());
-            }
-            return map;
+            return orders;
         }
     }
+
+    public void selecdtOrderDetail(int orderId) {}
 
     public boolean acceptOrder(int orderId) {
         return updateOrderStatus(orderId, '2'); // '2' = 수주

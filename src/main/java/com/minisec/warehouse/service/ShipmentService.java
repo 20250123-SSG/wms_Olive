@@ -16,6 +16,7 @@ public class ShipmentService {
         }
     }
 
+
     public void updateOrderStatus(int orderId, char status) {
 //        try (SqlSession sqlSession = getSqlSession()) {
 //            shipmentDao = sqlSession.getMapper(ShipmentDao.class);

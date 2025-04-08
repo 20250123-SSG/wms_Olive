@@ -1,9 +1,7 @@
 package com.minisec.warehouse.view;
 
-import com.minisec.warehouse.model.dto.ShipmentDto;
-import com.minisec.warehouse.model.dto.WarehouseReceiveLogDto;
-import com.minisec.warehouse.model.dto.WarehouseShipmentLogDto;
-import com.minisec.warehouse.model.dto.WarehouseProductDetailDto;
+import com.minisec.common.product.ProductDto;
+import com.minisec.warehouse.model.dto.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -65,6 +63,7 @@ public class WarehouseResultView {
             System.out.printf("%d\t %s\t\t\t %s\t\t %s\t\t %s \n",
                     i + 1, order.getStoreOrderSubject(), order.getStoreOrderMemo(), getOrderStatus(order.getStoreOrderStatus()), order.getCreatedAt());
         }
+        System.out.println("────────────────────────────────────────────────────────────────────────────────\n");
     }
 
     public static String getOrderStatus(char status) {
@@ -80,5 +79,23 @@ public class WarehouseResultView {
         }
 
         return orderStatus;
+    }
+
+    public static void displayShipmentDetailList(ShipmentDto shipmentDto) {
+        System.out.println("[주문 상세 정보]");
+        System.out.println("주문명: " + shipmentDto.getStoreOrderSubject());
+        List<ProductDto> products = shipmentDto.getProducts();
+        List<ShipmentDetailDto> shipmentDetails = shipmentDto.getShipmentDetails();
+        System.out.println("----- [주문 상품 목록] -----");
+        for (int i = 0; i < products.size(); i++) {
+            ProductDto product = products.get(i);
+            ShipmentDetailDto detail = shipmentDetails.get(i);
+
+            System.out.println("상품명: " + product.getProductName());
+            System.out.println("주문 수량: " + detail.getStoreOrderDetailQuantity() + "개");
+            System.out.println("상품 가격: " + product.getProductPrice() + "원");
+            System.out.println("--------------------------");
+        }
+
     }
 }

@@ -1,7 +1,8 @@
 package com.minisec.warehouse.model.dto;
 
-import lombok.*;
+import java.util.List;
 import java.time.LocalDateTime;
+import lombok.*;
 
 import com.minisec.common.product.ProductDto;
 
@@ -21,6 +22,6 @@ public class ShipmentDto {
     private LocalDateTime createdAt;
     private LocalDateTime shipmentDate;
 
-    private ShipmentDetailDto shipmentDetail;
-    private ProductDto product;
+    private List<ShipmentDetailDto> shipmentDetails;
+    private List<ProductDto> products;
 }

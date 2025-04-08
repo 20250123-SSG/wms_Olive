@@ -13,21 +13,15 @@
         <result property="createdAt" column="created_at"/>
         <result property="shipmentDate" column="shipment_date"/>
 
-        <association property="product" javaType="ProductDto">
+        <collection property="shipmentDetails" ofType="com.minisec.warehouse.model.dto.ShipmentDetailDto">
             <result property="productId" column="product_id"/>
-            <result property="categoryId" column="category_id"/>
+            <result property="storeOrderDetailQuantity" column="store_order_detail_quantity"/>
+        </collection>
+
+        <collection property="products" ofType="com.minisec.common.product.ProductDto">
             <result property="productName" column="product_name"/>
-            <result property="productBrandName" column="product_brand_name"/>
             <result property="productPrice" column="product_price"/>
-            <result property="productDescription" column="product_description"/>
-        </association>
-
-        <association property="shipmentDetail" javaType="ShipmentDetailDto">
-            <result property="storeOrderId" column="store_order_id"/>
-            <result property="productId" column="product_id"/>
-            <result property="storeOrderDetailQuantity" column="shipment_detail_quantity"/>
-
-        </association>
+        </collection>
     </resultMap>
 
     <select id="selectOrderList" resultMap="StoreOrderMap">
@@ -38,10 +32,8 @@
             so.store_order_memo,
             so.shipment_date,
             so.created_at,
-
             sod.product_id,
             sod.store_order_detail_quantity,
-
             p.product_name,
             p.product_price
         FROM
