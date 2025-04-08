@@ -8,13 +8,14 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StoreUserSelectDto {
+    private String userName;
+    private int userOrderDetailId;
     private int userOrderId;
-    private int userId;
     private String storeName;
     private String productName;
     private String productBrandName;
     private String categoryName;
     private int userOrderDetailQuantity;
-    private String userOrderStatus;
     private String userOrderMemo;
+    private String userOrderStatus;
 }

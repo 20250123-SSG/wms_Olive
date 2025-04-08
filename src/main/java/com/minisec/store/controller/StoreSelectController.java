@@ -30,7 +30,6 @@ public class StoreSelectController {
 
     }
 
-
     public void selectProductListCategory(int manageId, String searchCategory) {
         Map<String, Object> param = new HashMap<>();
         param.put("manageId", manageId);

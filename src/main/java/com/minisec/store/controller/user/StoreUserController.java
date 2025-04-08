@@ -14,8 +14,9 @@ public class StoreUserController {
 
     public void userView(int storeId) {
         while (true) {
-            System.out.println("1.고객주문상품조회");
+            System.out.println("1.전체 고객주문상품조회");
             System.out.println("2.고객주문승인");
+            System.out.println("3.승인대기중인 고객주문 조회");
             System.out.println("0. 돌아가기");
 
             System.out.print(">> 입력: ");
@@ -28,6 +29,9 @@ public class StoreUserController {
                     break;
                 case 2:
                     uov.updateOrderStatusView(storeId,sus);
+                    break;
+                case 3:
+                    uov.selectOrderByOrderStatusPendingView(storeId,sus);
                     break;
                 case 0:
                     return;

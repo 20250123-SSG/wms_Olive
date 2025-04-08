@@ -55,10 +55,10 @@ public class StoreOrderService {
         return isSuccess;
     }
 
-    public List<StoreOrderSelectDto> selectOrderStock() {
+    public List<StoreOrderSelectDto> selectOrderStock(int storeId) {
         SqlSession sqlSession = getSqlSession();
         storeOrderMapper = sqlSession.getMapper(StoreOrderMapper.class);
-        List<StoreOrderSelectDto> result = storeOrderMapper.selectOrderStock();
+        List<StoreOrderSelectDto> result = storeOrderMapper.selectOrderStock(storeId);
         return result;
     }
 
@@ -76,7 +76,7 @@ public class StoreOrderService {
             storeOrderDto.setStoreOrderId(storeOrderId);
             storeOrderDto.setStoreOrderSubject(storeOrderSubject);
             storeOrderDto.setStoreOrderMemo(storeOrderMemo);
-            storeOrderDto.setModifiedAt(LocalDateTime.now());
+            //storeOrderDto.setModifiedAt(LocalDateTime.now());
 
             int orderResult = storeOrderMapper.updateOrderStock(storeOrderDto);
             if (orderResult <= 0) {
@@ -88,7 +88,7 @@ public class StoreOrderService {
             storeOrderDetailDto.setStoreOrderDetailId(storeOrderDetailId);
             storeOrderDetailDto.setProductId(productId);
             storeOrderDetailDto.setStoreOrderDetailQuantity(storeOrderDetailQuantity);
-            storeOrderDetailDto.setModifiedAt(LocalDateTime.now());
+            //storeOrderDetailDto.setModifiedAt(LocalDateTime.now());
 
             int detailResult = storeOrderMapper.updateOrderDetailStock(storeOrderDetailDto);
             if (detailResult <= 0) {
