@@ -86,8 +86,9 @@ public class WarehouseResultView {
         System.out.println("주문명: " + shipmentDto.getStoreOrderSubject());
         List<ProductDto> products = shipmentDto.getProducts();
         List<ShipmentDetailDto> shipmentDetails = shipmentDto.getShipmentDetails();
+        int size = Math.min(products.size(), shipmentDetails.size());
         System.out.println("----- [주문 상품 목록] -----");
-        for (int i = 0; i < products.size(); i++) {
+        for (int i = 0; i < size; i++) {
             ProductDto product = products.get(i);
             ShipmentDetailDto detail = shipmentDetails.get(i);
 

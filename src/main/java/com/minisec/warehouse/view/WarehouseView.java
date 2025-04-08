@@ -66,18 +66,17 @@ public class WarehouseView {
             }
 
             List<ShipmentDto> orderList = shipmentController.selectOrderList(manageId, choice);
+            System.out.print("주문의 상세조회를 원하신다면 번호를, 상위메뉴로 돌아갈 경우 0번을 입력하세요: ");
             // 선택값이 1인 경우 수주 여부 확인
-            if (choice == 1) {
-                System.out.print("주문의 상세조회를 원하신다면 번호를, 상위메뉴로 돌아갈 경우 0번을 입력하세요: ");
-                int orderDetail = sc.nextInt();
-                sc.nextLine();
+            int orderDetail = sc.nextInt();
+            sc.nextLine();
 
-                if (orderDetail == 0) {
-                    System.out.println("상위 메뉴로 돌아갑니다.");
-                    return;
-                }
-                WarehouseResultView.displayShipmentDetailList(orderList.get(choice - 1));
+            if (orderDetail == 0) {
+                System.out.println("상위 메뉴로 돌아갑니다.");
+                return;
             }
+            WarehouseResultView.displayShipmentDetailList(orderList.get(orderDetail - 1));
+
         }
         /*
             if (choice == 1) { // 현재 대기중인 주문이라면
