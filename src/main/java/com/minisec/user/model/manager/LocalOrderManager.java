@@ -40,14 +40,34 @@ public class LocalOrderManager {
     public void addOrder(StoreDto store, StoreProductDto storeProduct, int quantity) {
         orderWrapper.addOrder(store, storeProduct, quantity);
         storeProduct.deleteLocalStoreProductQuantity(quantity);
+
+        deleteProductFromCartList(storeProduct);
     }
 
 
-    public StoreDto getStoreByStoreId(List<StoreDto> storeList, String inputStoreId) {
+    private void deleteProductFromCartList(StoreProductDto storeProduct) {
+        if (storeProduct.getStoreProductQuantity() == 0) {
+            String categoryName = storeProduct.getCategory();
+            List<StoreProductDto> productByyCategory = storeProductByCategory.get(categoryName);
+
+            productByyCategory.remove(storeProduct);
+
+            storeProductList.remove(storeProduct);
+
+            if (productByyCategory.isEmpty()) {
+                storeProductByCategory.remove(categoryName);
+            }
+        }
+    }
+
+
+    public StoreDto getStoreByStoreId(Map<Integer, StoreDto> storeListByUniqueNumber, String inputStoreId) {
         try {
-            return storeList.get(Integer.parseInt(inputStoreId.trim()) - 1);
-        } catch (IndexOutOfBoundsException e) {
-            throw new IllegalArgumentException("존재하지 않는 가맹점입니다.");
+            StoreDto store = storeListByUniqueNumber.get(Integer.parseInt(inputStoreId));
+            if (store == null) {
+                throw new IllegalArgumentException("존재하지 않는 가맹점입니다.");
+            }
+            return store;
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("가맹점 번호를 입력해주세요.");
         }
@@ -78,7 +98,6 @@ public class LocalOrderManager {
         }
         return quantity;
     }
-
 
 
     public Map<StoreDto, List<OrderProductDto>> getOrderListByStore() {

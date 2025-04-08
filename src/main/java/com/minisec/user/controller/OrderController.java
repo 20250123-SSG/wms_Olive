@@ -17,6 +17,7 @@ import com.minisec.user.view.printer.InsertStatusPrinter;
 import com.minisec.user.view.printer.order.OrderDetailsPrinter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +32,14 @@ public class OrderController {
 
 
 
-    public List<StoreDto> selectStoreList() {
-        return storeService.selectStoreList();
+    public Map<Integer,StoreDto> selectStoreListByUniqueNumber() {
+        Map<Integer,StoreDto> result = new HashMap<>();
+
+        int uniqueNum = 1;
+        for(StoreDto storeDto : storeService.selectStoreList()) {
+            result.put(uniqueNum++, storeDto);
+        }
+        return result;
     }
 
 
@@ -111,6 +118,7 @@ public class OrderController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         InsertStatusPrinter.printInsertOrderList(true);
         selectAllOrderDetailListByOrderId(orderList);
     }
@@ -150,6 +158,7 @@ public class OrderController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         InsertStatusPrinter.printInsertCartList(true);
     }
 

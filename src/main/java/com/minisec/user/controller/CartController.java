@@ -89,6 +89,7 @@ public class CartController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         InsertStatusPrinter.printInsertOrderList(true);
         selectAllOrderDetailListByOrderId(orderList);
     }
@@ -146,6 +147,7 @@ public class CartController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         UpdateStatusPrinter.printUpdateCartQuantity(true);
     }
 
@@ -182,6 +184,7 @@ public class CartController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         DeleteStatusPrinter.printDeleteCart(true);
     }
 
@@ -193,6 +196,7 @@ public class CartController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         DeleteStatusPrinter.printDeleteCart(true);
     }
 

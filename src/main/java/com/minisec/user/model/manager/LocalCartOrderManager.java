@@ -43,6 +43,7 @@ public class LocalCartOrderManager {
         } catch (IndexOutOfBoundsException e) {
             throw new IllegalArgumentException("존재하지 않는 장바구니 상품입니다.");
         }
+
         deleteOrderCartFromLocalCartList(localUserCartList, store, orderProductIndex);
     }
 

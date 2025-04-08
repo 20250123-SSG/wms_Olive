@@ -26,7 +26,8 @@ public class UserManagementController {
 
     public void updateUserInformationByFilter(Login user,
                                               UserInformationEditOption editOption,
-                                              String before, String after){
+                                              String before,
+                                              String after){
 
         UserInformationEditFilterDto filterDto = new UserInformationEditFilterDto();
         filterDto.setUserId(user.getUserId());
@@ -46,6 +47,7 @@ public class UserManagementController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         UpdateStatusPrinter.printUpdateUserInfo(true);
         UserUpdateInformationPrinter.print(before,after);
     }
@@ -72,6 +74,7 @@ public class UserManagementController {
             ExceptionPrinter.print(e.getMessage());
             return;
         }
+
         UpdateStatusPrinter.printUpdateBalanceInfo(true);
         user = userInfoService.selectUserByUserId(user.getUserId());
         UserInformationPrinter.printBalance(user);
