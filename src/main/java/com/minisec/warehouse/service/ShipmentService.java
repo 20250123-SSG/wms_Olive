@@ -26,7 +26,7 @@ public class ShipmentService {
             // 주문 상태값 업데이트
             int orderId = shipmentDto.getStoreOrderId();
             ShipmentMapper shipmentMapper = sqlSession.getMapper(ShipmentMapper.class);
-            int orderStatus = shipmentMapper.updateOrderStatus(orderId, status);
+            int orderStatus = shipmentMapper.updateOrderStatus(orderId, null, status);
 
             // 재고 및 로그 업데이트
             List<ProductDto> products = shipmentDto.getProducts();
@@ -63,6 +63,29 @@ public class ShipmentService {
                 sqlSession.rollback();
                 return false;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("주문 처리 중 오류 발생");
+        } finally {
+            getSqlSession().close();
+        }
+    }
+
+    public boolean rejectOrder(ShipmentDto shipmentDto, String memo, char status) {
+        try (SqlSession sqlSession = getSqlSession()) {
+            int orderId = shipmentDto.getStoreOrderId();
+            ShipmentMapper shipmentMapper = sqlSession.getMapper(ShipmentMapper.class);
+            System.out.println(orderId);
+            System.out.println(memo);
+            int orderStatus = shipmentMapper.updateOrderStatus(orderId, memo, status);
+            if(orderStatus > 0) {
+                sqlSession.commit();
+                return true;
+            }else{
+                sqlSession.rollback();
+                return false;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("주문 처리 중 오류 발생");

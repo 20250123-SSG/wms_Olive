@@ -28,8 +28,7 @@ public class ShipmentController {
         return shipmentService.acceptOrder(shipmentDto, '2');
     }
 
-   /* public boolean rejectOrder(int orderId) {
-        return updateOrderStatus(orderId, '3'); // '3' = 거절
-    }*/
-
+    public boolean rejectOrder(ShipmentDto shipmentDto, String memo) {
+        return shipmentService.rejectOrder(shipmentDto, memo, '3');
+    }
 }

@@ -98,24 +98,14 @@ public class WarehouseView {
                 } else {
                     System.out.print("거절 사유를 작성해주세요: ");
                     String memo = sc.nextLine();
-//                    boolean result = shipmentController.rejectOrder(orderId, memo);
+                    boolean result = shipmentController.rejectOrder(shipmentDto, memo);
+                    if (result){
+                        System.out.println("주문이 정상적으로 거절처리되었습니다..");
+                    }
                     return;
                 }
             }
         }
-        /*
-                if (answer.equals("Y")) {
-                    boolean result = shipmentController.acceptOrder(order.getStoreOrderId());
-                    if (result) {
-                        System.out.println("주문이 수주 처리되었습니다.");
-                    } else {
-                        System.out.println("수주 처리에 실패했습니다.");
-                    }
-                }
-            }
-        }
-
-         */
     }
 
     // 상품별 입출고 로그 조회

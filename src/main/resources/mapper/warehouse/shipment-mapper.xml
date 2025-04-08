@@ -56,8 +56,11 @@
     <!--db 업데이트 -->
     <update id="updateOrderStatus">
         UPDATE store_order
-        SET store_order_status = #{status},
-            shipment_date = NOW()
+        SET store_order_status = #{status}
+        <if test="status == '3'">
+            , store_order_memo = #{memo}
+        </if>
+        , shipment_date = NOW()
         WHERE store_order_id = #{orderId}
     </update>
 
