@@ -25,7 +25,7 @@ public class WarehouseView {
                     4. 상품 입출고 기록 확인
                     0. 프로그램 종료
                     ==================================
-                    > 입력:""");
+                    > 입력: """);
             switch (this.sc.nextLine()) {
                 case "1":
                     warehouseController.selectAllProducts(manageId);
@@ -68,7 +68,8 @@ public class WarehouseView {
             if(orderList.isEmpty()){
                 return;
             }
-            System.out.print("주문의 상세조회를 원하신다면 번호를, 상위메뉴로 돌아갈 경우 0번을 입력하세요: ");
+            System.out.println("주문의 상세조회를 원하신다면 번호를, 상위메뉴로 돌아갈 경우 0번을 입력하세요.");
+            System.out.print("> 입력: ");
 
             // 선택값이 1인 경우 수주 여부 확인
             int selectOrderDetail = sc.nextInt();
@@ -113,6 +114,7 @@ public class WarehouseView {
         // 상품 목록
         Map<Integer, Integer> map = warehouseController.selectAllProducts(manageId);
         System.out.println("입출고 내역을 확인하길 원한다면 번호를 입력, 돌아가기를 원한다면 0번을 입력하세요.");
+        System.out.print("> 입력: ");
         int choice = sc.nextInt();
         sc.nextLine();
         if (choice == 0) {

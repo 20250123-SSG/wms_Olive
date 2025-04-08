@@ -10,6 +10,7 @@ public class WarehouseResultView {
     private static final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static void displayProductList(List<WarehouseProductDetailDto> list) {
+        System.out.println("\n──────────────────────────────────────────────────────────────────");
         System.out.printf("%-5s %-20s %-10s %-20s%n", "번호", "상품이름", "수량", "마지막수정일");
 
         for (int i = 0; i < list.size(); i++) {
@@ -22,9 +23,12 @@ public class WarehouseResultView {
                     item.getWarehouseDetailQuantity(),
                     dtf.format(item.getProduct().getModifiedAt()));
         }
+        System.out.println("──────────────────────────────────────────────────────────────────\n");
+
     }
 
     public static void displayProductShippingLogList(List<WarehouseShipmentLogDto> list) {
+        System.out.println("\n──────────────────────────────────────────────────────────────────");
         System.out.printf("%-5s %-10s %-10s %-10s %-20s%n", "번호", "주문가맹점", "주문제목", "출고수량", "마지막수정일");
 
         for (int i = 0; i < list.size(); i++) {
@@ -37,10 +41,12 @@ public class WarehouseResultView {
                     item.getWarehouseShippingQuantity(),
                     item.getWarehouseLogTime());
         }
+        System.out.println("──────────────────────────────────────────────────────────────────\n");
 
     }
 
     public static void displayProductReceiveLogList(List<WarehouseReceiveLogDto> list) {
+        System.out.println("\n──────────────────────────────────────────────────────────────────");
         System.out.printf("%-5s %-10s %-10s %-10s %n", "번호", "보급처", "입고수량", "입고일" );
 
         for (int i = 0; i < list.size(); i++) {
@@ -52,6 +58,7 @@ public class WarehouseResultView {
                     item.getWarehouseReceiveQuantity(),
                     item.getWarehouseLogTime());
         };
+        System.out.println("──────────────────────────────────────────────────────────────────\n");
 
     }
 

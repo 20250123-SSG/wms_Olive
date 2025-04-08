@@ -22,7 +22,7 @@ public class UserMainView {
                 3. 구매
                 4. 구매 내역 조회
                 0. 종료하기
-                >> 입력 :""");
+               """);
             int functionNum = InputFunctionNumberView.input();
 
             if(functionNum == 0){

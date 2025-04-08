@@ -134,7 +134,7 @@ public class UserOrderView {
 
 
         if (newStatus.equals("2")) {
-            System.out.println("거절사유를 입력하세요(1.판매중단):");
+            System.out.print("거절사유를 입력하세요(1.판매중단):");
             int num = sc.nextInt();
             sc.nextLine();
             if(num == 1){

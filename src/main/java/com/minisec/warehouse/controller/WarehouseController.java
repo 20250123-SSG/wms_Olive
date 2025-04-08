@@ -19,7 +19,6 @@ public class WarehouseController {
     // 창고 내 전체 상품 조회
     public Map<Integer, Integer> selectAllProducts(int warehouseId) {
         System.out.println("\n창고 내 전체 상품 조회");
-        System.out.println("────────────────────────────────────────────────────────────────────────────────");
 
         List<WarehouseProductDetailDto> list = warehouseService.selectAllProducts(warehouseId);
         WarehouseResultView.displayProductList(list);
@@ -33,9 +32,12 @@ public class WarehouseController {
 
     // 상품 입출고 로그 조회
     public void selectSearchProductLog(int searchProductId) {
+        System.out.println("=======================");
         System.out.println("1. 입고내역 조회하기");
         System.out.println("2. 출고내역 조회하기");
+        System.out.print("> 입력: ");
         int logType = sc.nextInt();
+        sc.nextLine();
         if (logType == 1) {
             List<WarehouseReceiveLogDto> list = warehouseService.selectSearchReceiveProductLog(searchProductId);
             WarehouseResultView.displayProductReceiveLogList(list);
