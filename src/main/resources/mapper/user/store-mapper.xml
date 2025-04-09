@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.user.model.dao.store.StoreDao">
+
+    <resultMap id="storeResultMap" type="StoreDto">
+        <id      column="store_id"    property="storeId"/>
+        <result  column="store_name"  property="storeName"/>
+    </resultMap>
+
+
+    <select id="selectStoreList" resultMap="storeResultMap">
+        SELECT
+              store_id
+            , store_name
+        FROM
+            store
+    </select>
+
+</mapper>

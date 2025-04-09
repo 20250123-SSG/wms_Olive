@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.minisec.warehouse.model.dao.WarehouseProductMapper">
+    <resultMap id="warehouseLogMap" type="WarehouseShipmentLogDto">
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="storeOrderId" column="order_id"/>
+        <result property="warehouseShippingQuantity" column="warehouse_shipping_quantity"/>
+        <result property="warehouseLogTime" column="created_at"/>
+
+        <association property="product" javaType="ProductDto">
+            <result property="productId" column="product_id"/>
+            <result property="categoryId" column="category_id"/>
+            <result property="productName" column="product_name"/>
+            <result property="productBrandName" column="product_brand_name"/>
+            <result property="productPrice" column="product_price"/>
+            <result property="productDescription" column="product_description"/>
+        </association>
+
+        <association property="storeOrder" javaType="com.minisec.store.dto.StoreOrderDto">
+            <result property="storeOrderId" column="store_order_id"/>
+            <result property="storeOrderSubject" column="store_order_subject"/>
+            <result property="storeOrderStatus" column="store_order_status"/>
+        </association>
+
+        <association property="store" javaType="com.minisec.store.dto.StoreDto">
+        <result property="storeId" column="store_id"/>
+        <result property="storeName" column="store_name"/>
+        </association>
+    </resultMap>
+
+    <!-- 출고 로그 조회 -->
+    <select id="getShippingProductLog" parameterType="int" resultMap="warehouseLogMap">
+        SELECT
+            wl.product_id,
+            wl.order_id,
+            wl.warehouse_shipping_quantity,
+            wl.created_at,
+
+            p.product_id,
+            p.category_id,
+            p.product_name,
+            p.product_brand_name,
+            p.product_price,
+            p.product_description,
+
+            so.store_order_id,
+            so.store_order_subject,
+            so.store_order_status,
+
+            s.store_id,
+            s.store_name
+        FROM
+            warehouse_shipping_log wl
+        JOIN product p ON wl.product_id = p.product_id
+        LEFT JOIN store_order so ON wl.order_id = so.store_order_id
+        LEFT JOIN store s ON so.store_id = s.store_id
+        WHERE wl.product_id = #{productId}
+        ORDER BY wl.created_at DESC
+    </select>
+    
+    <insert id="insertWarehouseShipmentLog" parameterType="WarehouseShipmentLogDto">
+        INSERT INTO
+            warehouse_shipping_log(
+                warehouse_id,
+                product_id,
+                order_id,
+                warehouse_shipping_quantity,
+                created_at
+        ) VALUES (
+                  #{warehouseId},
+                  #{productId},
+                  #{storeOrderId},
+                  #{warehouseShippingQuantity},
+                  NOW()
+        )
+    </insert>
+</mapper>

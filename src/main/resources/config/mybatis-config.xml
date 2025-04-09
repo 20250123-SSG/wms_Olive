@@ -4,7 +4,38 @@
         "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-    <properties resource="config/connection-config.properties"/>
+    <properties resource= "config/connection-config.properties"/>
+
+    <typeAliases>
+        <!-- Login -->
+        <typeAlias type="com.minisec.common.login.Login" alias="Login"/>
+        <!-- Product -->
+        <typeAlias type="com.minisec.common.product.ProductDto" alias="ProductDto"/>
+        <!-- User -->
+        <typeAlias type="com.minisec.user.model.dto.user.UserInformationEditFilterDto" alias="UserInformationEditFilterDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreDto" alias="StoreDto"/>
+        <typeAlias type="com.minisec.user.model.dto.OrderProductDto" alias="OrderProductDto"/>
+        <typeAlias type="com.minisec.user.model.dto.order.OrderDto" alias="OrderDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreInventoryDeductionDto" alias="StoreInventoryDeductionDto"/>
+        <typeAlias type="com.minisec.user.model.dto.user.UserBalanceUpdateDto" alias="UserBalanceUpdateDto"/>
+        <typeAlias type="com.minisec.user.model.dto.order.OrderDetailFilterDto" alias="OrderDetailFilterDto"/>
+        <typeAlias type="com.minisec.user.model.dto.store.StoreProductDto" alias="StoreProductDto"/>
+        <typeAlias type="com.minisec.user.model.dto.cart.CartDto" alias="CartDto"/>
+        <typeAlias type="com.minisec.user.model.dto.cart.CartDetailByStoreDto" alias="CartDetailByStoreDto"/>
+        <typeAlias type="com.minisec.user.model.dto.cart.CartProductDeleteDto" alias="CartProductDeleteDto"/>
+
+        <!-- Warehouse -->
+        <typeAlias type="com.minisec.warehouse.model.dto.WarehouseProductDetailDto" alias="WarehouseProductDetailDto"/>
+        <typeAlias type="com.minisec.warehouse.model.dto.WarehouseReceiveLogDto" alias="WarehouseReceiveLogDto"/>
+        <typeAlias type="com.minisec.warehouse.model.dto.WarehouseShipmentLogDto" alias="WarehouseShipmentLogDto"/>
+        <typeAlias type="com.minisec.warehouse.model.dto.ShipmentDto" alias="ShipmentDto"/>
+        <typeAlias type="com.minisec.warehouse.model.dto.ShipmentDetailDto" alias="ShipmentDetailDto"/>
+        <typeAlias type="com.minisec.warehouse.model.dto.StorageDto" alias="StorageDto"/>
+
+        <!-- Store -->
+        <typeAlias type="com.minisec.store.dto.StoreProductDto" alias="StoreDetailProductDto"/>
+
+    </typeAliases>
 
     <environments default="dev">
         <environment id="dev">
@@ -18,6 +49,29 @@
         </environment>
     </environments>
     <mappers>
+        <!-- DB Connect Check -->
         <mapper resource="mapper/healthcheck-mapper.xml"/>
+        <!-- Login -->
+        <mapper resource="mapper/login-mapper.xml"/>
+        <!-- User -->
+        <mapper resource="mapper/user/store-mapper.xml"/>
+        <mapper resource="mapper/user/store-product-mapper.xml"/>
+        <mapper resource="mapper/user/user-order-mapper.xml"/>
+        <mapper resource="mapper/user/user-order-detail-mapper.xml"/>
+        <mapper resource="mapper/user/cart-mapper.xml"/>
+        <mapper resource="mapper/user/user-mapper.xml"/>
+
+        <!-- WareHouse -->
+        <mapper resource="mapper/warehouse/warehouse-product-mapper.xml"/>
+        <mapper resource="mapper/warehouse/warehouse-product-receive-log-mapper.xml"/>
+        <mapper resource="mapper/warehouse/warehouse-product-shipping-log-mapper.xml"/>
+        <mapper resource="mapper/warehouse/storage-mapper.xml"/>
+        <mapper resource="mapper/warehouse/shipment-mapper.xml"/>
+
+        <!-- Store -->
+        <mapper resource="mapper/store/store-order-mapper.xml"/>
+        <mapper resource="mapper/store/store-user-mapper.xml"/>
+        <mapper resource="mapper/store/store-modify-mapper.xml"/>
+        <mapper resource="mapper/store/store-select-mapper.xml"/>
     </mappers>
 </configuration>

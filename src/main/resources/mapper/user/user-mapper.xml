@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.user.model.dao.user.UserDao">
+
+    <resultMap id="userResultMap" type="Login">
+        <id     column="user_id"       property="userId"/>
+        <result column="user_login_id" property="userLoginId"/>
+        <result column="user_pwd"      property="userPwd"/>
+        <result column="user_name"     property="userName"/>
+        <result column="user_phone"    property="userPhone"/>
+        <result column="user_address"  property="userAddress"/>
+        <result column="user_balance"  property="userBalance"/>
+    </resultMap>
+
+
+    <select id="selectUserByUserId" parameterType="_int" resultMap="userResultMap">
+        SELECT
+            user_id
+          , user_login_id
+          , user_pwd
+          , user_name
+          , user_phone
+          , user_address
+          , user_balance
+        FROM
+            user
+        WHERE
+            user_id = #{userId}
+    </select>
+
+
+    <update id="updateUserBalance" parameterType="UserBalanceUpdateDto">
+        UPDATE
+            user
+        SET
+            user_balance = (user_balance + #{userOrderAmountForDeducted})
+        WHERE
+            user_id = #{userId}
+        AND user_balance > 0
+        AND (user_balance + #{userOrderAmountForDeducted}) >= 0
+    </update>
+
+
+    <update id="updateUserInformationByFilter" parameterType="UserInformationEditFilterDto">
+        UPDATE
+            user
+        <set>
+            <if test="userLoginId != null">
+                user_login_id = #{userLoginId},
+            </if>
+            <if test="userPwd != null">
+                user_pwd = #{userPwd},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+            <if test="userPhone != null">
+                user_phone = #{userPhone},
+            </if>
+            <if test="userAddress != null">
+                user_address = #{userAddress},
+            </if>
+        </set>
+        WHERE
+            user_id = #{userId}
+    </update>
+
+</mapper>

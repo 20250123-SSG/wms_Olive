@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.minisec.warehouse.model.dao.StorageMapper">
+
+    <resultMap id="StorageResultMap" type="StorageDto">
+        <result property="storageId" column="storage_id"/>
+        <result property="warehouseId" column="warehouse_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="supplierName" column="supplier_name"/>
+        <result property="storageQuantity" column="storage_quantity"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+
+    <!-- warehouse_detail에서 product_id가 존재하는지 확인 -->
+    <select id="selectWarehouseProductQuantity" resultType="Integer">
+        SELECT SUM(warehouse_detail_quantity)
+        FROM warehouse_detail
+        WHERE warehouse_id = #{warehouseId} AND product_id = #{productId}
+    </select>
+
+    <!-- warehouse_detail에서 기존 수량 업데이트 -->
+    <update id="updateWarehouseProductQuantity">
+        UPDATE warehouse_detail
+        SET warehouse_detail_quantity = warehouse_detail_quantity + #{additionalQuantity}
+        WHERE warehouse_id = #{warehouseId} AND product_id = #{productId}
+    </update>
+
+
+    <select id="selectAllStorage" resultMap="StorageResultMap">
+        SELECT storage_id,
+               warehouse_id,
+               product_id,
+               supplier_name,
+               storage_quantity,
+               created_at
+        FROM storage
+        WHERE warehouse_id = #{warehouseId}
+    </select>
+
+
+    <insert id="insertWarehouseReceiveLog" parameterType="StorageDto">
+        INSERT INTO
+            warehouse_receive_log (
+                    warehouse_id,
+                    product_id,
+                    supplier_name,
+                    warehouse_receive_quantity,
+                    created_at
+                )
+        VALUES (
+                #{warehouseId},
+                #{productId},
+                #{supplierName},
+                #{storageQuantity},
+                NOW()
+               )
+    </insert>
+
+    <select id="selectProductNameById" resultType="String">
+        SELECT product_name FROM product WHERE product_id = #{productId}
+    </select>
+
+    <insert id="insertWarehouseDetail">
+        INSERT INTO warehouse_detail (warehouse_id, product_id, warehouse_detail_quantity, created_at, modified_at)
+        VALUES (#{warehouseId}, #{productId}, #{warehouseDetailQuantity}, NOW(), NOW())
+    </insert>
+
+</mapper>
